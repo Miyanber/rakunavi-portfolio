@@ -1,0 +1,117 @@
+{% extends "main/performance_edit.html" %}
+{% load static %}
+
+{% block title %} {{ exhibition.title }}当日入力ページ {% endblock title %}
+
+{% block header_title %} {{ exhibition.title }} 当日入力ページ{% endblock header_title %}
+
+{% block extra_style %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'main/css/attraction_create.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+<section id="form-section">
+    <h2>{{ exhibition }}</h2>
+    <p>
+        <span class="body-text">混雑度と待ち時間のどちらか片方を選択できます。
+            整理券制等で待ち時間が発生する展示の場合は待ち時間を選択、ギャラリー系の展示の場合は混雑度を選択して入力して下さい。
+        </span>
+    </p>
+    
+    <form id="form" action="" method="post" enctype="multipart/form-data">
+        {{ form.media }}
+        {{ form.errors }}
+        {% csrf_token %}
+        <div class="form__nav">
+            <div id="congestion_level_tab" class="form__nav__tab">
+                混雑度
+            </div>
+            <div id="wait_time_tab" class="form__nav__tab">
+                待ち時間
+            </div>
+        </div>
+        <div class="form__tab">
+
+            <p class="last_updated_at">
+                最終更新： {% if last_updated_at %}{{ last_updated_at }}{% else %}未更新{% endif %}
+            </p>
+
+            <div class="form__tab__congestion_level">
+                <p class="label">
+                    <span>{{ form.congestion_level.label }}</span>
+                    {{ form.congestion_level.errors }}
+                </p>
+                {{ form.congestion_level }}
+            </div>
+            <div class="form__tab__wait_time">
+                <p class="label">
+                    <label for="{{ form.wait_time.id_for_label }}">{{ form.wait_time.label }}：{{ form.wait_time.help_text }}</label>
+                    {{ form.wait_time.errors }}
+                </p>
+                <div class="wait_time_container">
+                    <div class="wait_time_container__forms">
+                        {{ form.wait_time }} <span>分</span>
+                    </div>
+
+                    {% comment %} 
+                    必要性が薄いためコメントアウト
+                    <div class="wait_time_container__buttons">
+                        <div>
+                            <div class="increment"></div>
+                            <div>1分追加</div>
+                        </div>
+                        <div>
+                            <div class="decrement"></div>
+                            <div>1分減少</div>
+                        </div>
+                    </div> 
+                    {% endcomment %}
+
+                </div>
+            </div>
+            {% comment %} 所要時間 {% endcomment %}
+            <div class="form__tab__time_required">
+                {{ form.time_required.errors }}
+                <p class="label">
+                    <label for="{{ form.time_required.id_for_label }}">{{ form.time_required.label }}：{{ form.time_required.help_text }}</label>
+                </p>
+                <div class="wait_time_container">
+                    <div class="wait_time_container__forms">
+                        {{ form.time_required }} <span>分</span>
+                    </div>
+                </div>
+            </div>
+            {% comment %} お知らせ {% endcomment %}
+            <div class="form__tab__announcement">
+                {{ form.announcement.errors }}
+                <p class="label">
+                    <label for="{{ form.announcement.id_for_label }}">{{ form.announcement.label }}</label>
+                </p>
+                {{ form.announcement }}
+            </div>
+            {% comment %} 整理券 {% endcomment %}
+            <div class="form__tab__ticket_status">
+                {{ form.ticket_status.errors }}
+                <p class="label">
+                    <label for="{{ form.ticket_status.id_for_label }}">{{ form.ticket_status.label }}</label>
+                </p>
+                {{ form.ticket_status }}
+            </div>
+        </div>
+        
+        <label id="label_confirm">
+            <input type="checkbox" id="checkbox_confirm">
+            <span>私はコンテンツ・マニュアルを読み、問題がないことを確認しました。</span>
+        </label>
+        <button id="submit_button" type="submit" class="button_style1">送信</button>
+    </form>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js" defer></script>
+<script src="{% static "main/js/attraction_create.js" %}"></script>
+{% comment %} <script src="{% static 'main/js/confirm_input.js' %}" defer></script> {% endcomment %}
+{% endblock extra_js %}

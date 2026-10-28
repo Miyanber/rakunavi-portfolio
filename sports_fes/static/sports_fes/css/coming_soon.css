@@ -1,0 +1,19 @@
+body {
+    --background-color: #15181c !important;
+}
+
+footer {
+    display: none;
+}
+
+.festival_ended {
+    display: none;
+}
+
+.center-box {
+    height: 100lvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

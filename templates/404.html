@@ -1,0 +1,25 @@
+{% extends  "main/base.html" %}
+{% load static %}
+{% block title %}404 Not Found{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'main/css/error_page.css' %}">   
+{% endblock %}
+
+{% block header_title %}404 Page Not Found{% endblock %}
+
+{% block content %}
+<article>
+    <h2><span class="material-symbols-rounded">search_off</span> お探しのページが見つかりませんでした。</h2>
+    
+    <div class="emphasis">
+        <p>以下の理由が考えられます。</p>
+        <ul>
+            <li>URLが間違っている</li>
+            <li>サーバーへのアクセスが集中している</li>
+            <li>まだ公開されていないページを開こうとしている</li>
+        </ul>
+    </div>
+    <p>URLをご確認の上、しばらくしてからもう一度お試しください。</p>
+</article>
+{% endblock %}

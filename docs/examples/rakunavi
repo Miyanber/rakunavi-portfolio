@@ -1,0 +1,74 @@
+# /etc/nginx/sites-enabled/rakunaviのこと
+
+upstream daphne {
+    server 127.0.0.1:8001;
+}
+
+server {
+    server_name rakunavi.example.com;
+
+    # =========================
+    # WebSocket（明示的に許可）
+    # =========================
+    location ^~ /ws/ {
+        proxy_pass http://daphne;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # =========================
+    # WebSocket っぽい不正パス遮断
+    # =========================
+    location ~* ^/(ws-|wsfapi|ws/[^/]+@) {
+        return 444;
+    }
+
+    # =========================
+    # 通常 HTTP（Django）
+    # =========================
+    location / {
+        proxy_pass http://daphne;
+
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # ★ HTTP では Upgrade ヘッダを渡さない
+        proxy_set_header Upgrade "";
+        proxy_set_header Connection "";
+
+        proxy_redirect off;
+    }
+
+    # =========================
+    # Static / Media
+    # =========================
+    location /static {
+        alias /home/ubuntu/RakuNavi/staticfiles/;
+        access_log off;
+    }
+
+    location /media {
+        alias /home/ubuntu/myproject/media/;
+        expires 7d;
+        add_header Cache-Control "public";
+    }
+
+    # =========================
+    # SSL ここはSertbotが管理しているのでいじらない。
+    # =========================
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/rakunavi.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/rakunavi.example.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}

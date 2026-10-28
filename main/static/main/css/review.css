@@ -1,0 +1,205 @@
+.review_wrapper {
+    margin: 0 auto;
+    width: 70%;
+    max-width: 1000px;
+    border-radius: 1.5em;
+    background-color: #ededed;
+    font-family: var(--zen-kaku-gothic);
+}
+
+.review {
+    margin: 3rem auto;
+    padding: 2rem 0;
+    max-width: 800px;
+    width: 80%;
+}
+
+.review__title {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: .5em 1em;
+    border-radius: 1em;
+    background-color: #fefefe;
+}
+
+.review__history__title,
+.review__form__title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 1em .2em;
+    padding-left: .5em;
+    border-left: .3em solid #333;
+}
+
+.review__history__review {
+    padding: 1em;
+    background-color: #fefefe;
+    border-radius: 1em;
+    margin: 1em 0;
+}
+
+.latest_review {
+    border: black 0.15em solid;
+}
+
+.review__history__review__reviewed_at {
+    float: right;
+}
+
+.review__history__review__status.rejected {
+    color: #d43030;
+}
+
+.review__history__review__status.accepted {
+    color: #379637;
+}
+
+.review__history__review__reason {
+    margin-top: .5em;
+}
+
+.style2.review__form__fixButton {
+    display: block;
+    margin-left: auto;
+}
+
+#id_status {
+    position: relative;
+}
+
+#id_status div {
+    width: calc(100%/3);
+    float: right;
+    font-weight: 500;
+    text-align: center;
+}
+
+#id_status label {
+    display: inline;
+    font-size: 100%;
+    font-weight: bolder;
+    padding: 0.5em 2em;
+    border-radius: 1em;
+    cursor: pointer;
+}
+
+#id_status input[type=radio] {
+    display: none;
+}
+
+label:has(#id_status_0) {
+    background-color: #da0a18;
+    opacity: 0.6;
+}
+
+label:has(#id_status_1) {
+    background-color: #1ac038;
+    opacity: 0.6;
+}
+
+label:has(#id_status_2) {
+    background-color: #3c3d35;
+    color: #fff;
+    opacity: 0.6;
+}
+
+@keyframes opacity-blink {
+
+    20%,
+    80% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+#id_status label:has(input[type="radio"]:checked) {
+    opacity: 1;
+    box-shadow: #f1edf188 0px 3px 7px 0px;
+    animation: opacity-blink 1.5s infinite;
+}
+
+/* JSでクラス付与 */
+.reason_div {
+    transition: 1s transform;
+}
+
+.fixed {
+    position: fixed;
+    box-sizing: content-box;
+    max-width: 800px;
+    width: 80%;
+    background-color: #ededed;
+    z-index: 100;
+    padding: 1.5em;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    border-radius: 1em 1em 0 0;
+    bottom: 0;
+    left: 50%;
+    will-change: transform;
+    animation: reasonFormSlideIn 0.5s ease-out forwards;
+}
+
+.review__form button[type="submit"] {
+    margin: 1em auto;
+}
+
+@keyframes reasonFormSlideIn {
+    from {
+        transform: translateX(-50%) translateY(100%);
+    }
+
+    to {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+form div>label {
+    display: block;
+    padding: 0.5em 0;
+    margin-top: 1em;
+    font-size: 110%;
+    font-weight: bolder;
+}
+
+/* 以下、模擬店用 */
+
+.content {
+    width: 80%;
+    max-width: 1000px;
+    margin: 3rem auto;
+}
+
+
+
+body.dark-mode .review_wrapper {
+    background-color: #2c252c;
+}
+
+body.dark-mode .content {
+    background-color: #292729;
+}
+
+body.dark-mode .review__title,
+body.dark-mode .review__history__review {
+    background-color: #494049;
+}
+
+body.dark-mode .latest_review {
+    border: #d7d5d7 0.15em solid;
+}
+
+.review__history__title,
+.review__form__title {
+    border-left: .3em solid #ccc;
+}
+
+body.dark-mode .fixed {
+    border: #ccc 1px solid;
+    border-bottom: none;
+    background-color: #271e27;
+    box-shadow: rgba(129, 129, 134, 0.1) 0px 4px 16px, rgba(175, 175, 182, 0.05) 0px 8px 32px;
+}

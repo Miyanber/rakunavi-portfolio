@@ -1,0 +1,69 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}アクセス拒否{% endblock title %}
+
+{% block header_title %}アクセスが拒否されました{% endblock header_title %}
+{% block header_type %}introduction{% endblock header_type %}
+{% block header_image %}
+<picture>
+    <source srcset="{{ images.header_coming_soon_avif.url }}" type="image/avif">
+    <img id="header_bg" src="{{ images.header_coming_soon.url }}" alt="背景" decoding="async" fetchpriority="high">
+</picture>
+{% endblock header_image %}
+
+{% block content %}
+
+<article>
+    <h1>アクセスが拒否されました。</h1>
+    <ul>
+        {% if not config_permission.can_edit_team_info %}
+        <li>
+            <span class="material-symbols-rounded">directions_run</span>
+            応援団情報編集ページは編集期限外です。
+        </li>
+        {% endif %}
+        {% if not config_permission.can_edit_exhibitions %}
+        <li>
+            <span class="material-symbols-rounded">apps</span>
+            展示編集ページは編集期限外です。
+        </li>
+        {% endif %}
+        {% if not config_permission.can_edit_foodbooth %}
+        <li>
+            <span class="material-symbols-rounded">music_note</span>
+            ライブ編集ページは編集期限外です。
+        </li>
+        {% endif %}
+        {% if not config_permission.can_edit_performances %}
+        <li>
+            <span class="material-symbols-rounded">storefront</span>
+            模擬店編集ページは編集期限外です。
+        </li>
+        {% endif %}
+    </ul>
+    <p>
+        次の理由が考えられます。<br>
+        編集期限内にこのページが表示された場合は、QRコードを確認の上、必要な場合は開発者に連絡して下さい。
+    </p>
+    <ul>
+        <li>
+            <span class="material-symbols-rounded">qr_code</span>誤ったQRコードでアクセスしている。
+        </li>
+        <li> 
+            <span class="material-symbols-rounded">calendar_lock</span>提出期限を過ぎている。
+        </li>
+        <li>
+            <span class="material-symbols-rounded">verified_user</span>既に審査に合格している。（審査効率化のため、審査合格後は編集できません。）
+        </li>
+        <li>
+            <span class="material-symbols-rounded">timer</span>
+                複数のコンテンツを同時に編集している。異なるコンテンツ（展示・ライブ・模擬店）を編集する場合は、1つを先に保存してから次の入力を行ってください。
+        </li>
+    </ul>
+    <a class="button_style2" href="{% url 'main:manuals_for_students_list' %}">
+        <span class="material-symbols-rounded">article</span> 生徒用マニュアル一覧へ （認証が必要です）
+    </a>
+</article>
+
+{% endblock content %}

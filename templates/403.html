@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+
+{% load static %}
+
+{% block title %}403 Forbidden{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'main/css/error_page.css' %}">   
+{% endblock %}
+
+{% block header_title %}403 Forbidden{% endblock %}
+
+{% block content %}
+<article>
+    <h2><span class="material-symbols-rounded">gpp_bad</span> 要求されたページへのアクセスが拒否されました。</h2>
+    <p>以下の理由が考えられます。</p>
+    <ul>
+        <li>このページへのアクセス権が無い</li>
+        <li>サーバーへのアクセスが集中している</li>
+    </ul>
+    <p>しばらくしてからもう一度お試しください。</p>
+</article>
+{% endblock %}

@@ -1,0 +1,24 @@
+/* CKEditorで色が指定されても表示を崩さない */
+.message * {
+    color: inherit !important;
+    background-color: inherit !important;
+}
+
+p.price {
+    font-size: 1.3em;
+}
+
+p.allergens {
+    font-size: 1.2em;
+    color: red;
+    font-weight: bolder;
+}
+
+.background {
+    display: block;
+    width: 70%;
+    margin: 1em auto;
+    box-shadow: .1vw .1vw 5px rgba(74, 74, 74, 0.4), -.1vw -.1vw 5px rgba(74, 74, 74, 0.4);
+    aspect-ratio: 4 / 3;
+    background-color: #222222;
+}

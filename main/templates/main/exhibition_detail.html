@@ -1,0 +1,189 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block title %}{{ exhibition.title }} | 展示紹介{% endblock %}
+
+{% block header_title %}展示紹介{% endblock %}
+
+{% block extra_style %}
+<meta name="referrer" content="strict-origin-when-cross-origin">    {% comment %} URL流出防止 {% endcomment %}
+<link rel="stylesheet" href="{% static 'main/css/exhibition_detail.css' %}">
+<link rel="stylesheet" href="https://cdn.plyr.io/3.8.4/plyr.css" />
+{% endblock %}
+
+{% block content %}
+<section>
+    <div>
+        <a class="button_style1" style="margin: 0;" href="{% url 'main:exhibitions' exhibition.category %}#{{ exhibition.id }}">
+            <span class="material-symbols-rounded">arrow_back</span>
+            展示一覧に戻る
+        </a>
+    </div>
+</section>
+
+<article>
+    <div id="detail-title" class="clearfix">
+        {% comment %} avifを使用し、webpにフォールバック。開発者ツールでは、常にimgが選択されるので注意！ {% endcomment %}
+        <picture id="icon">
+            <source srcset="{% if exhibition.thumbnail_avif %}{{ exhibition.thumbnail_avif.url }}{% endif %}" type="image/avif">
+            <img src="{% if exhibition.thumbnail %}{{ exhibition.thumbnail.url }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="サムネイル">
+        </picture>
+        <div id="detail-title-right">
+            <h2 id="title">{{ exhibition.title }}</h2>
+            <p id="category">
+                {% if exhibition.category == 'class' %}
+                    {{ exhibition.grade_number }}-{{ exhibition.class_number }} {{ exhibition.get_category_display }} 
+                {% else %}
+                    {{ exhibition.get_category_display }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <table class="info_table">
+        {% if exhibition.tags.all %}
+        <tr class="info">
+            <td class="left_side">タグ</td>
+            <td class="right_side td_tags">
+                {% for tag in exhibition.tags.all %}
+                <a href="{% url 'main:exhibitions_search' %}?tags={{ tag.id }}">
+                    <label class="tag">
+                        {{ tag.name }}
+                    </label>
+                </a>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+
+        {% if attraction %}
+        <tr class="info">
+            {% if attraction.wait_time > 0 %}
+            <td class="left_side">待ち時間</td>
+            <td class="right_side">
+                {{ attraction.wait_time }} 分待ち
+                （{{ attraction.created_at|timezone:'Asia/Tokyo'|date:"H" }}時{{ attraction.created_at|timezone:'Asia/Tokyo'|date:"i" }}分 更新）
+            </td>
+            {% elif not attraction.congestion_level == -1 %}
+            <td class="left_side">混雑度</td>
+            <td class="right_side">
+                {{ attraction.get_congestion_level_display }}
+                （{{ attraction.created_at|timezone:'Asia/Tokyo'|date:"H" }}時{{ attraction.created_at|timezone:'Asia/Tokyo'|date:"i" }}分 更新）
+            </td>
+            {% endif %}
+        </tr>
+        {% endif %}
+
+        {% if attraction.announcement %}
+        <tr class="info">
+            <td class="left_side">お知らせ</td>
+            <td class="right_side">{{ attraction.announcement|linebreaks }}</td>
+        </tr>
+        {% endif %}
+
+    </table>
+
+    {% if exhibition.explanation %}
+    <div>
+        <h3 class="section-title">展示の説明</h3>
+
+        <div class="ck-content message">
+            {{ exhibition.explanation|safe }}   
+            {% comment %} ここだけはsafeつけてリッチテキストのHTMLタグを解釈させる {% endcomment %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if exhibition.background %}
+    <div>
+        <h3 class="section-title">画像</h3>
+        <picture>
+            <source srcset="{{ exhibition.background_avif.url }}" type="image/avif">
+            <img class="background_picture" src="{{ exhibition.background.url }}" alt="詳細画像">
+        </picture>
+    </div>
+    {% endif %}
+
+    {% comment %} 動画（ファイル優先）{% endcomment %}
+    {% if exhibition.video_file %}
+    <script src="https://cdn.plyr.io/3.8.4/plyr.polyfilled.js"></script>
+    <div>
+        <h3 class="section-title">紹介動画</h3>
+        <video id="player" playsinline controls>
+            <source src="{{ exhibition.video_file.url }}" type="video/mp4" preload="metadata">
+            お使いのブラウザは動画をサポートしていません。
+        </video>
+        <div id="av1_fallback_message">
+            お使いのブラウザはAV1コーデックに対応していません。動画が再生できない可能性があります。<br>
+            対応しているブラウザの詳細はこちらをご覧下さい。<br>
+            <a href="https://caniuse.com/?search=av1">
+                <button class="button_style2"><span class="material-symbols-rounded">video_file</span> Can I Use (外部サイト)</button>
+            </a>
+        </div>
+        <script src="{% static 'main/js/warn_safari.js' %}" defer></script>
+
+        <p style=" margin-top:1em; text-align: right;">※この動画を著作権者の許諾なく使用•公開•複製することは営利•非営利を問わず固く禁じます。</p>
+    </div>
+        <script>
+            {% comment %} Plyrの動作をカスタム {% endcomment %}
+            const player = new Plyr('#player', {
+                ratio: '16:9',
+            });
+        </script>
+    {% elif exhibition.video_youtube %}
+    <div>
+        <h3 class="section-title">紹介動画</h3>
+        <div class="video">
+            {{ exhibition.video_youtube|safe }}
+        </div>
+        <p style=" margin-top:1em; text-align: right;">※この動画を著作権者の許諾なく使用•公開•複製することは営利•非営利を問わず固く禁じます。</p>
+    </div>
+    {% endif %}
+
+
+    {% if exhibition.spots.all %}
+    <div class="map">
+        <h3 class="section-title">場所</h3>
+        <p>地図の閲覧には、校内掲示の合言葉が必要です。</p>
+        {% for spot in exhibition.spots.all %}    
+            <h4>{{ spot.name }}</h4>
+            <a class="button_style2" href="{% url 'main:map' spot.floor %}?spot={{ spot.id }}">
+                <span class="material-symbols-rounded">pin_drop</span>{{ spot.name }} 付近の地図を見る
+            </a>
+        {% empty %}
+        <h4>お楽しみに！</h4>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if exhibition.events.all %}
+    <div class="events">
+        <h3 class="section-title">イベント</h3>
+        {% for event in exhibition.events.all %}
+            <h2>{{ event.name }}</h2>
+            <p>{{ event.explanation }}</p>
+            {% for timeslot in event.timeslots.all %}
+            <span>{{ timeslot}},</span>
+            {% endfor %}
+            に開催
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% comment %} Tokenユーザーは行き来できる {% endcomment %}
+    {% if token and config_permission.can_edit_exhibitions or request.user.is_superuser %}
+    <div class="for_editors">
+        <h3 class="section-title">編集者の方へ</h3>
+        <p>
+            このページは公開時、各展示の個別紹介用ページとなります。<br>
+            現在は配布QRコードを利用して読み込んだユーザーのみに表示されており、まだ公開されていません。<br>
+            ここで再度編集する場合は、必ず編集ボタンをご利用下さい。
+        </p>
+        <a href="{% url 'main:exhibition_edit' exhibition.id %}?token={{ token }}">
+            <button class="button_style1"><span class="material-symbols-rounded">edit_square</span> 編集する</button>
+        </a>
+    </div>
+    {% endif %}
+</article>
+{% endblock %}

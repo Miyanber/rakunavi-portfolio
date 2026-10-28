@@ -1,0 +1,67 @@
+.formset#members>.formset_item .index {
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+
+.formset#members>.formset_item .form_item:has(.message) {
+    grid-column-start: 3;
+    grid-column-end: 5;
+}
+
+.formset#members>.formset_item .drag_indicator {
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+@media only screen and (max-width: 770px) {
+    .formset#members>.formset_item {
+        grid-template-columns: 1.5em 10% 1fr;
+    }
+
+    .formset#members>.formset_item .form_item:has(.name) {
+        grid-column-start: 3;
+        grid-column-end: 4;
+    }
+
+    .formset#members>.formset_item .form_item:has(.message) {
+        grid-column-start: 3;
+        grid-column-end: 4;
+    }
+
+    .formset#members>.formset_item .index {
+        grid-row-start: 1;
+        grid-row-end: 4;
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+
+    .formset#members>.formset_item .form_item {
+        grid-column-start: 3;
+        grid-column-end: 4;
+    }
+
+    .formset#members>.formset_item .form_item:has(.icon) {
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+
+    .formset#members>.formset_item .form_item:has(.icon) label {
+        position: static;
+    }
+
+    .formset#members>.formset_item .form_item:has(.icon) img {
+        width: 10em;
+        height: 10em;
+        object-fit: cover;
+        border-radius: 100%;
+        margin: 1em auto;
+        box-shadow: .1vw .1vw 5px var(--td-icon-img_box-shadow), -.1vw -.1vw 5px rgba(74, 74, 74, 0.4);
+    }
+
+    .formset#members>.formset_item .drag_indicator {
+        grid-row-start: 1;
+        grid-row-end: 4;
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+}

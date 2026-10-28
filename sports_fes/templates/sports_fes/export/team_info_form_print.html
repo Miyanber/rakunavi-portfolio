@@ -1,0 +1,59 @@
+{% extends "main/export/handout/base.html" %}
+
+{% block recipient %}
+{{ object.name }} 担当者
+{% endblock %}
+
+{% block content %}
+<p>
+    　今年度も、文化祭・体育祭公式Webアプリ「らくなび」が運用されます。
+    これに伴いまして、応援団担当者の皆様に、幾つか協力を要請いたします。これまで準備してきた皆さんの努力を、らくなびでアピールして下さい！
+</p>
+<table class="schedule">
+    <tr class="header">
+        <th>日時</th>
+        <th colspan="2">作業内容</th>
+    </tr>
+    <tr>
+        <td style="width: 10em;">期限：　　/　　 まで</td>
+        <td style="border-right: none;">
+            右のQRコードから、紹介ページに掲載する内容を入力する。<br>
+            <strong>※このQRコードは各展示ごとに異なり、認証情報を含みます。管理にご注意ください。また、学習用iPadで写真を撮り保存しておくことをお勧めします。</strong>
+        </td>
+        <td style="border-left: none;">
+            <img class="qr_code" src="data:image/png;base64,{{ object.qr }}" alt="QR Code" />
+        </td>
+    </tr>
+</table>
+<div style="margin-top: 20px;">　注意点：</div>
+<ul style="margin-top: 5px;">
+    <li>コンテンツを作成する際は、入力フォームからアクセスできる「コンテンツ作成ガイドライン」を遵守して下さい。</li>
+    <li>原則編集期限を過ぎると編集出来なくなり、アクセスが拒否されます。ご注意ください。</li>
+</ul>
+
+<style>
+    .date{
+        display: none;
+    }
+    .schedule {
+        margin: 0 auto;
+        border-collapse: collapse;
+
+        .header td, .header th {
+            text-align: center;
+        }
+
+        td, th {
+            border: 1px solid #000;
+            padding: 5px 10px;
+            vertical-align: top;
+        }
+
+        .qr_code {
+            float: right;
+            width: 90px;
+            height: 90px;
+        }
+    }
+</style>
+{% endblock %}

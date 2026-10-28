@@ -1,0 +1,104 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/team.css' %}" />
+<style>
+    {% for team in teams %}
+    {% if team.obj %}
+    .team-{{ team.key }} {
+        background-image: url('{% if team.obj.bg_image %}{{ team.obj.bg_image.url }}{% endif %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        overflow: hidden;
+    }
+    .team-{{ team.key }}::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: var(--team-overlay-{{ team.key }});
+        z-index: 1;
+    }
+    .team-{{ team.key }} .title {
+        position: relative;
+        z-index: 2;
+    }
+    {% endif %}
+    {% endfor %}
+</style>
+{% endblock %}
+
+{% block title %}ブロック{% endblock %}
+
+{% block content %}
+<header>
+    <div class="header-backlayer">
+        {% if general_images.team_header %}
+            <img class="common" src="{{ general_images.team_header.url }}" alt="チームヘッダー画像" />
+        {% else %}
+            <img class="black common" />
+        {% endif %}
+        <div class="title">ブ ロ ッ ク</div>
+    </div>
+</header>
+
+<p class="page-intro">
+    各ブロックのクラスと、応援合戦への意気込みをご紹介します！！
+    {% if request.user.is_superuser %}
+    <a class="button_basic1" href="{% url 'sports_fes:team_info_print' %}" target="_blank">
+        <span class="material-symbols-rounded">download</span> PDFダウンロード
+    </a>
+    {% endif %}
+</p>
+
+{% for team in teams %}
+<div class="team team-{{ team.key }}">
+    <div class="team-title">
+        {% for char in team.label %}
+            <div class="title-char">{{ char }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="team-content">
+        {% if team.obj and team.obj.main_image %}
+            <img class="teamphoto" src="{{ team.obj.main_image.url }}" alt="応援団画像" />
+        {% endif %}
+
+        <div class="classes">
+            {% for block in team.grade_blocks %}
+            <div class="grade-block">
+                <div class="grade-title">{{ block.label }}</div>
+                <div class="grade-list">
+                    {% for group in block.groups %}
+                    <div class="grade grade-{{ group.grade_num }}">
+                        {% for class_num in group.class_nums %}
+                            {# 例: 中1-1, 高2-3 のように校種内の学年番号で表示 #}
+                            <div class="class-item">{{ group.grade_num }}-{{ class_num }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if team.obj and team.obj.description %}
+        <div class="ck-content team-description">
+            {{ team.obj.description|safe }}
+        </div>
+        {% endif %}
+
+        {% if request.user.is_superuser %}
+        <div class="edit_button">
+            <a class="button_basic1" href="{% url 'sports_fes:team_info_update' team.obj.pk %}?token={{ team.obj.token }}" target="_blank">
+                <span class="material-symbols-rounded">edit</span> 情報を編集
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

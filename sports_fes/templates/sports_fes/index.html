@@ -1,0 +1,110 @@
+{% extends "sports_fes/base.html" %}
+
+{% block title %}らくなび | 体育祭Webアプリ{% endblock %}
+
+{% load static %} 
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/index.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="top">
+    <header class="index">
+        {% if general_images.index_title and general_images.index_dark_title %}
+            <img class="index_title fade-in light" src="{{ general_images.index_title.url }}" alt="" fetchpriority="high">
+            <img class="index_title fade-in dark" src="{{ general_images.index_dark_title.url }}" alt="" fetchpriority="high">
+        {% else %}
+            <div class="header-backlayer">
+                <img class="backup_index_title" src="{% static 'sports_fes/img/1217.webp' %}" alt="" fetchpriority="high"> 
+                    <div class="backup_header_title">
+                        <h3>第{{ assets.high_year }}回 サンプル高等学校</h3>
+                        <h3>第{{ assets.junior_year }}回 サンプル高等学校附属中学校</h3>
+                        <h1>体育祭</h1>
+                        <span class="date_and_time">{{ assets.begin_at|date:"Y.n.j (D)" }} {{ assets.begin_at|date:"H:i" }}〜{{ assets.end_at|date:"H:i" }} @向島G</span>
+                    </div>
+            </div>
+        {% endif  %}
+    </header>
+</div>
+
+{% if teams %}
+<section>
+    {% comment %} 得点表示 {% endcomment %}
+    <h2>現在の得点状況</h2>
+    <table class="points">
+    {% for team in teams %}
+        <tr class="{{ team.name }}">
+            <td class="{% if team.win %}winner{% endif %}">{{ team }}</td>
+            <td>{{ team.points }}</td>
+            <td>{{ team.points_updated_at|date:"H:i" }}更新</td>
+        </tr>
+    {% endfor %}
+    </table>
+</section>
+{% endif %}
+
+<section class="slogan">
+    <div class="slogan_wrap">
+        <div class="slogan-image">
+            {% if general_images.slogan_image %}
+            <img class="fade-in light" src="{{ general_images.slogan_image.url }}" alt="スローガン画像">
+            <img class="fade-in dark" src="{% if general_images.slogan_dark_image %}{{ general_images.slogan_dark_image.url }}{% endif  %}" alt="スローガン画像">
+            {% else %}
+            <div class="slogan-main">{{ assets.main }}</div>
+            <div class="slogan-sub">〜{{ assets.sub }}〜</div>
+            {% endif %}
+            <div class="toslogans">
+                <a class="button_basic1 fade-in" href="{% url "sports_fes:slogans" %}">
+                    view more<span class="material-symbols-rounded">chevron_right</span>
+                </a>
+            </div>
+        </div>
+
+        {% comment %} 以下は画像がある場合のみ {% endcomment %}
+        {% if general_images.slogan_logo %}
+        <div class="slogan-logo">
+            <div class="logo-square">
+            <img class="fade-in light" src="{% if general_images.slogan_logo %}{{ general_images.slogan_logo.url }}{% else %}{% static 'sports_fes/img/wip.webp' %}{% endif %}" alt="スローガンロゴ">
+            <img class="fade-in dark" src="{% if general_images.slogan_dark_logo %}{{ general_images.slogan_dark_logo.url }}{% else %}{% static 'sports_fes/img/wip_darkmode.webp' %}{% endif %}" alt="スローガンロゴ">
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+
+<div class="background">
+    <section class="news">
+        <h2>ご来場の方へ</h2>
+        <p>向島グラウンド周辺の道路はすべて駐停車禁止です。<br><span class="att">自家用車での来場は固くお断りします。</span></p>
+        <div class="buttons">
+            <a class="news_button" href="{% url 'sports_fes:facilities'%}">
+                <div class="text">会場案内</div>
+                <div class="icon">
+                    <span class="material-symbols-rounded">map_search</span>
+                </div>
+            </a>
+            <a class="news_button" href="{% url 'sports_fes:access'%}">
+                <div class="text">アクセス</div>
+                <div class="icon">
+                    <span class="material-symbols-rounded">subway_walk</span>
+                </div>
+            </a>
+        </div>
+    </section>
+</div>
+
+<section>
+    <h2>らくなび</h2>
+    <p>
+        今年度の体育祭では、文化祭Webアプリ「らくなび」に統合した体育祭Webアプリを運用しています。<br>
+        これは来場される皆様への情報発信を目的に、本校生徒によって開発されています。
+    </p>
+    
+    <a class="button_basic1 rakunavi_link" href="{% url 'main:index' %}">
+        <span>view Rakunavi for School Festival</span>
+    </a>
+</section>
+
+
+{% endblock %}

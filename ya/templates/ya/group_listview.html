@@ -1,0 +1,47 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/dm_listview.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}グループチャット一覧{% endblock title_wrapper %}
+{% block header_title %}グループチャット一覧{% endblock %}
+
+{% block content %}
+
+<div style="display:flex;">
+    <h1>グループ</h1>
+    <form method="POST" action="{% url 'ya:group_create' %}" style="margin: auto 0; margin-left: auto;">
+        {% csrf_token %}
+        <button type="submit" class="group-add-btn">
+            <span class="material-symbols-rounded">group_add</span>
+        </button>
+    </form>
+</div>
+
+{% for group in groups %}
+    <a class="group" href="{% url 'ya:group_chat' group.id %}">
+        <div class="dm">
+            <div class="left">
+                <img class="icon" src="{% if group.image %}{{ group.image.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+            </div>
+            {% with group.messages.last as last %}
+            <div class="middle">
+                <span class="username">
+                    {{ group.name }}{% if group.material_icon %}<span class="material-symbols-rounded roles">{{ group.material_icon }}</span>{% endif %}<span style="font-size:1rem; color:var(--label-color); margin-left:.5rem;">({{ group.members.count }})</span></span>
+                </span>
+                <span class="message">{{ last.content }}</span>
+            </div>
+            <div class="right">
+                <span class="send_at">{{ last.send_at }}</span>
+                {% if group.id in group_unreads.all  %}
+                    <span class="unread" style="color: var(--accent-color1)">未読メッセージがあります</span>
+                {% endif %}
+            </div>
+            {% endwith %}
+        </div>
+    </a>
+{% endfor %}
+
+{% endblock content %}

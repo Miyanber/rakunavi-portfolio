@@ -1,0 +1,122 @@
+{% load static %}
+{% load tz %}
+{% load custom_tags %}
+
+{% comment %} 混雑度アイコン事前読み込み {% endcomment %}
+<link rel="preload" href="{% static "main/img/icons/red.webp" %}" as="image">
+<link rel="preload" href="{% static "main/img/icons/yellow.webp" %}" as="image">
+<link rel="preload" href="{% static "main/img/icons/green.webp" %}" as="image">
+<link rel="preload" href="{% static "main/img/icons/blue.webp" %}" as="image">
+
+
+<div id="exhibitions">
+    {% for exhibition in exhibitions %}
+
+    {% with attraction=exhibition.ordered_attractions.0 %}
+    {% comment %} ここで混雑状況をclassに付与 {% endcomment %}
+    
+    <div id="{{ exhibition.id }}" class="exhibition {{ attraction|congestion_status }}">
+        <a href="{% url 'main:exhibition_detail' exhibition.pk %}" class="exhibition_link_mask"></a>
+        <div class="exhibition_header">
+            <img class="exhibition_header_image" src="{% if exhibition.background %}{{ exhibition.background.url }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="詳細画像">
+            <div class="icon_container">
+                <img src="{% if exhibition.thumbnail %}{{ exhibition.thumbnail.url }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="アイコン" class="icon" loading="lazy">
+            </div>
+        </div>
+        <div class="category no-print">
+            {% if exhibition.category == 'class' %}
+                <span>{{ exhibition.grade_number }}-{{ exhibition.class_number }} {{ exhibition.get_category_display }} </span>
+            {% else %}
+                <span>{{ exhibition.get_category_display }}</span>
+            {% endif %}
+        </div>
+        <div class="exhibition_content">
+            <h2 class="title">{{ exhibition.title }}</h2>
+            <div class="info-section">
+                <p>
+                    {{ exhibition.overview }}
+                </p>
+            </div>
+
+            <div class="festival-day-updates">
+                {% comment %} <h3 class="festival-day-updates__title"><span class="material-symbols-rounded">info</span>当日のお知らせ</h3> {% endcomment %}
+
+                {% comment %} 待ち時間・混雑度・お知らせ {% endcomment %}
+                <div class="festival-day-updates__body">
+
+                    {% comment %} 待ち時間 {% endcomment %}
+                    <div class="badge wait">
+                        <div class="badge_item">
+                            <span>所要時間(分)</span><span class="level_value required_time" style="font-weight: 400 !important;">{% if attraction.time_required >= 0 %}{{ attraction.time_required}}{% else %}ー{% endif%}</span>
+                        </div>
+                        <div class="badge_item">
+                            {% if attraction.wait_time >= 0 %}
+                            <span>待ち時間(分)</span><span class="level_value">{{ attraction.wait_time }}</span>
+                            {% elif attraction.congestion_level >= 0 %}
+                            <span>混雑度</span><span class="level_value">{{ attraction.formal_congestion_level }}</span>
+                            {% else %}
+                            <span>混雑度</span><span class="level_value">ー</span>
+                            {% endif %}
+                        </div>
+                        <div class="badge_item">
+                            <span>整理券配布</span>
+                            <span class="level_value ticket" style="color: font-weight: 500 !important;">
+                                {% if attraction.ticket_status == 3 %}<span class="material-symbols-rounded" style="font-size: 2.5rem; font-variation-settings: 'FILL' 0, 'wght' 600;">circle</span>
+                                {% elif attraction.ticket_status == 2 %}<span class="material-symbols-rounded" style="font-size: 2.5rem; font-variation-settings: 'FILL' 0, 'wght' 600;">change_history</span>
+                                {% elif attraction.ticket_status == 4 %}<span class="material-symbols-rounded" style="font-size: 2.5rem; font-variation-settings: 'FILL' 0, 'wght' 600;">close</span>
+                                {% else %}ー{% endif%}
+                            </span>
+                        </div>
+                    </div>
+
+
+                    {% comment %} お知らせ {% endcomment %}
+                    {% if attraction.announcement %}
+                    <div class="comment">
+                        {{ attraction.announcement }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if attraction %}
+                <div class="festival-day-updates__update-time">{{ attraction.created_at|date:"H" }}：{{ attraction.created_at|date:"i" }} 更新</div>
+                {% endif %}
+            </div>
+
+            {% comment %} 場所 {% endcomment %}
+            <div class="spot">
+                {% for spot in exhibition.spots.all %}
+                    <div><span class="material-symbols-rounded">location_on</span> {{ spot }}</div>
+                {% endfor %}
+            </div>
+
+        </div>
+        {% comment %} 審査状況 {% endcomment %}
+        {% if perms.main.can_review_exhibition  or perms.main.can_review_food_booth or perms.main.can_review_performance %}
+        <div style="margin-bottom: 3rem;"></div>
+        <div class="judge_container no-print">
+            {% if exhibition.review_status == "accepted" %}
+            <a class="permitted" href="{% url 'main:exhibition_review' exhibition.pk %}"><span class="material-symbols-rounded permitted">verified</span> 承認済み</a>
+            {% elif exhibition.review_status == "rejected" %}
+            <a class="rejected" href="{% url 'main:exhibition_review' exhibition.pk %}"><span class="material-symbols-rounded rejected">gpp_bad</span> 差し戻し</a>
+            {% else %}
+            <a class="in_progress" href="{% url 'main:exhibition_review' exhibition.pk %}"><span class="material-symbols-rounded in_progress">sync</span> 審査待ち</a>
+            {% endif %}
+            <a href="{% url 'main:attraction_create' exhibition.pk %}">
+                <span class="material-symbols-rounded">attractions</span> 当日入力
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% endwith %}
+
+
+    {% empty %}
+        {% if valid_flag %}
+            <h3>該当する展示は見つかりませんでした。</h3>
+        {% else %}
+            <h3>上のバーから展示を検索できます。</h3>
+        {% endif %}
+    {% endfor %}
+</div>

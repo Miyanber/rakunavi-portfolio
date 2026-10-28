@@ -1,0 +1,177 @@
+body {
+    --th_color: var(--very-dark-gray);
+    --th_background: #df9d9d;
+    --td_color: var(--very-dark-gray);
+    --td_background: #df9d9d;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td,
+th {
+    vertical-align: middle;
+    padding: .5em 1em;
+    color: var(--td_color);
+    background-color: var(--td_background);
+}
+
+th {
+    color: var(--th_color);
+    background-color: var(--th_background);
+}
+
+table.form {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.form td.grades > input,
+table.form td.grades > select {
+    width: auto;
+    min-width: 2em;
+    padding: .5em .2em;
+    display: inline-block;
+    text-align: center;
+    background-color: white;
+}
+
+/* form用tableのスタイル */
+table.form td,
+table.form th {
+    vertical-align: middle;
+    padding: .5em 1em;
+    border: .15em solid #ffdada;
+    background-color: white;
+    color: var(--very-dark-gray);
+}
+
+table.form th {
+    border: .15em solid white;
+    background-color: #ffdada;
+    color: black;
+}
+
+table.form input,
+table.form textarea,
+table.form select {
+    border: .2em solid #ffdada;
+    border-radius: .5em;
+    font-family: inherit;
+    transition: .3s;
+    padding: .5em 1em;
+    font-size: 1rem;
+}
+
+table.form input,
+table.form select {
+    border-radius: 0;
+    border: none;
+    border-bottom: .2em solid #dbdbdb;
+    color: black;
+}
+
+table.form input:focus,
+table.form textarea:focus,
+table.form select:focus {
+    outline: 0;
+    border: .2em solid #ff747b;
+}
+
+table.form input:focus,
+table.form select:focus {
+    outline: 0;
+    border: none;
+    border-bottom: .2em solid #ff747b;
+}
+
+table.form input {
+    display: block;
+    background-color: white;
+    width: 100%;
+}
+
+table.form textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+table.form ul.errorlist {
+    color: white;
+    background-color: #ff3c8a;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    display: block;
+}
+
+@media only screen and (max-width: 770px) {
+    table.form th,
+    table.form td {
+        display: block;
+    }
+
+    table.form th {
+        border: none;
+    }
+
+    table.form td {
+        border-top: none;
+    }
+}
+
+/* ダークモード */
+
+body.dark-mode table.form td,
+body.dark-mode table.form th {
+    border: .15em solid #494049;
+    background-color: #3b3b3b;
+    color: #ddd;
+}
+
+body.dark-mode table.form th {
+    border: .15em solid white;
+    background-color: #494049;
+    color: #ddd;
+}
+
+body.dark-mode table.form input,
+body.dark-mode table.form textarea,
+body.dark-mode table.form select {
+    border: .2em solid #494049;
+}
+
+body.dark-mode table.form input,
+body.dark-mode table.form select {
+    border-bottom: .2em solid #494049;
+    color: #ddd;
+}
+
+body.dark-mode table.form input:focus,
+body.dark-mode table.form textarea:focus,
+body.dark-mode table.form select:focus {
+    border: .2em solid #a555a5;
+}
+
+body.dark-mode table.form input:focus,
+body.dark-mode table.form select:focus {
+    border-bottom: .2em solid #a555a5;
+}
+
+body.dark-mode table.form select,
+body.dark-mode table.form input,
+body.dark-mode table.form textarea {
+    background-color: #494049;
+}
+
+body.dark-mode table.form textarea {
+    width: 100%;
+    resize: vertical;
+    background-color: #494049;
+}
+
+body.dark-mode table.form ul.errorlist {
+    color: white;
+    background-color: #ff3c8a;
+}

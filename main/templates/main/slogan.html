@@ -1,0 +1,54 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}スローガン{% endblock title %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}スローガン{% endblock header_title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/slogan.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<article>
+    <h2>今年のスローガン</h2>
+    <div style="text-align: center">
+        <p>今年のスローガンは、</p>
+        <h3>{{ slogans.first.main }}――{{ slogans.first.sub }}――</h3>
+        <p>です。</p>
+    </div>
+
+    <h2>スローガン一覧</h2>
+    <div>
+        <p>本校文化祭の、歴代のスローガンをまとめています。</p>
+    </div>
+
+    <table>
+        <tr>
+            <th class="year"></th>
+            <th colspan="2">スローガン</th>
+        </tr>
+        {% for slogan in slogans %}
+        <tr class="underbar">
+            <td class="year">{{ slogan.year }}年度</td>
+            <td class="main_slogan" colspan="2">{{ slogan.main }}――{{ slogan.sub }}――</td>
+        </tr>
+        <tr>
+            <td class="year"></td>
+            <td><img class="images" src="{{ slogan.image1.url }}" alt="スローガン"></td>
+            <td><img class="images" src="{{ slogan.footer_image.url }}" alt="スローガン"></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td class="year"></td>
+            <td>なにもありません。</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+
+</article>
+
+{% endblock content %}

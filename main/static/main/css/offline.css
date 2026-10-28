@@ -1,0 +1,26 @@
+img {
+    display: none !important;
+}
+
+header {
+    background: linear-gradient(30deg, #f7687ea0, #d12b44a0);
+}
+
+#frown {
+    width: 3em;
+    font-size: 1.5em;
+    font-weight: 900;
+    padding: 0.5em;
+    background-color: #f89aa8;
+    color: black;
+    border-radius: 1em;
+    margin-bottom: 1em;
+}
+
+body.dark-mode header{
+    background: linear-gradient(30deg, #3b2b3b, #661766);
+}
+body.dark-mode #frown {
+    background-color: #bd26bd;
+    color: #fcf5fc;
+}

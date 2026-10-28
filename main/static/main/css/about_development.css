@@ -1,0 +1,47 @@
+body {
+    --section-title_background: white;
+    --section-title_shadow: #7c7c7c;
+    --info_background: #ffdde3;
+}
+
+h2 {
+    font-size: 170%;
+}
+
+div h3 {
+    display: block;
+    width: 100%;
+    font-size: 1.3em;
+    padding-left: 2vw;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    border-left: 12px solid var(--accent-color2);
+    background-color: var(--section-title_background);
+    box-shadow: 4px 4px 0px var(--section-title_shadow);
+}
+
+div h3::first-letter {
+    font-size: 130%;
+}
+
+div.about {
+    text-align: center;
+}
+
+body.dark-mode {
+    --accent-color2: #9c479c;
+    --section-title_background: #494049;
+    --section-title_shadow: #131313;
+    --info_background: #494049;
+}
+
+img.logo {
+    max-width: 30%;
+    max-height: 7em;
+}
+
+.aws_logo{
+    /* AWSの規約によって色を変えてはいけない */
+    background-color: #232F3E; 
+    padding: 1em;
+}

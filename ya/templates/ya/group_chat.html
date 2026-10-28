@@ -1,0 +1,82 @@
+{% extends "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/dm.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}{{ group.name }}{% endblock title_wrapper %}
+{% block header_title %}{{ group.name }}{% endblock %}
+
+{% block content %}
+    <div class="top">
+        <div style="display:flex;">
+            <a href="{% url 'ya:group_list' %}">
+                <span class="material-symbols-rounded">arrow_back_ios_new</span>
+            </a>
+            <a href="{% url 'ya:group_settings' group.pk %}">
+                <span class="material-symbols-rounded">settings</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="user-groups">
+        <input type="checkbox" id="members-toggle">
+        <div class="icon_background">
+            <img class="icon" src="{% if group.image %}{{ group.image.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+        </div>
+        <div class="name"><label>{{ group.name }}{% if group.material_icon %}<span class="material-symbols-rounded roles">{{ group.material_icon }}</span>{% endif %}<span style="font-size:1rem; color:var(--label-color); margin-left:.5rem;">({{ group.members.count }})</span></label></div>
+        <label for="members-toggle" class="basic" id="members"><span class="material-symbols-rounded group">group</span></label>
+    </div>
+
+    <div class="user-groups members">
+        {% for member in group.members.all %}
+            <div class="member">
+                <img class="icon" src="{% if member.icon %}{{ member.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                <span class="username">{{ member.username }}</span><span class="material-symbols-rounded roles">{% if member.role %}{{ member.role.icon }}{% endif %}</span><span>@{{ member.user_id }}</span>
+            </div>
+        {% empty %}
+            <div class="member empty">
+                メンバーがいません
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="messages" class="messages">
+        {% for msg in messages %}
+            <div class="{% if msg.sender == request.user %}mine{% else %}yours{% endif %}" data-message-id="{{ msg.id }}">
+                <img class="sender icon" src="{% if msg.sender.icon %}{{ msg.sender.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                <div class="bubble">
+                    <span class="content">{{ msg.content }}</span>
+                </div>
+                <span class="send_at">
+                    {{ msg.send_at|timesince }}前
+                    <span class="material-symbols-rounded">
+                        {% if msg.read_count >= group.members_count %}
+                            done_all
+                        {% elif msg.read_count >= 1 %}
+                            check
+                        {% endif %}
+                    </span>
+                    <small class="read-count">（{{ msg.read_count }} / {{ group.members_count }})</small>
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id="group-form" class="message-form">
+        {% csrf_token %}
+        {{ form.content }}
+        <button type="submit" class="submit basic"><span class="material-symbols-rounded">send</span></button>
+        <div id="typing-indicator" style="display:none;">誰かが入力中…</div>
+    </form>
+    <div class="bottom"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.groupId = {{ group.id }};
+    window.myUserId = {{ request.user.id }};
+</script>
+<script src="{% static 'ya/js/group_chat.js' %}"></script>
+{% endblock %}

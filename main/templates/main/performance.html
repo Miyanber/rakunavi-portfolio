@@ -1,0 +1,64 @@
+{% extends "main/youthsquare.html" %}
+{% load static %}
+
+{% block title %}野外ライブ | 青春の広場{% endblock title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/performance.css' %}">
+{% endblock extra_style %}
+
+{% block main_content %}
+<section style="padding: 1em;">
+    <h2 class="heading_style1"><span class="body-text">{{ title_name }}</span></h2>
+    <div class="info">
+        {% if title_name == "野外ライブ" %}
+        <img class="live_spot" src="{{ images.header_performances.url }}" alt="" decoding="async">
+        <p style="text-align: center;">
+            {% with date=dates.1.begin_at %}
+            野外ライブは、<strong>文化祭2日目（{{ date.month }}月{{ date.day }}日）</strong>に、<strong>青春の広場（グラウンド）北側の野外ライブステージ</strong>で行われます。<br>
+            当日はキッチンカーも出店予定ですので、ぜひお立ち寄りください！<br>
+            {% endwith %}
+        </p>
+        <a href="{% url "main:timetable" 2 %}" class="link_style3"><span>タイムテーブルはこちら</span></a>
+        {% elif title_name == "音楽室ライブ" %}
+        <img class="live_spot" src="{{ images.header_youthsquare.url }}" alt="" decoding="async">
+        <p>
+            <span class="body-text">音楽室ライブは、本館4階音楽室で行われます。</span>
+        </p>
+        <a href="{% url "main:timetable" 2 %}" class="link_style3"><span>タイムテーブルはこちら</span></a>
+        {% endif %}
+    </div>
+</section>
+    
+<section> {% comment %} 本来はh1を入れるべきだが、今回はheaderに記述してる {% endcomment %}
+    <div class="performances">
+        {% for performance in performances %}
+        <div class="performance" id="{{ performance.id }}">
+            <a href="{% url 'main:performance_detail' performance.pk %}">
+            <div class="time">
+                <span>{{ performance.begin_at|default:"Unset" }} ～ {{ performance.end_at|default:"Unset" }}</span>
+            </div>
+            <div class="profile">
+                <img src="{% if performance.thumbnail %}{{ performance.thumbnail.url }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="" loading="lazy">
+                <h3 class="band_name">{{ performance.name }}</h3>
+                {% comment %} <p class="date">{{ performance.date }}</p> {% endcomment %}
+                <p class="genre">{{ performance.genre|default:"ジャンル未定" }}</p>
+            </div>
+            
+            {% if perms.main.can_review_exhibition or perms.main.can_review_food_booth or perms.main.can_review_performance %}
+            <div class="detail">
+                {% if performance.review_status == "accepted" %}
+                <a class="permitted link_style3" href="{% url 'main:performance_review' performance.pk %}"><span class="material-symbols-rounded permitted">verified</span> 承認済み</a>
+                {% elif performance.review_status == "rejected" %}
+                <a class="rejected link_style3" href="{% url 'main:performance_review' performance.pk %}"><span class="material-symbols-rounded rejected">gpp_bad</span> 差し戻し</a>
+                {% else %}
+                <a class="in_progress link_style3" href="{% url 'main:performance_review' performance.pk %}"><span class="material-symbols-rounded in_progress">sync</span> 審査待ち</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            </a>
+        </div>
+    {% endfor %}
+    </div>
+</section>
+{% endblock main_content %}

@@ -1,0 +1,60 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/notification.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4 d-flex align-items-center">
+        <span class="material-symbols-rounded me-2">notifications</span>通知一覧
+    </h3>
+
+    <div class="list-group shadow-sm">
+        {% for notification in notifications %}
+            <a href="{% url 'ya:post_detail' notification.post.id %}" 
+               class="list-group-item list-group-item-action py-3 {% if not notification.is_read %}unread{% endif %}">
+                <div class="notification">
+                    <div class="ms-2">
+                        {% if notification.action_type == 'like' %}
+                            <span class="material-symbols-rounded text-danger">favorite</span>
+                        {% else %}
+                            <span class="material-symbols-rounded text-primary">chat_bubble</span>
+                        {% endif %}
+                    </div>
+                    <div class="notification_body">
+                        {% if notification.sender.icon %}
+                            <img class="icon" src="{{ notification.sender.icon.url }}">
+                        {% else %}
+                            <span class="material-symbols-rounded text-secondary me-3" style="font-size: 3.5rem;">account_circle</span>
+                        {% endif %}
+
+                        <div style="width: 100%;">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">
+                                    <strong>{{ notification.sender.username }}</strong> さんが
+                                    {% if notification.action_type == 'like' %}
+                                        <span class="text-danger">あなたの投稿にいいねしました</span>
+                                    {% elif notification.action_type == 'reply' %}
+                                        <span class="text-primary">あなたの投稿に返信しました</span>
+                                    {% endif %}
+                                </h5>
+                                <small class="text-muted">{{ notification.created_at|date:"n/j H:i" }}</small>
+                            </div>
+                            
+                            <div class="mb-1 text-muted small text-truncate" style="max-width: 80%;">
+                                {{ notification.post.content|safe|truncatechars:50 }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <div class="list-group-item text-center py-5 text-muted">
+                通知はありません。
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

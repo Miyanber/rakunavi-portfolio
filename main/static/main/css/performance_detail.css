@@ -1,0 +1,413 @@
+:root {
+    --article_background: rgba(255, 255, 255, 0.75);
+    --span-genre_color: white;
+    --img_box-shadow: rgba(0, 0, 0, 0.56);
+    --img_border: white;
+    --h3_border-left: #88203a;
+    --h3_border-bottom: #d18699;
+    --h3_background: rgba(255, 255, 255, 0.5);
+    --div-songs-p-number_background: #c95871;
+    --div-songs-p-number_color: white;
+    --div-songs-span-artist_color: #595959;
+    --div-has-p-message-img_box-shadow-1: rgba(74, 74, 74, 0.4);
+    --div-has-p-message-img_box-shadow-2: rgba(74, 74, 74, 0.4);
+    --div-has-p-message-span-instrument_color: #595959;
+    --a-back_color: black;
+    --a-back_background: pink;
+    --a-back-hover_background: #c9959d;
+}
+
+section {
+    margin: 2em auto;
+}
+
+section>div {
+    margin: 3em 0;
+}
+
+.detail_header {
+    color: var(--very-dark-gray);
+    font-family: var(--yusei-magic);
+    background-color: #fff1f1;
+    box-shadow: rgba(99, 99, 99, 0.5) 0px .2em .4em 0px;
+}
+
+.detail_header span {
+    display: inline-block;
+}
+
+.detail_header .time-wrapper {
+    color: var(--very-dark-gray);
+    background-color: #ffabbd;
+    position: relative;
+    padding: .8em 3vw;
+    text-align: center;
+}
+
+.detail_header .time-wrapper::before {
+    position: absolute;
+    left: .5em;
+    top: 52.5%;
+    content: "";
+    border-top: .2em double var(--very-dark-gray);
+    width: calc(100% - 1em);
+    z-index: 0;
+}
+
+.detail_header .time-wrapper>span {
+    display: inline-block;
+    position: relative;
+    z-index: 10;
+    background-color: inherit;
+    color: var(--very-dark-gray);
+    padding: 0 1em;
+    font-size: 1.5em;
+}
+
+.detail_header .band-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 1em;
+}
+
+.detail_header .band-wrapper>* {
+    margin: auto;
+}
+
+.detail_header .band-wrapper img {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+
+.detail_header .band-wrapper .band_name {
+    font-size: 1.8em;
+    color: var(--very-dark-gray);
+    padding: .5em 1em;
+    background-color: #ffd4d4;
+    text-align: center;
+    box-shadow: .15em .15em 0 #bc9393;
+    min-width: 8em;
+    border-radius: 0.5em;
+    margin-bottom: 1em;
+}
+
+.detail_header .band-wrapper .genre {
+    background-color: #a24864;
+    color: var(--span-genre_color);
+    padding: 0.5em 1em;
+    border-radius: 2em;
+}
+
+.detail_header .band-wrapper .spot {
+    display: block;
+    text-align: center;
+}
+
+img.icon {
+    object-fit: cover;
+}
+
+img.icon {
+    width: 12em;
+    height: 12em;
+    aspect-ratio: 1/1;
+}
+
+img.group_photo {
+    display: block;
+    width: 70%;
+    margin: 1em auto;
+    box-shadow: .1vw .1vw 5px rgba(74, 74, 74, 0.4), -.1vw -.1vw 5px rgba(74, 74, 74, 0.4);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background-color: #222222;
+}
+
+h3.section-title {
+    font-size: 1.1em;
+    padding: .5em 1em;
+    border-bottom: var(--h3_border-bottom) .2em solid;
+    margin: 1em 0;
+}
+
+h3.section-title::first-letter {
+    font-size: 2em;
+    color: #88203a;
+    padding: 0 .1em;
+}
+
+div.video>* {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    max-width: 600px;
+}
+
+div.songs {
+    padding: 0 1em;
+    font-family: var(--yusei-magic);
+}
+
+div.songs>div {
+    display: flex;
+    align-items: center;
+    align-content: flex-start;
+}
+
+div.songs>div p {
+    display: inline-block;
+    margin: .5em;
+}
+
+div.songs>div p.number {
+    display: inline-flex;
+    background-color: #c95871;
+    color: white;
+    border-radius: 100%;
+    width: 2.2em;
+    height: 2.2em;
+    font-size: 1.2em;
+    justify-content: center;
+    align-items: center;
+}
+
+div.songs>div p.content span.title {
+    font-size: 1.1em;
+}
+
+div.songs>div p.content span.artist {
+    color: #595959;
+}
+
+/* CKEditorで色が指定されても表示を崩さない */
+.message * {
+    color: inherit !important;
+    background-color: inherit !important;
+}
+
+div:has(div.message) {
+    width: 100%;
+}
+
+div:has(div.message) p {
+    padding: 0 .5em;
+}
+
+div.members {
+    padding: 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: var(--yusei-magic);
+    row-gap: 1.5em;
+}
+
+div.members>div {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    column-gap: 1.5em;
+    row-gap: 1em;
+    padding: .5em;
+}
+
+div.members>div div {
+    display: flex;
+    column-gap: .8em;
+    align-items: center;
+}
+
+div.members>div span.instrument {
+    display: inline-block;
+    color: white;
+    background-color: #c95871;
+    padding: .5em 1em;
+    border-radius: 2em;
+}
+
+div.members>div div span.name {
+    display: inline-block;
+    font-size: 1.1em;
+}
+
+div.members>div div span.message {
+    color: #595959;
+    padding: 0 .5em;
+}
+
+a.back {
+    display: inline-flex;
+    text-decoration: none;
+    color: black;
+    background-color: pink;
+    padding: 1em;
+    border-radius: 50%;
+    transition: .4s all;
+}
+
+a.back:hover {
+    background-color: #c9959d;
+}
+
+@media only screen and (max-width: 1100px) {
+
+    img.icon {
+        float: none;
+        rotate: initial;
+        max-width: 100%;
+        margin: 1em 0;
+    }
+
+    div.members {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-width: 770px) {
+    section {
+        width: 90%;
+    }
+
+    .detail_header {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .detail_header .time-wrapper {
+        justify-content: center;
+    }
+
+    .detail_header .time-wrapper span {
+        font-size: 1.5em;
+    }
+
+    .detail_header .band-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .detail_header .band-wrapper .band_name {
+        width: 90%;
+    }
+
+    .detail_header .band-wrapper .genre {
+        margin: 1em auto;
+    }
+
+    img.icon {
+        float: none;
+        rotate: initial;
+        max-width: 100%;
+        margin: 1em 0;
+    }
+}
+
+/* ダークモード */
+
+body.dark-mode article {
+    background-color: #181818;
+}
+
+body.dark-mode div.time {
+    color: var(--very-dark-gray);
+    background-color: #a555a5;
+}
+
+body.dark-mode div.time::before {
+    border-top: .15em solid var(--very-dark-gray);
+}
+
+body.dark-mode div.detail_header {
+    color: var(--very-dark-gray);
+}
+
+body.dark-mode div.detail_header h2 span.band_name {
+    color: #a555a5;
+}
+
+body.dark-mode div.detail_header h2 span.genre {
+    background-color: #a555a5;
+    color: #ddd;
+}
+
+body.dark-mode img.icon,
+body.dark-mode img.group_photo {
+    box-shadow: rgba(0, 0, 0, 1) 0px .4vw .9vw .3vw;
+    border: .5rem solid #464046;
+}
+
+body.dark-mode h3.section-title {
+    border-left: #4c474c .4em solid;
+    border-bottom: #a555a5 .2em solid;
+    background-color: rgba(40, 40, 40, 0.5);
+}
+
+body.dark-mode h3.section-title::first-letter {
+    color: #bbb;
+}
+
+body.dark-mode div.songs>div p.number {
+    background-color: #d379d3;
+    color: var(--very-dark-gray);
+}
+
+body.dark-mode div.songs>div p.content span.artist {
+    color: #a5a2a2;
+}
+
+body.dark-mode div.members>div img {
+    box-shadow: .1vw .1vw 5px rgba(74, 74, 74, 0.4), -.1vw -.1vw 5px rgba(74, 74, 74, 0.4);
+}
+
+body.dark-mode div.members>div div span.instrument {
+    color: #a5a2a2;
+    background-color: #a555a5;
+}
+
+body.dark-mode div.members>div div span.message {
+    color: #ccc;
+}
+
+body.dark-mode a.back {
+    color: #111;
+    background-color: #eb9deb;
+}
+
+body.dark-mode a.back:hover {
+    background-color: #d379d3;
+}
+
+body.dark-mode .detail_header {
+    font-family: var(--yusei-magic);
+    background-color: #291f29;
+    box-shadow: rgba(99, 99, 99, 0.5) 0px .2em .4em 0px;
+}
+
+body.dark-mode .detail_header .time-wrapper {
+    color: #222;
+    background-color: #a555a5;
+    position: relative;
+    padding: .8em 3vw;
+    text-align: center;
+}
+
+body.dark-mode .detail_header .time-wrapper::before {
+    border-top: .2em double var(--very-dark-gray);
+}
+
+body.dark-mode .detail_header .band-wrapper .band_name {
+    color: #eee;
+    background-color: #423542;
+    box-shadow: .15em .15em 0 #99949999;
+}
+
+body.dark-mode .detail_header .band-wrapper .genre {
+    background-color: #a555a5;
+    color: #fff;
+}
+
+body.dark-mode .detail_header .band-wrapper .spot {
+    color: #ccc;
+}

@@ -1,0 +1,77 @@
+{% extends "main/editor.html" %}
+{% load static %}
+
+{% block title %}{{ performance.name }} | ライブ紹介{{ block.super }}{% endblock title %}
+
+{% block header_title %}ライブ紹介 <span style="display: inline-block;">編集ページ</span>{% endblock header_title %}
+
+{% block extra_style %}
+{{ block.super }}
+<meta name="referrer" content="strict-origin-when-cross-origin">    {% comment %} URL流出防止 {% endcomment %}
+<link rel="stylesheet" href="{% static 'main/css/performance_edit.css' %}">
+{% endblock extra_style %}
+
+{% block back_to_mypage %}{% endblock back_to_mypage %}
+
+{% block extra_forms %}
+<section>
+    <h3>曲目</h3>
+    <div id="songs" class="formset">
+        {{ song_formset.as_div }}
+    </div>
+    <div id="song-settings">
+        <div id="song_form_dummy" hidden>
+            <div class="drag_indicator">
+                <div class="wrapper">
+                    <span class="material-symbols-rounded">
+                        drag_indicator
+                    </span>
+                </div>
+            </div>
+            <div class="index" form-prefix="__prefix__">
+                <strong>__prefix1__</strong>
+            </div>
+            {{ song_formset.empty_form.as_div }}
+        </div>
+        <div class="add_or_delete_buttons">
+            <button class="add_item" id="song_add" type="button">曲を追加</button>
+            <button class="remove_item" id="song_remove" type="button">最後の曲を削除</button>
+        </div>
+    </div>
+</section>
+<section>
+    <h3>メンバー</h3>
+    <p>
+        <span class="body-text">
+            ※必ず本名ではなく、ニックネームを入力して下さい。
+        </span>
+    </p>
+    <div id="members" class="formset">
+        {{ member_formset.as_div }}
+    </div>
+    <div id="member-settings">
+        <div id="member_form_dummy" hidden>
+            <div class="drag_indicator">
+                <div class="wrapper">
+                    <span class="material-symbols-rounded">
+                        drag_indicator
+                    </span>
+                </div>
+            </div>
+            <div class="index" form-prefix="__prefix__">
+                <strong>__prefix1__</strong>
+            </div>
+            {{ member_formset.empty_form.as_div }}
+        </div>
+        <div class="add_or_delete_buttons">
+            <button class="add_item" id="member_add" type="button">メンバーを追加</button>
+            <button class="remove_item" id="member_remove" type="button">最後のメンバーを削除</button>
+        </div>
+    </div>
+</section>
+{% endblock extra_forms %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'main/js/performance_edit.js' %}" defer></script>
+{% endblock extra_js %}

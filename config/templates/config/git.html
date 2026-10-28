@@ -1,0 +1,44 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}EC2操作{% endblock title %}
+
+{% block extra_style %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'main/css/editor.css' %}">
+<link rel="stylesheet" href="{% static 'config/css/git.css' %}">
+{% endblock extra_style %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}EC2操作{% endblock header_title %}
+
+{% block content %}
+<article>
+    <section>
+        <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:mypage' %}">
+            <span class="material-symbols-rounded">arrow_left_alt</span>&nbsp;
+            <span class="material-symbols-rounded">security</span> 管理ページ
+        </a>
+        <h2>EC2操作</h2>
+        <p>これまでSSH接続などでしかEC2でのデプロイ作業などはできませんでしたが、操作を選択する形で可能になりました。</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">実行</button>
+        </form>
+    </section>
+
+    <section class="result">
+        {% if request.session.operation_status %}
+            ＞{{ request.session.operation }}
+            {{  request.session.operation_status|linebreaks }}
+        {% endif %}
+    </section>
+
+</article>
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock extra_js %}
+

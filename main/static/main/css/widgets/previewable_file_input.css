@@ -1,0 +1,59 @@
+div.previewable_file_input {
+    padding: 1px;
+}
+
+div.previewable_file_input button {
+    padding: .5em;
+    border-radius: 1em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    outline: none;
+    border: none;
+    min-width: 20%;
+    color: black;
+    transition: .2s all;
+    font-size: .9em;
+}
+
+div.previewable_file_input button>span {
+    width: 1.1em;
+    font-size: 1.5em;
+}
+
+div.previewable_file_input button.file_input {
+    border: .15em solid #ccc;
+}
+
+div.previewable_file_input button.file_input:hover {
+    background-color: #ccc;
+}
+
+div.previewable_file_input button.file_input.no-preview {
+    width: 100%;
+}
+
+div.previewable_file_input button.disable_checkbox_input,
+div.previewable_file_input button.clear_file_input {
+    background-color: #e45151;
+    color: white;
+}
+
+div.previewable_file_input button.disable_checkbox_input:hover,
+div.previewable_file_input button.clear_file_input:hover {
+    color: white;
+    background-color: #b84141;
+}
+
+div.previewable_file_input img {
+    display: block;
+    max-width: 30em;
+    max-height: 30em;
+    margin: 1em auto;
+}
+
+div.previewable_file_input>div {
+    display: flex;
+    justify-content: space-between;
+}

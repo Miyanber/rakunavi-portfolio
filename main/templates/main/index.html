@@ -1,0 +1,225 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+{% comment %} メインページなので特に高速化したい、preloadもする {% endcomment %}
+<link rel="preload" href="{% static 'main/css/index.css' %}" as="style">
+<link rel="stylesheet" href="{% static 'main/css/index.css' %}">
+<link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" as="style">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=">
+{% endblock extra_style %}
+
+{% block extra_js %}
+{% comment %} Make sure you put this AFTER Leaflet's CSS {% endcomment %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="" defer></script>
+{% comment %} 両方defer、initMapを後で読み込むこと {% endcomment %}
+<script src="{% static 'main/js/index_initMap.js' %}" defer></script>
+{% endblock extra_js %}
+
+{% block title_wrapper %}らくなび - 学内文化祭{{ dates.0.begin_at.year }} 公式Webアプリ{% endblock title_wrapper %}
+
+{% block header %}
+<header class="index">
+    <h1 class="index__rakunavi">らくなび</h1>
+    <div class="index__title">
+        <span class="index__title__year">{{ dates.0.begin_at.year }}年度 学内文化祭</span>
+        <span class="index__title__slogan">{{ slogan.main }}<br>-{{ slogan.sub }}-</span>
+        <span class="index__title__dates">
+            {{  dates.0.begin_at|date:"Y.n.j" }} - {{  dates.1.end_at|date:"Y.n.j" }}
+        </span>
+    </div>
+    <div class="index__image">
+        <picture>
+            <source srcset="{{ images.header_index_avif.url }}" type="image/avif">
+            <img src="{{ images.header_index.url }}" alt="背景" decoding="async" loading='eager' fetchpriority="high">
+        </picture>
+    </div>
+    <div class="index__background"></div>
+</header>
+{% endblock header %}
+
+{% block content %}
+    <div class="content0">
+        <h2>{{ dates.0.begin_at.year }}年度 学内文化祭</h2>
+        <div class="slogan">
+            <div class="main"><h3>{{ slogan.main }}</h3></div>
+            <div class="sub"><h3>―{{ slogan.sub }}―</h3></div>
+        </div>
+        <a class="button_style1" href="{% url 'main:slogans' %}">
+            スローガンについて詳しく見る<span class="material-symbols-rounded">open_in_new</span>
+        </a>
+        <div class="date0">            
+            <div>
+                <div class="day">{{  dates.0.begin_at|date:"Y.n.j" }}</div>
+                <div class="time">{{  dates.0.begin_at|date:"H:i" }} 〜 {{  dates.0.end_at|date:"H:i" }}</div>
+            </div>
+            <div class="hyphen"></div>
+            <div>
+                <div class="day">{{  dates.1.end_at|date:"Y.n.j" }}</div>
+                <div class="time">{{  dates.1.begin_at|date:"H:i" }} 〜 {{  dates.1.end_at|date:"H:i" }}</div>
+            </div>
+        </div>
+        
+        <div class="attention">
+            <p>上記は一般公開スケジュールです。校内生のスケジュールは、この限りではありません。</p>
+        </div>
+
+    {% if festival_ended %}
+        <div class="thx" style="margin: 1em 0;">
+            ご来場ありがとうございました!
+        </div>
+    {% endif %}
+        <span class="small">
+            {% comment %} ※2日目は一般の方も参加可能です。 {% endcomment %}
+        </span>
+    </div>
+</section>
+{% if config_permission.display_introduction %}
+<section>
+    <h2 class="heading_style1"><span class="body-text">おすすめ</span></h2>
+    <p>
+        <span class="body-text">
+            展示・ライブのおすすめを表示しています。
+        </span>
+    </p>
+    <div>
+        <div class="name">クラブ展示・クラス展示</div>
+        <div class="gallery">
+            {% for exhibition in exhibitions %}
+                <a href="{% url 'main:exhibition_detail' exhibition.id %}">
+                    {% if exhibition.thumbnail %}
+                        <picture>
+                            <source srcset="{{ exhibition.thumbnail_avif.url }}" type="image/avif">
+                            <img class="icon" src="{{ exhibition.thumbnail.url }}" alt="" loading="lazy" decoding="async">
+                        </picture>
+                    {% elif exhibition.background %}
+                        <picture>
+                            <source srcset="{{ exhibition.background_avif.url }}" type="image/avif">
+                            <img class="icon" src="{{ exhibition.background.url }}" alt="" loading="lazy" decoding="async">
+                        </picture>
+                    {% else %}
+                        <img class="icon" src="{% static 'main/img/default-icon_1x1.webp' %}" alt="" loading="lazy" decoding="async">
+                    {% endif %}
+                    <span>{{ exhibition.title }}</span>
+                </a>
+            {% endfor %}
+        </div>
+        <a class="button_style1" href="{% url 'main:exhibitions' 'class' %}">
+            <span class="material-symbols-rounded">apps</span> 
+            展示紹介はこちら
+        </a>
+    </div>
+    <div>
+        <div class="name">野外ライブ・音楽室ライブ</div>
+        <div class="gallery">
+            {% for performance in performances %}                
+                <a href="{% url 'main:performance_detail' performance.id %}">
+                    {% if performance.thumbnail %}
+                        <picture>
+                            <source srcset="{{ performance.thumbnail_avif.url }}" type="image/avif">
+                            <img class="icon" src="{{ performance.thumbnail.url }}" alt="" loading="lazy" decoding="async">
+                        </picture>
+                    {% elif performance.group_photo %}
+                        <picture>
+                            <source srcset="{{ performance.group_photo_avif.url }}" type="image/avif">
+                            <img class="icon" src="{{ performance.group_photo.url }}" alt="" loading="lazy" decoding="async">
+                        </picture>
+                    {% else %}
+                        <img class="icon" src="{% static 'main/img/default-icon_1x1.webp' %}" alt="" loading="lazy" decoding="async">
+                    {% endif %}
+                    <span>{{ performance.name }}</span>
+                </a>
+            {% endfor %}
+        </div>
+        <a class="button_style1" href="{% url 'main:outdoor_performances' %}">
+            <span class="material-symbols-rounded">music_note</span> 
+            ライブ紹介はこちら
+        </a>
+    </div>
+</section>
+{% endif %}
+
+<section>
+    <h2 class="heading_style1"><span class="body-text">らくなび</span></h2>
+    <p>
+        <span class="body-text">
+            「らくなび」は、本校生徒によって開発された、サンプル高等学校・附属中学校文化祭 公式Webアプリです。<br>
+            学内文化祭を世間へ発信し、展示やライブの内容をより広く一般の方々に知ってもらいたいという願いをもって、2024年度から生徒主体で試験運用がスタートしました。
+        </span>
+    </p>
+    <div style="display: flex; justify-content: space-evenly; flex-wrap: wrap; margin: .5rem 0;">
+        <a class="button_style1" href="{% url 'main:credits' %}" id="credits" target="_blank">
+            <span class="material-symbols-rounded">groups</span> 謝辞・クレジット
+        </a>
+        <a class="button_style1" href="{% url 'main:about_development' %}" id="about_development" target="_blank">
+            <span class="material-symbols-rounded">code</span> 開発について
+        </a>
+        <a class="button_style1" href="{% url 'main:about_design' %}" id="about_design" target="_blank">
+            <span class="material-symbols-rounded">palette</span> デザインについて
+        </a>
+    </div>
+
+</section>
+
+<section>
+    <h2 class="heading_style1"><span class="body-text">アクセス <span class="material-symbols-rounded">directions_walk</span></span></h2>
+    <p class="large">
+        <span class="body-text">サンプル高等学校・附属中学校</span>
+    </p>
+    <p>
+        <span class="body-text">〒601-8478 京都市南区壬生通八条下る東寺町559番地</span>
+    </p>
+    <ul>
+        <li><span class="body-text">京都駅八条口から徒歩約13分</span></li>
+        <li><span class="body-text">近鉄東寺駅から徒歩約10分</span></li>
+        <li><span class="body-text">四条大宮から市バス18・71・207系統で10分、東寺東門下車徒歩3分</span></li>
+    </ul>
+    <div class="map">
+         <div class="container">
+		    <div id="mapid"></div>
+	    </div>
+        <a href="https://maps.app.goo.gl/Qu2ikvwrdTLxYai69" class="g_map_link">GoogleMapはこちら<span class="material-symbols-rounded">open_in_new</span></a>
+    </div>
+</section>
+
+<section>
+    <div class="guide">
+        <h2 class="heading_style1"><span class="marker body-text">FAQ・お知らせ</span></h2>
+    
+        {% for item in news %}
+        <div class="list_item">
+            <input type="checkbox" id="news-{{ forloop.counter }}">
+            <label class="list_question" for="news-{{ forloop.counter }}">
+                <span class="material-symbols-rounded"><span class="icon_name"></span></span>
+                <span class="body-text">{{ item.title }}</span>
+            </label>
+            <div class="list_answer">
+                <span class="body-text">{{ item.content|linebreaks }}</span>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="egg">
+            <input type="checkbox" id="egg1">
+            <label class="list_question" for="egg1">
+                <span class="material-symbols-rounded"><span class="icon_name"></span></span>
+                <span class="body-text">らくなびの開発経緯について</span>
+            </label>
+            <div class="list_answer">
+                <span class="body-text">
+                    <a href="{% url 'main:egg' %}" target="_blank">
+                        <button class="button_style2">
+                            <span class="material-symbols-rounded">waves</span>（:]ミ（:]彡
+                            <span class="material-symbols-rounded">waves</span>
+                        </button>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+

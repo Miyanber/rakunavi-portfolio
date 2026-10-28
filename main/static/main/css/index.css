@@ -1,0 +1,782 @@
+@charset "UTF-8";
+
+header.index {
+    position: relative;
+    display: flex;
+    padding: 0;
+    width: 95svw;
+    height: calc(95svh - 6em);
+    margin: 2svh auto;
+    overflow: hidden;
+    z-index: 0;
+    border-radius: 2em;
+    box-shadow: #94919467 0px 3px 10px 0px;
+}
+
+.index__rakunavi {
+    position: absolute;
+    left: .5em;
+    top: 0;
+    color: #fa3862;
+    text-shadow: 0.02em 0.02em 2px rgb(106, 106, 106);
+    letter-spacing: 0.05em;
+}
+
+.index__rakunavi::after {
+    font-family: var(--title-font);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -1em;
+    width: 100%;
+    content: "Raku Navi";
+    height: auto;
+    font-size: 0.5em;
+    text-align: center;
+    letter-spacing: 0;
+}
+
+.index__title {
+    position: relative;
+    flex-basis: max(30svw, 20em);
+    height: 100%;
+    object-fit: contain;
+}
+
+.index__title__year,
+.index__title__slogan,
+.index__title__dates {
+    position: absolute;
+    top: 30svh;
+    left: 2svw;
+    width: 90%;
+    text-align: center;
+    font-size: max(2svw, 1.4em);
+    color: #cc1e44;
+    font-family: var(--text-font);
+    font-weight: 500;
+    z-index: 5;
+    text-shadow: 0.1em 0.1em 2px #0000002e;
+}
+
+.index__title__slogan {
+    top: 40svh;
+    font-size: max(2svw, 1.4em);
+    font-family: var(--text-font);
+    font-weight: 600;
+}
+
+.index__title__dates {
+    top: 55svh;
+    font-size: max(1.8svw, 1.2em);
+    font-family: "Titillium Web";
+    font-weight: 500;
+}
+
+.index__image {
+    flex: 1;
+}
+
+.index__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.index__background {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #fac7d8 20px),
+        repeating-linear-gradient(90deg, #fae8ee, #ffe0e6, #f596aa, #f7839c, #f7839c);
+    z-index: -10;
+}
+
+@media only screen and (max-width: 1060px) {
+    header img#header_bg {
+        position: absolute;
+        bottom: -10svh;
+        right: 0;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: bottom right;
+    }
+
+    .index__background {
+        background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #fac7d8 20px),
+            repeating-linear-gradient(180deg, #fae8ee, #ffe0e6, #f596aa, #f7839c, #f7839c);
+    }
+
+    body.dark-mode .index__background {
+        background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #833283 20px),
+            repeating-linear-gradient(90deg, #c058c0, #914491, #ac20ac, #741774, #4d0a4d);
+    }
+}
+
+/* よく理解できていない。クラス名が古いので#header_bg以外は適用外 */
+@media only screen and (max-aspect-ratio: 1/1) {
+    header img#header_bg {
+        position: absolute;
+        bottom: -10svh;
+        left: 0;
+        /* 左端からの位置 */
+        margin: 0 auto;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    header .layer2 .bgc_img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #fac7d8 20px),
+            repeating-linear-gradient(180deg, #fae8ee, #ffe0e6, #f596aa, #f7839c, #f7839c);
+        z-index: -10;
+    }
+
+    header .layer1 .himg {
+        position: absolute;
+        width: 98svw;
+        height: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+}
+
+@media only screen and (max-width: 820px) {
+    header img#header_bg {
+        position: absolute;
+        bottom: -10svh;
+        left: -10svw;
+        /* 左端からの位置 */
+        margin: 0 auto;
+        width: 98svh;
+        height: auto;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .title h1 {
+        position: absolute;
+        font-size: 5svw;
+        font-family: var(--title-font);
+        font-weight: 800;
+        left: 2svw;
+        z-index: 5;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .index__title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #fac7d8 20px),
+            repeating-linear-gradient(180deg, #fae8ee, #ffe0e6, #f596aa, #f7839c, #f7839c);
+        clip-path: circle(50% at 7svw 8svh);
+        z-index: 1;
+    }
+
+    body.dark-mode .index__title {
+        background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #963e96 20px),
+            repeating-linear-gradient(180deg, #b873b8, #754875, #c42dc4, #8b1d8b, #630f63);
+    }
+
+    .index__title__year,
+    .index__title__slogan,
+    .index__title__dates {
+        text-align: left;
+        top: 8svh;
+        left: 5svw;
+    }
+
+    .index__title__slogan {
+        top: 16svh;
+    }
+
+    .index__title__dates {
+        top: 26svh;
+    }
+
+    .index__image img {
+        object-fit: cover;
+        /* 枠いっぱいに拡大してはみ出しカット */
+        object-position: 35% top;
+        overflow: hidden;
+        transform: scale(1.5) translateY(15%);
+    }
+}
+
+header.index .wrapper {
+    position: absolute;
+    margin: 0;
+    min-width: 50vw;
+    top: 40%;
+    transform: translate(0, -40%);
+    right: 10vw;
+    text-align: right;
+    border-right: 1vw solid #ff4d6a;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.9) 12em, rgba(255, 255, 255, 0));
+    padding: 40px 5vw;
+    margin: 0;
+}
+
+header.index p {
+    font-size: 1.2em;
+    color: black;
+    text-shadow: 0.1em 0.1em 2px white;
+    line-height: 1.8em;
+}
+
+/* index終了 */
+
+.content0 {
+    width: 80vw;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+}
+
+.content0 h2 {
+    font-family: "Shippori Mincho", sans-serif;
+    color: var(--color);
+    margin: 5vw auto;
+    font-size: 1.8rem;
+    line-height: 1.25;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    text-align: center;
+}
+
+.content0 .slogan {
+    font-family: "Shippori Mincho", sans-serif;
+    color: var(--color);
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 2vw;
+    line-height: 1.25;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    text-align: center;
+    text-shadow: 5px 5px 10px #aeaeae;
+}
+
+.content0 .slogan h3 {
+    font-family: "Shippori Mincho", sans-serif;
+    color: var(--color);
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 2.4rem;
+    line-height: 1.25;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    text-align: center;
+    text-shadow: 5px 5px 10px #aeaeae;
+}
+
+.content0 .attention {
+    width: 70vw;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.content0 .thx {
+    font-family: "Shippori Mincho", sans-serif;
+    color: var(--accent-color);
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 2rem;
+    line-height: 1.25;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    text-align: center;
+}
+
+.date0 {
+    display: -webkit-flex;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: max-content;
+    margin-top: 4em;
+    margin-bottom: 4em;
+}
+
+.date0 .day {
+    font-family: "Titillium Web", sans-serif;
+    font-size: 1.5em;
+    border: var(--color) solid 0.1em;
+    padding: 0.2em 2em;
+    border-radius: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.date0 .time {
+    font-family: "Titillium Web", sans-serif;
+    font-size: 1.3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.date0 .hyphen {
+    font-size: 1.5em;
+    width: calc(40svw - 24em);
+    height: 1em;
+    border-bottom: var(--color) solid 0.1em;
+    margin-left: 1.5vw;
+    margin-right: 1.5vw;
+}
+
+section {
+    margin: 5em auto;
+    font-size: 1em;
+    text-align: center;
+    background-color: transparent;
+    padding: 1em 1em 4em 1em;
+}
+
+section ul {
+    display: inline-block;
+}
+
+section ul li {
+    text-align: left;
+}
+
+section iframe {
+    display: block;
+    margin: 0 auto;
+}
+
+section div.guide {
+    text-align: left;
+}
+
+section p.large {
+    font-size: 1.5em;
+}
+
+h2 .material-symbols-rounded {
+    font-size: 1.3em;
+}
+
+section.date {
+    color: var(--very-dark-gray);
+    padding: 0.3em;
+    font-family: var(--title-font);
+}
+
+section.date .content {
+    font-size: 130%;
+}
+
+section.date .content .button_style1 {
+    font-size: 65%;
+}
+
+section.date div.slogan {
+    color: #9f72ff;
+    color: #a5203d;
+    padding: 0.1em;
+    font-size: 180%;
+    font-style: italic;
+    margin: 0 1em;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+}
+
+section.date div.slogan div.sub {
+    text-align: end;
+    font-size: 0.9em;
+    transform: rotate(-3deg);
+}
+
+section.date .date_flex {
+    display: flex;
+    justify-content: center;
+}
+
+section.date .date_flex span {
+    font-size: 1.1em;
+}
+
+section.date .date_flex>span {
+    display: inline-block;
+    margin: 2vw;
+}
+
+section.date .date_flex span.num {
+    font-size: 1.2em;
+}
+
+section.date .date_flex span.day {
+    background-color: #fec0c0;
+    padding: 0.3em 0.5em;
+    margin: 0.2em 0;
+    font-size: 0.7em;
+    color: var(--very-dark-gray);
+    border-radius: 2em;
+}
+
+section.date span.small {
+    font-size: 0.7em;
+}
+
+section.date .date_flex .narrow {
+    transform: scaleX(0.8);
+    transform-origin: 0 50%;
+    width: 4.6em;
+    white-space: nowrap;
+    font-size: 0.9em;
+    letter-spacing: -0.05em;
+}
+
+section:has(.gallery)>div {
+    margin: 2em 0;
+}
+
+div.name {
+    margin-bottom: 1vh;
+}
+
+div.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+section:has(.gallery)>div>.name {
+    padding: 0.5em 5vw;
+    font-size: 1.2em;
+    text-align: left;
+    background: linear-gradient(to right, #b2425e, #b2425ed3 calc(12em + 5vw), #b2425e40);
+    color: white;
+}
+
+section .button_style1 {
+    font-size: 90%;
+    padding: 0.5em 1em;
+}
+
+.gallery a {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    width: 23%;
+    aspect-ratio: 1 / 1;
+    margin: 0.5vh 1%;
+    overflow: hidden;
+    border-radius: 10%;
+    box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 20%);
+    transition: 0.3s all;
+    border: 0.1em solid #888888;
+}
+
+.gallery a:hover {
+    box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
+    transform: translateY(-5px);
+}
+
+.gallery span {
+    position: absolute;
+    font-size: 0.9em;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 0.1em 0.2em;
+    color: #000000;
+}
+
+.gallery img {
+    transition: 0.4s all;
+    width: 100%;
+    height: 100%;
+    /* 両方指定しないと隙間ができる */
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.gallery img:hover {
+    opacity: 0.8;
+}
+
+img.concept {
+    width: 90%;
+}
+
+@media only screen and (max-width: 770px) {
+    .index__rakunavi {
+        top: 1em;
+        z-index: 2;
+    }
+
+    .index__title__year,
+    .index__title__slogan,
+    .index__title__dates {
+        top: 15svh;
+    }
+
+    .index__title__slogan {
+        top: 20svh;
+    }
+
+    .index__title__dates {
+        top: 25svh;
+    }
+
+    .festival_ended {
+        font-size: 85%;
+    }
+
+    header.index .wrapper {
+        right: 1em;
+    }
+
+    header.index .wrapper p {
+        font-size: 1.1em;
+    }
+
+    iframe {
+        width: 100%;
+        height: 30svh;
+    }
+
+    section {
+        width: 90%;
+        padding: 1em 1em 2em;
+    }
+
+    section.date .content {
+        font-size: max(2.5vw, 1em);
+    }
+
+    section.date .content>span {
+        font-size: 1.1em;
+    }
+
+    section.date span.slogan {
+        display: block;
+        font-size: 2em;
+    }
+
+    section.date .date_flex {
+        column-gap: 0.5em;
+    }
+
+    section.date .date_flex span {
+        font-size: 1.4em;
+    }
+
+    section.date .date_flex span.num {
+        font-size: 1.5em;
+    }
+
+    .gallery a {
+        width: 40%;
+        margin: 0.5vh 4%;
+    }
+
+    .date0 .day {
+        font-size: 1.2em;
+    }
+
+    .date0 .time {
+        font-size: 1.1em;
+    }
+}
+
+.map .container {
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 1em;
+    overflow: hidden;
+    border: 2px solid var(--accent-color);
+}
+
+#mapid {
+    height: 50dvh;
+    z-index: 0;
+}
+
+.g_map_link {
+    font-size: 1.2em;
+    color: #1181ad;
+    border-bottom: 2px #1181ad solid;
+}
+
+.g_map_link:hover {
+    color: #157297;
+    border-bottom: 2px #157297 solid;
+}
+
+.overlay h3 {
+    margin: 0.5em 1em 0.4em 1em;
+    font-family: var(--text-font);
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.overlay p {
+    display: flex;
+    margin: 0.25em 1em 0.5em 1em;
+    font-family: var(--text-font);
+    font-size: 0.8em;
+    font-weight: 400;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ダークモード */
+/*body.dark-mode header.index div {
+    background: linear-gradient(to left, rgba(30, 30, 30, 0.7) 80%, rgba(30, 30, 30, 0.3));
+}*/
+
+body.dark-mode header.index h1 {
+    color: #f0e9f0;
+    text-shadow: 0.05em 0.05em 2px #00000000;
+}
+
+body.dark-mode header.index h1::before {
+    color: #f0e9f0;
+}
+
+body.dark-mode .index__rakunavi {
+    color: #f0e9f0;
+    text-shadow: 0.02em 0.02em 2px rgb(106, 106, 106);
+}
+
+body.dark-mode .index__title__year,
+body.dark-mode .index__title__slogan,
+body.dark-mode .index__title__dates {
+    color: #f0e9f0;
+    text-shadow: 0.1em 0.1em 2px #0000002e;
+}
+
+body.dark-mode .index__background {
+    background-image: repeating-radial-gradient(circle at 7svw 8svh, transparent 0, #833283 20px),
+        repeating-linear-gradient(90deg, #c058c0, #914491, #ac20ac, #741774, #4d0a4d);
+}
+
+body.dark-mode header.index #TH {
+    color: #ddd;
+    background-color: #00000000;
+}
+
+body.dark-mode header.index p {
+    color: #ddd;
+    text-shadow: 0.1em 0.1em 2px #111;
+}
+
+body.dark-mode section {
+    background: linear-gradient(150deg, #201920, #2f242f);
+    box-shadow: #94919467 0px 3px 10px 0px;
+}
+
+body.dark-mode section h2 {
+    color: #ddd;
+}
+
+body.dark-mode section h2 span {
+    color: #ddd;
+}
+
+body.dark-mode section h2::before,
+body.dark-mode section h2::after {
+    border-top: 0.2em double #a555a5;
+}
+
+body.dark-mode section p>span,
+body.dark-mode section h2>span,
+body.dark-mode section li>span,
+body.dark-mode section label>span,
+body.dark-mode section div.list_answer>span {
+    background-color: #20202000;
+}
+
+body.dark-mode section.date {
+    color: #ddd;
+}
+
+body.dark-mode section.date span.slogan {
+    color: #cf33cf;
+}
+
+body.dark-mode section.date span.day {
+    background-color: #8f3c8f;
+    color: #ddd;
+}
+
+body.dark-mode section.date div.slogan {
+    color: #c010c0;
+}
+
+body.dark-mode #mapid {
+    filter: invert(90%) hue-rotate(210deg);
+}
+
+body.dark-mode .g_map_link {
+    font-size: 1.2em;
+    color: #379ac2;
+    border-bottom: 2px #379ac2 solid;
+}
+
+body.dark-mode .g_map_link:hover {
+    color: #2a8cb3;
+    border-bottom: 2px #2a8cb3 solid;
+}
+
+body.dark-mode .leaflet-control a {
+    filter: invert(90%) hue-rotate(140deg);
+    color: #0078a8;
+}
+
+body.dark-mode .leaflet-control span {
+    color: black;
+}
+
+body.dark-mode .gallery a {
+    background-color: #302530;
+    box-shadow: 0 2.5rem 2rem -2rem #b193b120;
+}
+
+body.dark-mode .gallery a:hover {
+    box-shadow: 0 2.5rem 2rem -2rem #b193b150;
+}
+
+body.dark-mode .gallery span {
+    position: absolute;
+    font-size: 0.9em;
+    right: 0;
+    bottom: 0;
+    background-color: #353535;
+    padding: 0.1em 0.2em;
+    color: #eee;
+    width: 100%;
+}
+
+body.dark-mode section:has(.gallery)>div>.name {
+    background: linear-gradient(to right, #8d428d, #8d428dbb calc(12em + 5vw), #614d61);
+    color: #eee;
+}
+
+body.dark-mode img.concept {
+    filter: invert(85%);
+}

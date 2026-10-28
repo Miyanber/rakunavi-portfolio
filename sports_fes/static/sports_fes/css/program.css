@@ -1,0 +1,441 @@
+.header-backlayer {
+    background-color: #1262e3bb;
+    box-shadow: #192d5080 0 0 15px;
+}
+
+body.dark-mode .header-backlayer {
+    box-shadow: #4d8efe80 0 0 20px;
+}
+
+header .title {
+    background-color: #1d6dd5bb;
+}
+
+.search_control {
+    width: max-content;
+    max-width: 800px;
+    margin: 4rem auto 0;
+    text-align: left;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.search-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    border: 0.15rem solid #3c999730;
+    border-radius: 2rem;
+    background-color: var(--card-color);
+    color: var(--color);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s ease;
+
+    .close-text {
+        display: none;
+    }
+
+    &&.is-open {
+        .open-text {
+            display: none;
+        }
+
+        .close-text {
+            display: block;
+        }
+    }
+}
+
+.search-button:hover,
+.search-button:focus-visible {
+    background-color: #f2f7ff;
+    border-color: var(--accent-color3);
+}
+
+body.dark-mode .search-button:hover,
+body.dark-mode .search-button:focus-visible {
+    background-color: #1ae0cf50;
+}
+
+.search-button .material-symbols-rounded {
+    font-size: 1.2rem;
+}
+
+.search_field {
+    display: none;
+    width: 90%;
+    max-width: 800px;
+    padding: 1.2rem;
+    margin: 1rem auto 4rem;
+    border: var(--accent-color3) 2px solid;
+    background-color: var(--card-color);
+    border-radius: 1.5rem;
+    corner-shape: superellipse(1.4);
+    box-shadow: var(--accent-shadow-color) 0 2px 10px 2px;
+}
+
+.search_field.is-open {
+    display: block;
+}
+
+.search_field_header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.search-field-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: none;
+    background: transparent;
+    color: var(--color);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.search-field-close .material-symbols-rounded {
+    font-size: 1.2rem;
+}
+
+.button-container {
+    width: max-content;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* 検索リセットのボタン */
+.reset_search {
+    display: inline-block;
+    color: var(--color);
+    padding: 0.5rem;
+    font-size: 0.9em;
+}
+
+form {
+    width: 100%;
+}
+
+input {
+    box-sizing: border-box;
+    background-color: #3c6a9910;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 0.15rem solid #3c6a9930;
+    border-radius: .6rem;
+    font-family: var(--text-font);
+    font-size: 1.1rem;
+    outline: none;
+    transition: 0.5s;
+    color: var(--text-color);
+    corner-shape: superellipse(1.4);
+}
+
+body.dark-mode input {
+    background-color: #8a9fb520;
+    border: 0.15rem solid #91a5b850;
+}
+
+input:focus {
+    border: 0.15rem solid var(--accent-color3);
+    background-color: #ccebe988;
+}
+
+/* プログラム単位 */
+
+.program-cards {
+    width: 90%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    height: 100%;
+    transition: 0.4s;
+    color: var(--text-color);
+    text-decoration: none;
+    font-family: var(--text-font);
+    align-items: center;
+    z-index: 51;
+    border-bottom: var(--accent-color1) solid 1px;
+    background-color: transparent;
+}
+
+.card:last-child {
+    border: none;
+}
+
+body.dark-mode .card {
+    transition: 0.4s;
+}
+
+.card:hover {
+    transform: translateX(1rem);
+}
+
+.number {
+    width: 15%;
+    font-size: 1.2rem;
+    z-index: 51;
+}
+
+.name {
+    width: 100px;
+    flex-grow: 1;
+    font-size: 1.4rem;
+    font-weight: bold;
+    z-index: 51;
+}
+
+.grade {
+    width: max-content;
+    z-index: 51;
+
+    &&.grade-in-detail {
+        font-size: 2em;
+        display: block;
+        justify-content: center;
+        margin: 2rem auto;
+    }
+}
+
+.grade_inner {
+    padding: 0.2em;
+    border-radius: 0.5em;
+}
+
+.enter {
+    width: 5%;
+    font-size: 1.5rem;
+    z-index: 51;
+}
+
+/* 以下、詳細ページ */
+
+.program-content {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: flex-start;
+    /* 上揃え */
+    gap: 5%;
+    /* 画像と説明の間隔 */
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        flex-direction: column;
+        row-gap: 1rem;
+    }
+}
+
+.program-image {
+    flex: 0 0 50%;
+    /* 横幅40% */
+}
+
+.program-image img {
+    width: 100%;
+    /* 枠に合わせてリサイズ */
+    height: auto;
+    border-radius: 0.6rem;
+    /* 任意で角丸 */
+    aspect-ratio: 16/9;
+    box-shadow: #23232356 0 0 5px 2px;
+    border: #44444488 solid 0.1rem;
+    filter: brightness(100%);
+}
+
+.program-description {
+    flex: 0 0 44%;
+    /* 横幅60% */
+    font-size: max(1rem, 1.3vw);
+    line-height: 1.6;
+    word-wrap: break-word;
+    /* 長い単語やURLを折り返す */
+    word-break: break-word;
+    /* 同じく折り返しを強制 */
+    white-space: normal;
+    /* 改行可能にする */
+    text-align: left;
+}
+
+.program-track-image {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: flex-start;
+    /* 上揃え */
+    gap: 6%;
+    /* 画像と説明の間隔 */
+    flex-wrap: wrap;
+}
+
+.program-track-image h3 {
+    width: 100%;
+    text-align: center;
+    font-family: var(--title-font);
+    font-size: 2rem;
+}
+
+.program-track-image img {
+    width: 100%;
+    /* 枠に合わせてリサイズ */
+    height: auto;
+    border-radius: 0.6rem;
+    /* 任意で角丸 */
+    aspect-ratio: 3/2;
+    box-shadow: #23232371 0 0 5px 2px;
+    border: #44444488 solid 0.1rem;
+    filter: brightness(0%);
+}
+
+/* ---------------- 学年ボタン（横並び可変） ---------------- */
+
+.tag-field {
+    width: max-content;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    /* ラベルとボタン群の間隔 */
+    margin: 1rem auto;
+}
+
+.tag-label {
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: var(--text-font);
+    color: var(--color);
+    white-space: nowrap;
+    /* 改行せず横に固定 */
+    margin-right: 1rem;
+}
+
+.tag-options {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.6rem;
+    row-gap: 2.2rem;
+    margin: 1rem 0;
+    justify-content: center;
+}
+
+.tag-option input[type="checkbox"] {
+    display: none;
+    /* チェックボックス自体は非表示 */
+}
+
+.tag-option label {
+    padding: 0.2rem 1rem;
+    border: 2px solid;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.5s;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    color: #000;
+    /* 初期文字色は黒 */
+    font-family: var(--button-font-B);
+    flex-wrap: wrap;
+    corner-shape: superellipse(1.1);
+}
+
+/* 初期状態（薄い色） */
+.tag-option input[type="checkbox"]+label {
+    /* 背景と境界線を薄くする */
+    background-color: rgba(0, 0, 0, 0.05);
+    /* 仮の初期値、後で JS で上書き */
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* 選択時 */
+.tag-option input[type="checkbox"]:checked+label {
+    color: #fff;
+    /* 文字を白に */
+    /* 背景色・border色は JS で grade.color に基づき設定 */
+}
+
+/* hover時 */
+.tag-option label:hover {
+    background-color: #e6f0fa;
+}
+
+@media screen and (max-width: 1200px) {}
+
+.grade-bars {
+    width: max-content;
+    display: flex;
+    align-items: center;
+}
+
+.grade-bar-wrap {
+    display: flex;
+    align-items: center;
+    margin: 0 .1rem;
+    padding: 0 .1rem;
+    height: 1.2rem;
+    transition:
+        background-color .2s,
+        opacity .2s,
+        transform .2s;
+}
+
+.grade-bar {
+    width: .5rem;
+    height: 1rem;
+    border-radius: .3rem;
+    background: transparent;
+    border: 2px solid var(--text-color);
+    opacity: .25;
+    corner-shape: superellipse(1.4);
+    transition:
+        background-color .2s,
+        opacity .2s,
+        transform .2s;
+}
+
+.grade-bar.active {
+    border: 2px solid var(--grade-color);
+    background: var(--grade-color);
+    opacity: .9;
+}
+
+body.dark-mode .grade-bar.active {
+    box-shadow: #ffffffaa 0 0 1px 1px;
+}
+
+
+.grade-bar-wrap:last-child {
+    margin: 0 .4rem;
+    padding: 0 .5rem;
+    border-left: solid 1px #d5dadb;
+}
+
+body.dark-mode .grade-bar-wrap:last-child {
+    border-left: solid 1px #5e6879;
+}

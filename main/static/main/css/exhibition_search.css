@@ -1,0 +1,99 @@
+div.search_form {
+    margin: 2vh auto;
+    border-radius: 0.5em;
+}
+
+div.integrated_search_form {
+    background: linear-gradient(60deg, #ffe5e9 0%, #fcd3db 80%);
+    width: 70vw;
+    margin: 2vh auto;
+    padding: 2vh 1vw;
+    border-radius: 2em;
+}
+
+div.integrated_search_form h3 {
+    text-align: start;
+}
+
+form.search_form {
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 2vh;
+    padding: 0;
+}
+
+form.search_form label {
+    font-size: 110%;
+    font-weight: 500;
+    width: 20%;
+}
+
+form.search_form input {
+    padding: 10px;
+    width: 80%;
+    margin: 0 10%;
+    margin-bottom: 30px;
+}
+
+form.search_form button{
+    width: 20vw;
+    margin: 0 auto 3em auto;
+    padding: 10px;
+}
+
+.click_to_exhibitions_search .button_style2 {
+    display: flex;
+    margin: 0 auto 1em auto;
+}
+
+fieldset {
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 3em;
+}
+
+#id_tags div {
+    width: 100%;
+    /* float: left; */
+}
+
+#id_tags div label {
+    display: block;
+    width: auto;
+    text-align: center;
+    text-align: start;
+}
+
+#id_tags div label input {
+    width: 2em;
+    margin: 0;
+}
+
+@media only screen and (max-width: 770px) {
+    div.integrated_search_form {
+        width: 85vw;
+    }
+
+    form.search_form {
+        width: 90%;
+    }
+
+    form.search_form button {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 3840px) {
+    .button_style1 {
+        font-size: 110%;
+    }
+
+    input {
+        font-size: 100%;
+    }
+}
+
+
+body.dark-mode div.integrated_search_form {
+    background: linear-gradient(60deg, #292229 0%, #271a27 60%);
+}

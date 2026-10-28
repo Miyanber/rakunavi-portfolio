@@ -1,0 +1,140 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/posts_listview.css' %}">
+<link rel="stylesheet" href="{% static 'ya/css/ckeditor_custom.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}Я{% endblock title_wrapper %}
+{% block header_title %}Я{% endblock %}
+
+{% block content %}
+        {% comment %} 新規作成 {% endcomment %}
+        <div class="new-post">
+            <div class="background"></div>
+            <div class="content ">
+                <div class="icon_background ">
+                    <img class="icon" src="{% if request.user.icon %}{{ request.user.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                </div>
+                <div class="post-content">
+                    <div class="name"><label>{{ request.user.username }}{% if request.user.role %}<span class="material-symbols-rounded roles">{{ request.user.role.icon }}</span>{% endif %}</label> @{{ request.user.user_id }} </div>
+                    <div class="post-body">
+                            <form method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <span class="error">{{ form.content.errors }}</span>
+                            {{ form.content }}
+                            {{ form.media }}
+
+                            <input type="file" name="image" id="image-input" accept="image/*" style="display: none;">
+                            
+                            <div id="post-image-wrapper">
+                                <img id="preview-image" src="#" alt="Image Preview">
+                                <button type="button" id="clear-image-btn">
+                                    <span class="material-symbols-rounded" style="font-size: 1.1rem;">
+                                        close
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div style="display: flex;">
+                                <div class="image-button-wrapper" style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-symbols-rounded" id="image-upload-icon" style="cursor: pointer; font-size: 1.5rem;">
+                                        add_photo_alternate
+                                    </span>
+                                </div>
+                                <div class="post_button"><button type="submit" class="basic" id="post-btn">ポスト</button></div>
+                                {% comment %} この情報で二重送信二重作成を防止 {% endcomment %}
+                                <input type="hidden" name="submit_token" value="{{ submit_token }}">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for post in posts %}
+        {% if post %}
+            <div class="unit">
+                <div class="post">
+                    <div class="icon_background">
+                        <img class="icon" src="{% if post.author.icon %}{{ post.author.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                    </div>
+                    <div class="post-content">
+                        <div class="name">
+                            <label>
+                                {{ post.author.username }}{% if post.author.role %}<span class="material-symbols-rounded roles">{{ post.author.role.icon }}</span>{% endif %}
+                            </label>
+                            @{{ post.author.user_id }}
+                            <span class="time-since-js" style="margin-left: auto;">                            
+                                {% if a_week_ago <= post.created_at %}
+                                {{ post.created_at|date:"Md日 H:i" }}
+                                {% else %}
+                                    {{ post.created_at|date:"Y年Md日 H:i" }}
+                                {% endif %}
+                            </span>
+                        {% if request.user == post.author or request.user.is_superuser %}
+                        <button class="delete-btn" data-post-id="{{ post.id }}" onclick="event.stopPropagation();">
+                            <span class="material-symbols-rounded">delete</span></button>
+                        {% endif %}
+                        </div>
+
+                        <a href="{% url 'ya:post_detail' post_id=post.id %}">
+                            <div class="ck-content post-body">
+                                {{ post.content|safe }}
+                                {% if post.image %}
+                                    <picture>
+                                        <source srcset="{{ post.image_avif.url }}" type="image/avif">
+                                        <div class="post-image">
+                                            <img src="{{ post.image.url }}" alt="投稿画像" loading="lazy" decoding="async" class="js-open-image" data-image-url="{{ post.image.url }}">
+                                        </div>
+                                    </picture>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="post-footer">
+                    <div class="buttons">
+                        <button class="comment-btn footer-btn" style="text-decoration: none;">
+                            <span class="material-symbols-rounded">chat_bubble</span><span class="like-count">{{ post.replies.count }}</span>
+                        </button>
+                        <button type="button" class="like-btn footer-btn" data-post-id="{{ post.id }}" aria-pressed="{% if user in post.liked.all %}true{% else %}false{% endif %}">
+                            <span class="heart material-symbols-rounded">favorite</span>
+                            <span class="like-count">{{ post.liked.count }}</span>
+                        </button>
+                        <button class="quote-btn footer-btn" data-post-id="{{ post.post_id }}" onclick="event.stopPropagation();">
+                            <span class="material-symbols-rounded">repeat</span><span class="quote-count">{{ post.quote_count }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+
+
+        <div class="pagination">
+        {% if posts.has_previous %}
+        <p>
+            <a href="?page={{ posts.previous_page_number }}">前へ</a>
+        </p>
+        {% endif %}
+        <p>
+            {{ posts.number }} / {{ posts.paginator.num_pages }}
+        </p>
+        {% if posts.has_next %}
+        <p>
+            <a href="?page={{ posts.next_page_number }}">次へ</a>
+        </p>
+        {% endif %}
+        </div>
+    
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    window.csrftoken = "{{ csrf_token }}";
+    window.toggle_like_url = "{% url 'ya:toggle_like' %}";
+</script>
+<script src="{% static "ya/js/post_input.js" %}"></script>
+{% endblock extra_js %}

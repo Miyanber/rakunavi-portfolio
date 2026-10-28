@@ -1,0 +1,117 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}模擬店・キッチンカー | 青春の広場{% endblock title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/youthsquare.css' %}">
+{% endblock extra_style %}
+
+
+{% block header %}
+<header class="introduction">
+{% block header_image %}
+    <picture>
+        <source srcset="{{ images.header_youthsquare_avif.url }}" type="image/avif">
+        <img id="header_bg" src="{{ images.header_youtusquare.url }}" alt="背景" decoding="async" fetchpriority="high">
+    </picture>
+{% endblock header_image %}
+    <h1>
+        青春の広場
+    </h1>
+</header>
+{% endblock header %}
+
+{% block content %}
+<section class="common">
+    <p>
+        <span class="body-text">
+            青春の広場では、キッチンカーや高校生のクラス模擬店、飲料の販売があります。北側のステージでは本校生徒による野外ライブが行われます！
+            是非お楽しみください！
+        </span>
+    </p>
+    <div style="width: 100%; text-align: center;"><a href="#map" class="link_style3">青春の広場の地図はこちら！</a></div>
+</section>
+
+<div id="navigation" class="spots">
+    <a class="{% if 'outdoor_performance' in request.path %}active{% endif %}" href="{% url 'main:outdoor_performances' %}#navigation">野外ライブ</a>
+    {% comment %} 運用が不明なので、一時的に音楽室ライブは表示しない {% endcomment %}
+    {% comment %} <a class="{% if 'indoor_performance' in request.path %}active{% endif %}" href="{% url 'main:indoor_performances' %}#navigation">音楽室ライブ</a> {% endcomment %}
+    <a class="{% if 'food' in request.path %}active{% endif %}" href="{% url 'main:youthsquare' %}#navigation">模擬店・キッチンカー</a>
+</div>
+
+{% block main_content %}
+<section>
+    <h2 class="heading_style1"><span class="body-text">クラス模擬店</span></h2>
+    <div class="food_booths">
+        {% for booth in food_booths %}
+        <a href="{% url 'main:food_booth_detail' booth.pk %}">
+            <div class="food_booth_div">
+                <picture>
+                    <source srcset="{% if booth.thumbnail_avif %}{{ booth.thumbnail_avif.url }}{% endif %}" type="image/avif">
+                    <img class="icon" src="{% if booth.thumbnail %}{{ booth.thumbnail.url }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="サムネイル">
+                </picture>
+                <div>
+                    <p>高校{{ booth.grade_number }}年{{ booth.class_number }}組</p>
+                    <h3><span>{{ booth.name }}</span></h3>
+                    <p>
+                        <span>{{ booth.price }}円</span>
+                    </p>
+                    {% comment %} 2025/9/30無効化 {% endcomment %}
+                    {% comment %} <p class="allergens">アレルゲン：
+                        {% for allergen in booth.allergens.all %}
+                            {{ allergen.name }}, 
+                        {% empty %}
+                            なし
+                        {% endfor %}
+                    </p> {% endcomment %}
+                </div>
+                {% if perms.main.can_review_exhibition  or perms.main.can_review_food_booth or perms.main.can_review_performance %}
+                {% comment %} aタグ内にaを書くため {% endcomment %}
+                <object>
+                    {% if food_booth.review_status == "accepted" %}
+                    <a class="permitted link_style3" href="{% url 'main:food_booth_review' booth.pk %}"><span class="material-symbols-rounded permitted">verified</span> 承認済み</a>
+                    {% elif food_booth.review_status == "rejected" %}
+                    <a class="rejected link_style3" href="{% url 'main:food_booth_review' booth.pk %}"><span class="material-symbols-rounded rejected">gpp_bad</span> 差し戻し</a>
+                    {% else %}
+                    <a class="in_progress link_style3" href="{% url 'main:food_booth_review' booth.pk %}"><span class="material-symbols-rounded in_progress">sync</span> 審査待ち</a>
+                    {% endif %}
+                </object>
+                {% endif %}
+            </div>
+            
+        </a>
+            
+        {% endfor %}
+    </div>
+</section>
+<section>
+    <h2 class="heading_style1"><span class="body-text">キッチンカー</span></h2>
+    <div class="food_trucks">
+        {% for truck in food_trucks %}
+        <div class="food_truck_div">
+            {% comment %} <img src="{% if truck.picture %}{{ truck.picture.url }}{% else %}{% static 'main/img/default-icon.webp' %}{% endif %}" alt=""> {% endcomment %}
+            <div>
+                <h3><span class="body-text">{{ truck.name }}</span></h3>
+                <p class="info"><span class="body-text">{{ truck.info }}</span></p>
+            </div>
+            <table>
+                {% for menu in truck.menus.all %}
+                <tr>
+                    <td class="name">{{ menu.name }}</td>
+                    {% if menu.price %}
+                    <td class="price">
+                        {{ menu.price }}<span class="yen">円</span>{% if menu.is_cheapest %}～{% endif %}
+                        {% if menu.note %}<br>※{{ menu.note }}{% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock main_content %}
+
+{% endblock content %}

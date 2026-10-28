@@ -1,0 +1,42 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/search_user.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}Яユーザー検索{% endblock title_wrapper %}
+{% block header_title %}Яユーザー検索{% endblock %}
+
+{% block content %}
+
+    <a style="margin-right: auto;" href="{% url 'ya:dm_listview' %}">
+        <span class="material-symbols-rounded">arrow_left_alt</span>
+    </a>
+
+    <form method="GET">
+        <div class="form search">
+            {{ form.as_p }}
+            <button type="submit" class="basic submit"><span class="material-symbols-rounded">search</span></button>
+        </div>
+    </form>
+
+    <div class="users">
+    {% if not request.session.form_is_valid %}
+    <h3>おすすめ</h3>
+    {% endif %}
+    {% for user in users %}
+    <a href="{% url 'ya:dm' user.id %}">
+        <div class="user">
+            <span class="username">{{ user.username }}</span>
+        </div>
+    </a>
+    {% empty %}
+    <h3>ユーザーが見つかりませんでした。</h3>
+    {% endfor %}
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock extra_js %}

@@ -1,0 +1,153 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}{{ today.day }}日目 | タイムテーブル{% endblock title %}
+
+{% block header_title %}タイムテーブル{% endblock header_title %}
+{% block header_type %}function{% endblock header_type %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/timetable.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<div id="overlay_dark" hidden></div>
+<div class="spots">
+    {% for date in dates %}
+    <a href="{% url 'main:timetable' date.day %}" class="{% if today.day == date.day %}active{% endif %}">
+        {{ date.day }}日目
+    </a>
+    {% endfor %}
+</div>
+<section>
+    <div class="date">
+        <span class="date__span marker body-text">
+            <span><span class="num">{{ today.begin_at.month }}</span>月<span class="num">{{ today.begin_at.day }}</span>日 ({{ today.begin_at|date:"D" }}) </span>
+            <span class="num">{{ today.begin_at_time }}～{{ today.end_at_time }}</span>
+        </span> 
+        <p class="full-screen">
+            <span class="body-text">
+                イベントをクリックして、詳細を確認できます。<br>
+                全画面表示での閲覧がおすすめです！
+            </span>
+        </p>
+        <button id="full-screen" class="button_style1"><span class="material-symbols-rounded">fullscreen</span> 全画面表示</button>
+    </div>
+    <div class="background">
+        <div class="cancel">
+            <button class="button_style1" id="cancel"><span class="material-symbols-rounded">close_fullscreen</span> 全画面表示を終了</button>
+        </div>
+    </div>
+    <div class="timetable-spots">
+        <div class="timetable-spot head">
+            <div class="spot-name head"></div>
+            <div class="time-grids head">
+                {% for time in times %}
+                <div class="time-grid head {% if time.minute == 0 %}just{% endif %} {% if forloop.first %}first{% elif forloop.last %}last{% endif %}">
+                    {% if time.minute == 0 %}
+                    <div>
+                        <span>{{ time|date:'G' }}<span class="small">時</span></span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% for spot in spots %}
+        <div class="timetable-spot">
+            <div class="spot-name">
+                {% if spot.has_performance %}
+                    <a target="_blank" href="{% url 'main:outdoor_performances' %}"><p>{{ spot.name }}</p></a>
+                {% else %}
+                    <p class="spot">
+                        {{ spot.name }}
+                    </p>
+                    {% for exhibition in spot.exhibitions.all %}
+                    <a target="_blank" href="{% url 'main:exhibition_detail' exhibition.id %}"><p>{{ exhibition.title }}</p></a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="time-grids">
+                {% comment %} イベントの表示 {% endcomment %}
+                {% for event in spot.events.all %}
+                {% comment %} イベント詳細 {% endcomment %}
+                <div id="event_detail_{{ event.id }}" class="event_detail" hidden>
+                    <div class="event_detail__close_button" onclick="closeEventDetail({{ event.id }})">
+                        <span class="material-symbols-rounded">close</span>
+                    </div>
+                    <div class="event_detail__section">
+                        <div class="event_detail__label">主催</div>
+                        <div class="event_detail__content">
+                            <a class="link_style5" href="{% url 'main:exhibition_detail' event.exhibition.id %}">{{ event.exhibition }}</a>
+                        </div>
+                    </div>
+                    <div class="event_detail__section">
+                        <div class="event_detail__label">イベント名</div>
+                        <div class="event_detail__content">{{ event.name }}</div>
+                    </div>
+                    <div class="event_detail__section">
+                        <div class="event_detail__label"><span class="material-symbols-rounded">schedule</span>時間</div>
+                        <div class="event_detail__content">
+                            {% for timeslot in event.timeslots.all %}
+                            {% if not forloop.first %}<br>{% endif %}
+                            {{ timeslot.date }} {{ timeslot.begin_at }} ～ {{ timeslot.end_at }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="event_detail__section">
+                        <div class="event_detail__label"><span class="material-symbols-rounded">location_on</span>場所</div>
+                        <div class="event_detail__content">
+                            <a class="link_style5" href="{% url 'main:map' event.spot.floor %}?spot={{ event.spot.id }}">{{ event.spot.name }}</a>
+                        </div>
+                    </div>
+                    {% if event.explanation %}
+                    <div class="event_detail__section">
+                        <div class="event_detail__label">説明</div>
+                        <div class="event_detail__content">{{ event.explanation }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% for timeslot in event.timeslots.all %}
+                {% if timeslot.date == today %}
+                {% comment %} イベントの表示（複数の時間あり） {% endcomment %}
+                <div onclick="showEventDetail({{ event.id }})" class="event" style="width: {% percentage timeslot.seconds today.seconds %}%; height: {% percentage timeslot.seconds today.seconds %}%; left:{% percentage_datetime timeslot.begin_at today.begin_at today.seconds %}%; top:{% percentage_datetime timeslot.begin_at today.begin_at today.seconds %}%; ">
+                    <div>
+                        <p class="yusei">{{ event.name }}</p>
+                    </div>
+                </div>
+                <span class="time" style="left: {% percentage_datetime timeslot.begin_at today.begin_at today.seconds %}%; top:{% percentage_datetime timeslot.begin_at today.begin_at today.seconds %}%;">{{ timeslot.begin_at }}</span>
+                <span class="time" style="left: {% percentage_datetime timeslot.end_at today.begin_at today.seconds %}%; top:{% percentage_datetime timeslot.end_at today.begin_at today.seconds %}%;">{{ timeslot.end_at }}</span>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+
+                {% comment %} ライブの表示 {% endcomment %}
+                {% for performance in spot.performances.all %}
+                {% if performance.date == today %}
+                <div class="performance" style="width: {% percentage performance.seconds today.seconds %}%; height: {% percentage performance.seconds today.seconds %}%; left:{% percentage_datetime performance.begin_at today.begin_at today.seconds %}%; top:{% percentage_datetime performance.begin_at today.begin_at today.seconds %}%; ">
+                    <a href="{% url 'main:performance_detail' performance.id %}">
+                        <div>
+                            <p class="yusei">{{ performance.name }}</p>
+                        </div>
+                    </a>
+                </div>
+                <span class="time" style="left: {% percentage_datetime performance.begin_at today.begin_at today.seconds %}%; top:{% percentage_datetime performance.begin_at today.begin_at today.seconds %}%;">{{ performance.begin_at }}</span>
+                <span class="time" style="left: {% percentage_datetime performance.end_at today.begin_at today.seconds %}%; top:{% percentage_datetime performance.end_at today.begin_at today.seconds %}%;">{{ performance.end_at }}</span>
+                {% endif %}
+                {% endfor %}
+                
+                {% comment %} グリッドの表示 {% endcomment %}
+                {% for time in times %}
+                <div class="time-grid {% if time.minute == 0 %}just{% endif %} {% if forloop.first %}first{% elif forloop.last %}last{% endif %}"></div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'main/js/timetable.js' %}" defer></script>
+{% endblock extra_js %}

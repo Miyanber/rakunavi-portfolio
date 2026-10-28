@@ -1,0 +1,32 @@
+<tr>
+    <th>開催日</th>
+    <th>開始時刻</th>
+    <th>終了時刻</th>
+    <td>削除</td>
+</tr>
+{% for timeslot in timeslots %}
+<tr id="timeslot-{{ timeslot.pk }}">
+    <td>
+        {{ timeslot.date }}
+    </td>
+    <td>
+        {{ timeslot.begin_at }}
+    </td>
+    <td >
+        {{ timeslot.end_at }}
+    </td>
+    <td>
+        <button class="event_form__content__timeslots__timeslot__delete_button" type="button" data-pk="{{ timeslot.pk }}">
+            <span class="material-symbols-rounded">
+                close
+            </span>
+        </button>
+    </td>
+</tr>
+{% empty %}
+<tr data-date="{{ timeslot.date.day }}" data-begin_at="{{ timeslot.begin_at }}">
+    <td colspan="4">
+        時間枠を追加して下さい。
+    </td>
+</tr>
+{% endfor %}

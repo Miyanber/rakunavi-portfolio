@@ -1,0 +1,126 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ performance.name }} | ライブ紹介{% endblock title %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}ライブ紹介{% endblock header_title %}
+{% block header_image %}
+    <picture>
+        <source srcset="{{ images.header_youthsquare_avif.url }}" type="image/avif">
+        <img id="header_bg" src="{{ images.header_youtusquare.url }}" alt="背景" decoding="async" fetchpriority="high">
+    </picture>
+{% endblock header_image %}
+
+{% block extra_style %}
+<meta name="referrer" content="strict-origin-when-cross-origin">    {% comment %} URL流出防止 {% endcomment %}
+<link rel="stylesheet" href="{% static 'main/css/performance_detail.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<section>
+    <div>
+        <a class="button_style1" style="margin: 0;" href="{% url 'main:outdoor_performances' %}#{{ performance.id }}">
+            <span class="material-symbols-rounded">arrow_back</span>
+            ライブ一覧に戻る
+        </a>
+    </div>
+
+    <div class="detail_header">
+        <div class="time-wrapper">
+            <span class="time">{{ performance.begin_at|default:"Unset" }} ～ {{ performance.end_at|default:"Unset" }}</span>
+        </div>
+        <div class="band-wrapper">
+            <picture>
+                <source srcset="{% if performance.thumbnail_avif %}{{ performance.thumbnail_avif.url }}{% endif %}" type="image/avif">
+                <img class="icon" src="{% if performance.thumbnail %}{{ performance.thumbnail.url }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="">
+            </picture>
+            <h2 class="band_name">{{ performance.name }}</h2>
+            <div class="genre">{{ performance.genre|default:"ジャンル未定" }}</div>
+            <span class="spot"><span class="material-symbols-rounded">location_on</span>{{ performance.spot }}</span>
+        </div>
+    </div>
+    <div>
+        <h3 class="section-title">紹介・意気込み</h3>
+        <div class="ck-content message">
+            {{ performance.message|safe }}
+            {% comment %} ここだけはsafeつけてリッチテキストのHTMLタグを解釈させる {% endcomment %}
+        </div>
+    </div>
+
+    {% if performance.group_photo %}
+    <div>
+        <h3 class="section-title">画像</h3>
+            <picture id="icon">
+                <source srcset="{% if performance.group_photo_avif %}{{ performance.group_photo_avif.url }}{% endif %}" type="image/avif">
+                <img class="group_photo" src="{{ performance.group_photo.url }}">
+            </picture>
+    </div>
+    {% endif %}
+
+    {% if performance.video %}
+    <div>
+        <h3 class="section-title">紹介動画</h3>
+        <div class="video">
+            {{ performance.video|safe }}
+        </div>
+    </div>
+    {% endif %}
+    {% if performance.songs.exists %}
+    <div>
+        <h3 class="section-title">曲目</h3>
+        <div class="songs">
+            {% for song in performance.songs.all %}
+            <div>
+                <p class="number">
+                    <span>{{ forloop.counter }}</span>
+                </p>
+                <p class="content">
+                    <span class="title">{{ song.title }}</span>
+                    {% if song.artist %}
+                    <br><span class="artist">{{ song.artist }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% if performance.members.exists %}
+    <div>
+        <h3 class="section-title">メンバー</h3>
+        <div class="members">
+            {% for member in performance.members.all %}
+            <div>
+                <div>
+                    <span class="instrument">{{ member.instrument }}</span>
+                    <span class="name">{{ member.name }}</span>
+                </div>
+                {% if member.message %}
+                <div>
+                    <span class="message">{{ member.message }}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% comment %} Tokenユーザーは行き来できる {% endcomment %}
+    {% if token and config_permission.can_edit_performances or request.user.is_superuser %}
+    <div class="for_editors">
+        <h3 class="section-title">編集者の方へ</h3>
+        <p>
+            このページは公開時、各ライブの個別紹介用ページとなります。<br>
+            現在は配布QRコードを利用して読み込んだユーザーのみに表示されており、まだ公開されていません。<br>
+            ここで再度編集する場合は、必ず編集ボタンをご利用下さい。
+        </p>
+        <a href="{% url 'main:performance_edit' performance.id %}?token={{ token }}">
+            <button class="button_style1"><span class="material-symbols-rounded">edit_square</span> 編集する</button>
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endblock content %}

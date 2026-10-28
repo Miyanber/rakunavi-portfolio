@@ -1,0 +1,78 @@
+{% extends "sports_fes/base.html" %} 
+{% load static %} 
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/access.css' %}" />
+{% endblock %} 
+{% block title %}アクセス{% endblock %} 
+
+{% block content %}
+
+<header>
+    <div class="header-backlayer">
+        {% if general_images.access_header %}
+            <img class="common" src="{{ general_images.access_header.url }}" alt="アクセスヘッダー画像" />
+        {% else %}
+            <img class="black common" />
+        {% endif %}
+        <div class="title">ア ク セ ス</div>
+    </div>
+</header>
+
+<section>
+    <h2>開催場所</h2>
+    <div class="spot-name">
+        本校総合グラウンド
+    </div>
+    <div class="spot-address">
+        〒612-8156
+        京都府京都市伏見区向島西定請７０
+    </div>
+    
+    <div class="map-container">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1635.8630265485194!2d135.76601194352304!3d34.9133237034257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60010fe1fc884371%3A0x645f844a5de5bd6d!2z5rSb5Y2X6auY562J5a2m5qCh44O76ZmE5bGe5Lit5a2m5qCh5ZCR5bO244Kw44Op44Km44Oz44OJ!5e0!3m2!1sja!2sjp!4v1758457153832!5m2!1sja!2sjp"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+    </div>
+
+    <p class="no-parking">
+        向島グラウンド周辺の道路はすべて駐停車禁止です。<br>
+        <span class="red">自家用車での来場は固くお断りします。</span>
+    </p>
+
+    <h4>最寄り駅・乗り換え</h4>
+    <ul>
+        <li>近鉄向島駅から徒歩10分</li>
+        <li>
+            （ＪＲからの乗り換え） <b>近鉄京都駅</b> → （地下鉄から）<b>近鉄竹田駅</b> → （京阪電車から）<b>近鉄丹波橋駅</b>→ <b>向島駅</b> ← 近鉄奈良方面
+        </li>
+    </ul>
+
+    <h4>近鉄電車をご利用の方へ</h4>
+    <div class="ck-content explanation">
+        {{ explanation.content|safe }}
+    </div>
+
+    {% if explanation.show_schedule %}
+    <table>
+        <tr>
+            <th>行先</th>
+            <th>京都駅発</th>
+            <th>丹波駅発</th>
+            <th>向島駅着</th>
+        </tr>
+        {% for schedule in schedules %}
+        <tr>
+            <td>{{ schedule.bound_for }}</td>
+            <td>{{ schedule.Kyoto_Departure_Time }}</td>
+            <td>{{ schedule.Tanbabashi_Departure_Time }}</td>
+            <td>{{ schedule.Mukaijima_Departure_Time }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>※京都市営地下鉄のため、竹田駅乗り換え</div>
+    {% endif %}
+
+</section>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+
+{% block title %}403 Forbidden{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'sports_fes/css/error_page.css' %}">
+{% endblock %}
+
+{% block content %}
+<article>
+    <div class="title_box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m396-340 84-84 84 84 56-56-84-84 84-84-56-56-84 84-84-84-56 56 84 84-84 84 56 56Zm84 260q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg> 
+        <h2>要求されたページへのアクセスが拒否されました。</h2>
+    </div>
+    <div class="error-code"><p>403</p>Forbidden</div>
+    <div class="contents_box">
+        <p>次のような理由が考えられます。</p>
+        <ul>
+            <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M380.5-480.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43 57Zm0-315-240 90v189q0 54 15 105t41 96q42-21 88-33t96-12q50 0 96 12t88 33q26-45 41-96t15-105v-189l-240-90Zm-70 523q-34 8-65 22 29 30 63 52t72 34q38-12 72-34t63-52q-31-14-65-22t-70-8q-36 0-70 8Zm57 187q-6-1-12-3-135-45-215-166.5T160-516v-189q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v189q0 140-80 261.5T505-88q-6 2-12 3t-13 1q-7 0-13-1Z"/></svg>このページへのアクセス権が無い</li>
+            <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M260-160q-91 0-155.5-63T40-377q0-78 47-139t123-78q25-92 100-149t170-57q117 0 198.5 81.5T760-520q69 8 114.5 59.5T920-340q0 75-52.5 127.5T740-160H260Zm0-80h480q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-80q0-83-58.5-141.5T480-720q-83 0-141.5 58.5T280-520h-20q-58 0-99 41t-41 99q0 58 41 99t99 41Zm220-240Zm28.5 148.5Q520-343 520-360t-11.5-28.5Q497-400 480-400t-28.5 11.5Q440-377 440-360t11.5 28.5Q463-320 480-320t28.5-11.5Zm0-140Q520-483 520-500v-100q0-17-11.5-28.5T480-640q-17 0-28.5 11.5T440-600v100q0 17 11.5 28.5T480-460q17 0 28.5-11.5Z"/></svg>サーバーへのアクセスが集中している</li>
+        </ul>
+        <p>しばらくしてからもう一度お試しください。</p>
+    </div>
+</article>
+
+<script>
+const el = document.querySelector(".title_box");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add("is-visible");
+      }, 800);
+      observer.unobserve(entry.target);
+    }
+  });
+});
+observer.observe(el);
+</script>
+
+{% endblock %}
+
+   

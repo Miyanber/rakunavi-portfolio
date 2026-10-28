@@ -1,0 +1,38 @@
+{% extends 'ya/user_profile_base.html' %}
+{% load static %}
+
+{% block profile_right %}
+    <form method="POST" enctype="multipart/form-data" style="width: 100%;">
+        {% csrf_token %}
+
+        <div>
+            <div class="user_id">
+                <h3 style="margin-top: 1.5rem; margin-bottom: 0;">ユーザーID<font style="color: var(--accent-color1)">*</font></h3><p>半角アルファベット、半角数字、@/./+/-/_ で150文字以下で入力してください。</p>
+                {{ form.user_id }}
+                {% if form.user_id.errors %}
+                    <div class="error">{{ form.user_id.errors }}</div>
+                {% endif  %}
+            </div>
+
+            <div class="username">
+                <h3 style="margin-top: 1.5rem; margin-bottom: 0;">ユーザー名<font style="color: var(--accent-color1)">*</font></h3><p>日本語で150文字以下で入力してください。</p>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif  %}
+            </div>
+
+            <div class="self_introduction">
+                <h3 style="margin-top: 1.5rem; margin-bottom: 0;">自己紹介</h3>
+                {{ form.self_introduction }}
+                {% if form.self_introduction.errors %}
+                    <div class="error">{{ form.self_introduction.errors }}</div>
+                {% endif  %}
+            </div>
+        </div>
+        <button type="submit" class="basic" style="margin: 2rem auto;">変更</button>
+        
+        {% comment %} これがないとCkeditorが動作しない {% endcomment %}
+        {{ form.media }}
+    </form>
+{% endblock %}

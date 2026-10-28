@@ -1,0 +1,58 @@
+{% extends 'admin/base.html' %}
+
+{% block extrastyle %}
+{{ block.super }}
+{% comment %} ここに管理サイトで適用するCSSを追加 {% endcomment %}
+<style>
+    input[type=text],
+    input[type=number],
+    textarea,
+    .ck-editor-container,
+    select {
+        background-color: white;
+        color: black;
+        border-radius: .5em;
+        transition: .3s;
+        padding: .5em;
+    }
+
+    html[data-theme="dark"] {
+
+        input,
+        textarea,
+        select {
+            background-color:rgb(52, 53, 54);
+            color: #ddd;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            background-color:rgb(56, 58, 58);
+            outline: 0;
+        }
+
+        textarea {
+            color: #eee;
+            background-color: #323232;
+        }
+
+        .ck-editor-container{
+            filter: invert(90%);
+        }
+        .ck-toolbar{
+            color: #ddd;
+        }
+
+        .ck-content,
+        .ck-editor__editable,
+        .ck-editor__main,
+        .ck-rounded-corners,
+        .ck-editor__editable_inline,
+        .ck-focused{
+            background-color: pink;
+        }
+    }
+
+
+</style>
+{% endblock %}

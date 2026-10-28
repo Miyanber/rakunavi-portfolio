@@ -1,0 +1,8 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static "main/css/admin.css" %}">
+{% endblock extra_style %}
+
+{% block header_type %}function admin{% endblock header_type %}

@@ -1,0 +1,40 @@
+header.function {
+    display: none;
+}
+
+section {
+    width: 90%;
+}
+
+section.result {
+    margin-top: 30px;
+}
+
+form {
+    display: block;
+    width: 40%;
+    margin: 0 auto;
+}
+
+button {
+    display: block;
+    margin: 0 auto;
+    font-size: 1.1em;
+    padding: 0.5em;
+    border: black 2px solid;
+    border-radius: 0.5em;
+    box-shadow: #94919467 0px 4px 7px 0px;
+    background-color: #f8f0f2;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(3px)scale(1.05);
+}
+
+body.dark-mode button {
+    color: #fff;
+    border: #b424b4 2px solid;
+    box-shadow: #dbd6db67 0px 4px 7px 0px;
+    background-color: #423842;
+}

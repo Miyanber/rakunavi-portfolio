@@ -1,0 +1,30 @@
+{% extends "main/export/handout/base.html" %}
+
+{% block recipient %}{% if object.spot.name == "野外ライブステージ" %}野外ライブ出場者{% elif object.spot.name == "音楽室" %}音楽室ライブ出場者{% endif %}{% endblock recipient %}
+
+{% block content %}
+<p>
+    　今年度も、文化祭公式Webアプリ「らくなび」が運用されます。学内文化祭を世間へ発信し、展示やライブの内容をより広く一般の人々に知ってもらうことを目的としています。
+    そのためライブ出場者の皆様には、下のQRコードからアクセスできるフォームを通じて、各自のステージの紹介内容を入力していただく必要があります。ご協力お願いいたします。
+</p>
+<p>
+    　ここまで準備してきた皆さんのパフォーマンスを、らくなびでアピールして下さい！
+</p>
+<p>
+    　なお、コンテンツを作成する際は、紹介入力フォームからアクセスできる「コンテンツ作成ガイドライン」を遵守して下さい。
+</p>
+<p>
+    <strong>※このQRコードは各プリントごとに異なり、認証情報を含みます。管理にご注意ください。また、学習用iPadで写真を撮り保存しておくことをお勧めします。</strong>
+</p>
+<p>
+    ※<strong>紹介ページの編集は、{{ deadline }} まで行うことができます。</strong>
+    原則この期限を過ぎると編集出来なくなり、アクセスが拒否されます。忘れないようご注意ください。
+</p>
+{% endblock content %}
+
+{% block links %}
+<div class="qr_wrapper">
+    <img src="data:image/png;base64,{{ object.qr }}" alt="QR Code" />
+    <div class="title">ライブ紹介入力フォーム（ID: <span>{{ object.id }}</span>）</div>
+</div>
+{% endblock links %}

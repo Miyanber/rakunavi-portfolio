@@ -1,0 +1,43 @@
+{% extends "main/exhibition.html" %}
+{% load static %}
+
+{% block title %}検索 | 展示紹介{% endblock title %}
+
+{% block header_title %}展示検索{% endblock header_title %}
+{% block header_type %}introduction{% endblock header_type %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/exhibition.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/exhibition_search.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<div id="categories" class='spots no-print'>
+    <a href="{% url 'main:exhibitions_search' %}" class="{% if 'exhibitions_search' in request.path %}active{% endif %}">検索</a>
+    <a href="{% url 'main:exhibitions' 'class' %}" class="{% if category == 'class' %}active{% endif %}">クラス展示</a>
+    <a href="{% url 'main:exhibitions' 'club' %}" class="{% if category == 'club' %}active{% endif %}">クラブ展示</a>
+    <a href="{% url 'main:exhibitions' 'grade' %}" class="{% if category == 'grade' %}active{% endif %}">学年展示</a>
+    <a href="{% url 'main:exhibitions' 'facility' %}" class="{% if category == 'facility' %}active{% endif %}">施設・その他</a>
+</div>
+
+<article class="search_form">
+    <div>
+        <p>
+        知りたい・調べたい展示を、タイトル・概要・展示場所・タグから検索できます！<br>
+        例：[ １年１組教室、ジェットコースター、射的、ウッドデッキ ]<br>
+        複数の検索ワードにも対応しています！<small>＊数字の半角全角、英語の大文字小文字の区別はありません。</small><br>
+        タグのみでも検索可能です。
+    </p>
+    </div>
+
+    <form method="get" class="search_form">
+        {{ form.as_div }}
+        {% csrf_token %}
+        <button type="submit" class="button_style1"><span class="material-symbols-rounded">search</span> 詳細検索</button>
+    </form>
+</article>
+
+{% comment %} ExhibitionListと共有 {% endcomment %}
+{% include "main/exhibition_unit.html" %}
+
+{% endblock content %}

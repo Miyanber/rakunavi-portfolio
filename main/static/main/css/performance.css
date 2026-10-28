@@ -1,0 +1,355 @@
+body {
+    --h2-h3_color: #530012;
+
+    --div-performances_background: #fff1f1;
+    --div-performances_box-shadow: rgba(99, 99, 99, 0.5);
+    --div-performances_border: #ffabbd;
+    --div-performances-p-time_background: #ffabbd;
+    --div-performances-p-time-before_border: var(--very-dark-gray);
+
+    --div-performances-songs-p-number_background: #c95871;
+    --div-performances-songs-p-number_color: white;
+    --div-performances-songs-span-artist_color: #595959;
+
+    --table-profile-h3_color: #252525;
+    --table-profile-h3_background: #ffd4d4;
+    --table-profile-h3_box-shadow: #bc9393;
+    --table-profile-p-genre_background: #a24864;
+    --table-profile-p-genre_color: white;
+    --table-profile-p-spot_color: #4b4b4b;
+
+    --div-detail-a-detail_border: #9f72ff;
+    --div-detail-a-detail_color: #5100ff;
+    --div-detail-a-detail-hover_color: white;
+    --div-detail-a-detail-hover_background: #9f72ff;
+}
+
+header.introduction {
+    min-height: 40vw;
+}
+
+
+h2,
+h3 {
+    font-size: 1.5em;
+    color: var(--h2-h3_color);
+}
+
+section {
+    margin: 3em auto;
+    max-width: 1300px;
+}
+
+section:has(.performances) {
+    width: 95%;
+}
+
+div.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div.info img.live_spot {
+    max-width: 100%;
+    width: 500px;
+}
+
+div.performances {
+    font-family: var(--yusei-magic);
+    display: flex;
+    background: none;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    row-gap: 3em;
+    column-gap: 1em;
+    font-size: 1rem;
+}
+
+
+.performance {
+    position: relative;
+    background-color: var(--div-performances_background);
+    box-shadow: var(--div-performances_box-shadow) 0px .2em .4em 0px;
+    height: max-content;
+    transition: all 0.5s ease;
+    width: 22%;
+    border-radius: 0.5em;
+}
+
+.performance:hover {
+    background-color: #f5e6e6;
+    transform: translateY(-5px);
+    box-shadow: rgba(99, 99, 99, 0.8) 0px 6px 20px 0px;
+}
+
+.performance:hover .band_name {
+    color: black;
+}
+
+
+div.performances .time {
+    position: relative;
+    text-align: center;
+    font-size: 1.5em;
+    color: var(--very-dark-gray);
+    padding: .5em .5em;
+    margin: 0;
+    background-color: var(--div-performances-p-time_background);
+    border-radius: 0.5em 0.5em 0 0;
+}
+
+div.performances .time>span {
+    position: relative;
+    background-color: inherit;
+    z-index: 1;
+    padding: 0 .5em;
+}
+
+div.performances .time::before {
+    position: absolute;
+    left: .3em;
+    top: 50%;
+    content: "";
+    border-top: .2em double var(--div-performances-p-time-before_border);
+    width: calc(100% - .6em);
+    z-index: 0;
+}
+
+div.performances .profile {
+    margin: 1em;
+    text-align: center;
+}
+
+div.performances .profile img {
+    display: inline-block;
+    width: 80%;
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    vertical-align: bottom;
+}
+
+div.performances .profile h3 {
+    color: var(--table-profile-h3_color);
+    padding: .5em 0;
+    background-color: var(--table-profile-h3_background);
+    margin: 0;
+    text-align: center;
+    box-shadow: .15em .15em 0 var(--table-profile-h3_box-shadow);
+}
+
+div.performances .profile .genre {
+    display: inline-block;
+    text-align: center;
+    background-color: var(--table-profile-p-genre_background);
+    color: var(--table-profile-p-genre_color);
+    padding: .5em 1em;
+    margin: 1em 0;
+    border-radius: 2em;
+}
+
+div.performances .profile .date {
+    display: inline-block;
+    font-weight: bolder;
+    text-align: center;
+    background-color: var(--table-profile-p-genre_background);
+    color: var(--table-profile-p-genre_color);
+    padding: .5em 1em;
+    margin: 1em 0;
+    border-radius: 2em;
+}
+
+div.performances .profile p.spot {
+    font-weight: bold;
+    color: var(--table-profile-p-spot_color);
+    text-align: center;
+    font-size: 1.1em;
+}
+
+div.performances .songs {
+    margin: 0 1.2em 1em;
+}
+
+div.performances .songs>div {
+    display: flex;
+    align-items: center;
+    align-content: flex-start;
+}
+
+div.performances .songs p {
+    display: inline-block;
+    margin: .2em .5em;
+}
+
+div.performances .songs p.number {
+    display: inline-flex;
+    background-color: var(--div-performances-songs-p-number_background);
+    color: var(--div-performances-songs-p-number_color);
+    border-radius: 100%;
+    width: 2.2em;
+    height: 2.2em;
+    font-size: 1.2em;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+div.performances .songs p.content span.artist {
+    color: var(--div-performances-songs-span-artist_color);
+    font-size: .9em;
+}
+
+div.performances .detail {
+    margin: 0 1em 1em;
+    text-align: center;
+}
+
+@media only screen and (max-width: 1100px) {
+    body {
+        font-size: 0.8em !important;
+    }
+
+    header.introduction {
+        min-height: 30vh;
+    }
+
+    div.performances .time {
+        font-size: 1.3em;
+    }
+
+    .band_name {
+        font-size: 1.3em;
+    }
+
+    .genre {
+        font-size: 0.8em;
+    }
+}
+
+@media only screen and (max-width: 770px) {
+    .performance {
+        width: 45%;
+    }
+
+    div.performances .profile img {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    div.performances {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .performance {
+        width: 70%;
+    }
+
+    div.performances .profile img {
+        width: 70%;
+    }
+}
+
+/* ダークモード */
+
+body.dark-mode {
+    --h2-h3_color: #530012;
+
+    --div-performances_background: #291f29;
+    --div-performances_box-shadow: rgba(99, 99, 99, 0.5);
+    --div-performances_border: #a555aa;
+    --div-performances-p-time_background: #b96cb9;
+    --div-performances-p-time-before_border: #b96cb7;
+
+    --div-performances-songs-p-number_background: #d37dd3;
+    --div-performances-songs-p-number_color: white;
+    --div-performances-songs-span-artist_color: #999;
+
+    --table-profile-h3_color: #252525;
+    --table-profile-h3_background: #c075c0;
+    --table-profile-h3_box-shadow: #b377b3;
+    --table-profile-p-genre_background: #a555a5;
+    --table-profile-p-genre_color: white;
+    --table-profile-p-spot_color: #4b4b4b;
+
+    --div-detail-a-detail_border: #a555a5;
+    --div-detail-a-detail_color: #ddd;
+    --div-detail-a-detail-hover_color: #eee;
+    --div-detail-a-detail-hover_background: #964d96;
+}
+
+body.dark-mode h2,
+body.dark-mode h3 {
+    color: var(--h2-h3_color);
+}
+
+body.dark-mode section.common {
+    background-color: #291f29;
+}
+
+body.dark-mode .body-text {
+    background-color: #00000000;
+}
+
+body.dark-mode .performance {
+    background-color: #251d25;
+    box-shadow: rgba(99, 99, 99, 0.5) 0px 4px 16px 0px;
+}
+
+body.dark-mode .performance:hover {
+    background-color: #212121;
+}
+
+body.dark-mode .performance:hover .band_name {
+    color: #fff;
+}
+
+body.dark-mode div.performances .time {
+    background-color: #631e63;;
+    color: #f2e2f2;
+}
+
+body.dark-mode div.performances .time::before {
+    border-top: .2em double #f2e2f2;
+}
+
+body.dark-mode div.performances .songs>div p.number {
+    background-color: #a555a5;
+    color: var(--very-dark-gray);
+}
+
+body.dark-mode div.performances .songs p.content span.artist {
+    color: #a5a2a2;
+}
+
+body.dark-mode div.performances .profile h3 {
+    color: #eee;
+    background-color: #413541;
+    box-shadow: .15em .15em 0 #363336;
+}
+
+body.dark-mode div.performances .profile .genre {
+    background-color: #494049;
+    color: #ddd;
+}
+
+body.dark-mode div.performances .profile p.spot {
+    color: #ccc;
+}
+
+@media only screen and (min-width: 3840px) {
+    section {
+        max-width: 2000px;
+    }
+
+    section:has(.performances) {
+        max-width: 2600px;
+    }
+
+    .performance {
+        font-size: 200%;
+    }
+}

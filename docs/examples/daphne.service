@@ -1,0 +1,21 @@
+[Unit]
+Description=Daphne ASGI Service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/RakuNavi
+ExecStart=/home/ubuntu/RakuNavi/.venv/bin/daphne \
+  -b 127.0.0.1 \
+  -p 8001 \
+  rakunavi.asgi:application
+
+Restart=always
+RestartSec=3
+CPUQuota=80%
+KillSignal=SIGQUIT
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+{{ formset.management_form }}
+{% for form in formset %}
+<div class="formset_item">
+    <div class="drag_indicator">
+        <div class="wrapper">
+            <span class="material-symbols-rounded">
+                drag_indicator
+            </span>
+        </div>
+    </div>
+    <div class="index {% if forloop.last %}last{% endif %}" form-prefix="{{ forloop.counter0 }}">
+        <strong>{{ forloop.counter }}</strong>
+    </div>
+    {{ form.media }}
+    {{ form.as_div }}
+</div>
+{% endfor %}

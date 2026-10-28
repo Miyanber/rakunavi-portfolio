@@ -1,0 +1,222 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/dm.css' %}">
+<link rel="stylesheet" href="{% static 'ya/css/group_settings.css' %}">
+<link rel="stylesheet" href="{% static 'ya/css/search_user.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}Я{% endblock title_wrapper %}
+{% block header_title %}Я{% endblock %}
+
+{% block content %}
+
+    <div class="top">
+        <div style="display:flex;">
+            <a href="{% url 'ya:group_chat' group.id %}">
+                <span class="material-symbols-rounded">arrow_back_ios_new</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="user-groups">
+        <div class="icon_background">
+            <img class="icon" src="{% if group.image %}{{ group.image.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+        </div>
+        <div class="name"><label style="font-size:1rem;"><label style="font-size:1.2rem;">設定 | </label>{{ group.name }}{% if group.material_icon %}<span class="material-symbols-rounded roles">{{ group.material_icon }}</span>{% endif %}<span style="font-size:.8rem; color:var(--label-color); margin-left:.5rem;">({{ group.members.count }})</span></label></div>
+    </div>
+
+    <form method="POST" class="settings" enctype="multipart/form-data" id="settings_form">
+        {% csrf_token %}
+        <!-- グループ名 -->
+        <div class="form-group">
+            <label>グループ名</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="error">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- 画像フィールド -->
+        <div class="form-group">
+            <label>グループアイコン</label>
+            <div class="change-images">
+                <div style="width: 6rem; aspect-ratio: 1 / 1;">
+            {% if form.instance.image %}
+                    <img class="icon" src="{{ form.instance.image.url }}" alt="現在の画像">
+            {% endif %}
+                </div>
+                <span class="material-symbols-rounded">fast_forward</span>
+                <div style="width: 6rem; aspect-ratio: 1 / 1;">
+                    <img class="icon" id="preview" src="" alt="選択画像プレビュー" style="display:none;">
+                </div>
+            </div>
+            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}">
+
+        </div>
+
+        <!-- メンバー -->
+        <div class="form-group">
+            <label>グループメンバー</label>
+            <div class="members-list">
+                {% for member in group.members.all %}
+                    <div class="member">
+                        <img class="icon" src="{% if member.icon %}{{ member.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                        <span class="username">{{ member.username }}</span><span class="material-symbols-rounded roles">{% if member.role %}{{ member.role.icon }}{% endif %}</span><span>@{{ member.user_id }}</span>
+                        <button type="button" class="remove basic" data-user-id="{{ member.user_id }}">
+                            <span class="material-symbols-rounded">person_remove</span>
+                        </button>
+                    </div>
+                {% empty %}
+                    <div class="member empty">
+                        メンバーがいません
+                    </div>
+                {% endfor %}
+                </div>
+            
+            {% comment %} ユーザー追加 {% endcomment %}
+            <div class="form search">
+                <input type="text" id="user-search" placeholder="ユーザーIDを入力">
+                <button type="button" class="basic submit" id="add-member"><span class="material-symbols-rounded">person_add</span></button>
+            </div>
+            
+            <select name="members" id="members-select" multiple style="display:none;">
+                {% for member in form.instance.members.all %}
+                    <option value="{{ member.id }}" selected>{{ member.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- 説明 -->
+        <div class="form-group">
+            <label>グループの説明</label>
+                <textarea name="description" id="id_description" rows="2">{{ form.instance.description }}</textarea>
+            {% if form.description.errors %}
+                <div class="error">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- アイコン -->
+        <div class="form-group">
+            <label>Material iconの指定</label>
+            {{ form.material_icon }}
+            {% if form.material_icon.errors %}
+                <div class="error">{{ form.material_icon.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="basic" style="margin: 0 auto;" id="form_submit_btn">更新</button>
+
+        <div style="width: max-content; margin: 0 auto; margin-top: 5rem; display: flex; flex-direction: column; align-items: center;">
+            <h3 style="width: max-content;"><span class="material-symbols-rounded" style="margin-right: .2rem;">warning</span><span>DANGER ZONE</span></h3>
+            {% if group.is_visible %}
+            <p style="width: max-content; margin-bottom: 1rem;">グループは有効です</p>
+            <button class="basic" id="group_delete_btn">グループの削除</button>
+            {% else %}
+            <p style="width: max-content;">このグループは無効化されています</p>
+            {% endif %}
+            {% comment %} checkboxはcssで隠す {% endcomment %}
+            {{ form.is_visible }}
+            {% if form.is_visible.errors %}
+                <div class="error">{{ form.is_visible.errors }}</div>
+            {% endif %}
+        </div>
+    </form>
+
+    <div class="bottom"></div>
+    
+    <script>
+    const input = document.getElementById('id_image');
+    const preview = document.getElementById('preview');
+
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    });
+
+    {% comment %} ユーザー追加 {% endcomment %}
+    document.getElementById("add-member").addEventListener("click", () => {
+        const userId = document.getElementById("user-search").value;
+        if (!userId.trim()) {
+            alert("ユーザーIDを入力してください");
+            return;
+        }
+        var response = confirm("続行すると未保存の内容は失われます。よろしいですか？");
+        if(!response){
+            return;
+        }
+        
+        fetch("{% url 'ya:group_member_add' group.id %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `user_id=${userId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error);
+            }
+        });
+    });
+    {% comment %} ユーザー削除 {% endcomment %}
+    document.querySelectorAll(".remove").forEach(button => {
+        button.addEventListener("click", () => {
+            var response = confirm("続行すると未保存の内容は失われます。よろしいですか？");
+            if(!response){
+                return;
+            }
+
+            const userId = button.dataset.userId;
+            fetch("{% url 'ya:group_member_remove' group.id %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `user_id=${userId}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    button.closest(".member").remove();
+                } else {
+                    alert(data.error);
+                }
+            });
+        });
+    });
+
+    {% comment %} グループ削除 {% endcomment %}
+    document.getElementById("group_delete_btn").addEventListener("click", (event) => {
+        // コレがないとキャンセルしても送信される
+        event.preventDefault();
+        if (confirm("グループを削除します。よろしいですか？")) {
+            const isVisibleCheckbox = document.getElementById('id_is_visible');
+            if (isVisibleCheckbox) {
+                isVisibleCheckbox.checked = false;
+            }
+            document.getElementById('settings_form').submit(); 
+        }
+    });
+    </script>
+
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock extra_js %}

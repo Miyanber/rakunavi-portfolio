@@ -1,0 +1,37 @@
+{% comment %} cdn_urlにはプロトコル（"https://"ないし"http://"）付きのURLがテンプレートエンジンによって代入される {% endcomment %}
+{
+  "name": "Rakunavi",
+  "short_name": "rakunavi",
+  "start_url": "/?utm_source=homescreen",
+  "display": "standalone",
+  "background_color": "#fffafa",
+  "theme_color": "#b24661",
+  "description": "らくなびは、サンプル高等学校・サンプル高等学校付属中学校文化祭・体育祭の公式Webサイトです。",
+  "id": "/",
+  "icons": [
+    {
+      "src": "{{ cdn_url }}/static/main/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "{{ cdn_url }}/static/main/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "{{ cdn_url }}/static/main/screenshots/mobile.png",
+      "type": "image/png",
+      "sizes": "432x929",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "{{ cdn_url }}/static/main/screenshots/desktop.png",
+      "type": "image/png",
+      "sizes": "1920x1200",
+      "form_factor": "wide"
+    }
+  ]
+}

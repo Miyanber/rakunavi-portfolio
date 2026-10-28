@@ -1,0 +1,46 @@
+<div class="review_wrapper">
+    <div class="review">
+        <div class="review__title">
+            審査用フォーム
+        </div>
+        <div class="review__history">
+            <div class="review__history__title">審査履歴</div>
+            <div class="review__history__reviews">
+                {% for review in reviews %}
+                <div class="review__history__review {% if forloop.last %}latest_review{% endif %}">
+                    <div class="review__history__review__reviewed_at">{{ review.reviewed_at|date:"Y年n月j日 H:i" }}：{{ review.in_charge_of }}</div>
+                    <div class="review__history__review__status {% if review.status == 'accepted' %}accepted{% elif review.status == 'rejected' %}rejected{% else %}unknown{% endif %}">
+                        {% if review.status == 'accepted' %}
+                        <span class="material-symbols-rounded">check_circle</span> 承認
+                        {% elif review.status == 'rejected' %}
+                        <span class="material-symbols-rounded">cancel</span> 差し戻し
+                        {% elif review.status == 'pending' %}
+                        <span class="material-symbols-rounded">hourglass</span> 審査待ち
+                        {% else %}
+                        <span class="material-symbols-rounded">help</span> 不明
+                        {% endif %}
+                    </div>
+                    <div class="review__history__review__reason">
+                        {{ review.reason }}
+                    </div>
+                    <div class="review__history__review__comment">{{ review.comment }}</div>
+                </div>
+                {% empty %}
+                <p>審査履歴がありません。<strong>審査が必要です</strong>。</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="review__form">
+            <div class="review__form__title">審査用フォーム</div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form }}
+                <button id="reviewFormFixButton" type="button" class="review__form__fixButton button_style2">
+                    <span class="material-symbols-rounded">keep</span>
+                    差し戻し理由のフォームを画面上に固定/解除
+                </button>
+                <button type="submit" class="button_style1"><span class="material-symbols-rounded">star_half</span> 審査内容を保存</button>
+            </form>
+        </div>
+    </div>
+</div>

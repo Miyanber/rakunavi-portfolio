@@ -1,0 +1,77 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+
+{% block title %}スローガン{% endblock title %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}スローガン{% endblock header_title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/slogan.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<header>
+    <div class="header-backlayer">
+        {% if general_images.facility_header %}
+            <img class="common" src="{{ general_images.facility_header.url }}" alt="会場案内ヘッダー画像" />
+        {% else %}
+            <img class="black common" />
+        {% endif %}
+        <div class="title">スローガン</div>
+    </div>
+</header>
+
+<section>
+    <div style="text-align: center">
+        <p>本年度のスローガンは、</p>
+        <div class="slogan_wrap">
+            <div class="slogan-image">
+                {% if general_images.slogan_image %}
+                <img class="fade-in light" src="{{ general_images.slogan_image.url }}" alt="スローガン画像">
+                <img class="fade-in dark" src="{{ general_images.slogan_dark_image.url }}" alt="スローガン画像">
+                {% else %}
+                <div class="slogan-main">{{ assets.main }}</div>
+                <div class="slogan-sub">〜{{ assets.sub }}〜</div>
+                <p>です。</p>
+                {% endif %}
+            </div>
+            {% if general_images.slogan_logo %}
+            <div class="slogan-logo">
+                <div class="logo-square">
+                    <img class="fade-in light" src="{% if general_images.slogan_logo %}{{ general_images.slogan_logo.url }}{% else %}{% static 'sports_fes/img/wip.webp' %}{% endif %}" alt="スローガンロゴ">
+                    <img class="fade-in dark" src="{% if general_images.slogan_dark_logo %}{{ general_images.slogan_dark_logo.url }}{% else %}{% static 'sports_fes/img/wip_darkmode.webp' %}{% endif %}" alt="スローガンロゴ">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <h2>スローガン一覧</h2>
+    <div>
+        <p>本校体育祭の、歴代のスローガンをまとめています。</p>
+    </div>
+
+    <table>
+        <tr>
+            <th class="year"></th>
+            <th colspan="2">スローガン</th>
+        </tr>
+        {% for slogan in slogans %}
+        <tr class="underbar">
+            <td class="year">{{ slogan.year }}年度</td>
+            <td class="main_slogan" colspan="2">{{ slogan.main }}――{{ slogan.sub }}――</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td class="year"></td>
+            <td>なにもありません。</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+
+</section>
+
+{% endblock content %}

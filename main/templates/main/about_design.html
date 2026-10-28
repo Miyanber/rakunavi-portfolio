@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+{% comment %} メインページなので特に高速化したい、preloadもする {% endcomment %}
+<link rel="preload" href="{% static 'main/css/about.css' %}" as="style">
+<link rel="stylesheet" href="{% static 'main/css/about.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}デザインについて{% endblock title_wrapper %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+<h2 class="design_title">ページをひらけば、そこはもう文化祭。</h2>
+<div style="width:80%; max-width: 1200px; margin: 1rem auto;">
+<p class="design_content">文化祭が始まる、あの高揚感を、ホームページでも感じてほしい。<br>
+    もっと便利に、わかりやすい文化祭を体験してほしい。<br>
+    そんな想いを胸に、本年度のサイトデザインは「『和』と『モダン』の融合」をテーマに設計しました。<br>
+    細かい部分にたくさんの色やフォントの工夫が散りばめられています。<br>
+    ぜひ、「デザイン」の面でもこのサイトを楽しんでいただけたら幸いです。</p>
+</div>
+<section class="design_basic">
+    <div style="display: flex; width:80%; max-width: 1400px; margin: 1rem auto;">
+        <img src="{% static 'main/img/exhibition_ex.webp' %}" style="width: 30%; height: auto; border-radius: 1rem; corner-shape: superellipse(1.1);" class="light">
+        <img src="{% static 'main/img/exhibition_ex_d.webp' %}" style="width: 30%; height: auto; border-radius: 1rem; corner-shape: superellipse(1.1);" class="dark">   
+        <div style="margin: 0 2rem;">
+        <h2 style="margin: .5rem 0;">１．各展示紹介のリニューアル</h2>
+        <p class="design_content ">本年度の展示紹介は、「わかりやすい」を追求しました。<br><br>
+        「所要時間」や「整理券」の項目を増やし、「混雑度」も含めて記号や数字で表すことにより、状態が一目でわかるようになっています。<br>
+        また、背景色を混雑度と同期させることにより、色でも混雑しているかどうかがわかるようになりました。<br><br>
+        また、配置や角丸をより現代風に、かつ配色は「和」を連想させるようなものに変更しました。<br>
+        構造はモダンに、それでいて色は和風に。「『和』と『モダン』の融合」がここにあります。</p>
+        </div>
+    </div>
+</section>
+{% endblock content %}

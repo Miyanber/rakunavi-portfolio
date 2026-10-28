@@ -1,0 +1,16 @@
+.document_name{
+    font-size: 120%;
+    max-width: 90%;
+}
+
+article img{
+    width: 50%;
+}
+
+code{
+    background-color: #e5d3d6;
+}
+
+body.dark-mode code{
+    background-color: #3e343e;
+}

@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}オフライン{% endblock title %}
+
+{% block header_title %}Offline Error{% endblock header_title %}
+{% block header_type %}introduction{% endblock header_type %}
+{% block header_image %}{% endblock header_image %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/offline.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+<article>
+    <h1>現在、オフラインです</h1>
+    <p id="frown">：(</p>
+    <p>現在、オンラインサーバーに接続できないようです。インターネット接続を確認して、再読み込みしてみてください。</p>
+</article>
+
+{% endblock content %}

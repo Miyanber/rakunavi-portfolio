@@ -1,0 +1,102 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/group_create.css' %}">
+<link rel="stylesheet" href="{% static 'ya/css/group_settings.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}グループチャット作成{% endblock title_wrapper %}
+{% block header_title %}グループチャット作成{% endblock %}
+
+{% block content %}
+
+<div class="top">
+    <div style="display:flex;">
+        <a href="{% url 'ya:group_list' %}">
+            <span class="material-symbols-rounded">arrow_back_ios_new</span>
+        </a>
+    </div>
+</div>
+
+<div class="user-groups">
+    <div class="name"><label>新規グループ作成</label></div>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="settings">
+    {% csrf_token %}
+    <div class="form">
+        {% csrf_token %}
+        <!-- グループ名 -->
+        <div class="form-group">
+            <label>グループ名</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="error">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- 画像フィールド -->
+        <div class="form-group">
+            <label>グループアイコン</label>
+            <div class="change-images">
+                <div style="width: 6rem; aspect-ratio: 1 / 1;">
+                    <img class="icon" id="preview" src="" alt="選択画像プレビュー" style="display:none;">
+                </div>
+            </div>
+            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}">
+
+        </div>
+
+        <!-- メンバー -->
+        <div class="form-group">
+            <label>グループメンバー</label>
+            {{ form.members }}
+            {% if form.members.errors %}
+                <div class="error">{{ form.members.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- 説明 -->
+        <div class="form-group">
+            <label>グループの説明</label>
+                <textarea name="description" id="id_description" rows="2">{{ form.instance.description }}</textarea>
+            {% if form.description.errors %}
+                <div class="error">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- アイコン -->
+        <div class="form-group">
+            <label>Material iconの指定</label>
+            {{ form.material_icon }}
+            {% if form.material_icon.errors %}
+                <div class="error">{{ form.material_icon.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+    <button type="submit" class="basic submit" style="margin: 0 auto;"><span class="material-symbols-rounded">create</span>作成</button>
+    <div class="bottom"></div>
+</form>
+
+<script>
+const input = document.getElementById('id_image');
+const preview = document.getElementById('preview');
+
+input.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = '';
+        preview.style.display = 'none';
+    }
+});
+</script>
+
+{% endblock content %}

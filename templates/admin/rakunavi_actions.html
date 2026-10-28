@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "admin/css/rakunavi_actions.css" %}">
+{% endblock extrastyle %}
+
+{% block userlinks %}
+    {% url 'django-admindocs-docroot' as docsroot %}{% if docsroot %}<a href="{{ docsroot }}">{% translate 'Documentation' %}</a> / {% endif %} らくなびアクション /
+    {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; らくなびアクション
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    {% if messages %}{{ message.0 }}{% endif %}
+    <div>
+        <h2>展示モデルの作成</h2>
+        <p>
+            既存のアカウントから展示モデルを作成します。
+        </p>
+        <form action="" method="post" class="rakunavi_action">
+            {% csrf_token %}
+            <input type="hidden" name="action_type" value="create_exhibitions">
+            <button type="submit" class="button default">実行</button>
+        </form>
+    </div>
+
+    <div>
+        <h2>アカウントの作成</h2>
+        <p>
+            新規アカウントを作成します。(未実装)
+        </p>
+        <form action="" method="post" class="rakunavi_action">
+            {% csrf_token %}
+            <input type="hidden" name="action_type" value="create_user">
+            <button type="submit" class="button default">実行</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ document }}{% endblock title %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}{{ document }}{% endblock header_title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/documents.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+<article>
+    <a class="button_style2" href="{% url 'main:documents_list' %}">
+        <span class="material-symbols-rounded">arrow_back</span>
+        <span class="material-symbols-rounded">article</span> ドキュメント一覧へ戻る
+    </a>
+        {{ html|safe }}
+</article>
+
+
+{% endblock content %}

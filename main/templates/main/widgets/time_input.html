@@ -1,0 +1,8 @@
+{% load static %}
+<div class="time_input">
+    <div class="div">
+        <input type="number" name="hour" class="time-input_hour" min="0" max="23">時
+        <input type="number" name="minute" class="time-input_minute" min="0" max="23">分
+    </div>
+    <input type="hidden" name="{{ widget.name }}"{% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+</div>

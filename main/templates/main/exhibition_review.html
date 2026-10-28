@@ -1,0 +1,28 @@
+{% extends "main/exhibition_detail.html" %}
+{% load static %}
+
+{% block title %}先生用審査ページ | {{ exhibition.title }} | 展示紹介{% endblock title %}
+
+{% block header_title %}先生用審査ページ - 展示紹介{% endblock header_title %}
+{% block extra_style %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'main/css/editor.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/review.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+{% if perms.main.can_review_exhibition %}
+{% include "main/partials/back_to_mypage.html" %}
+{% endif %}
+
+{{ block.super }} 
+
+{% include "main/partials/review.html" %}
+
+{% endblock content %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'main/js/review.js' %}" defer></script>
+{% endblock extra_js %}

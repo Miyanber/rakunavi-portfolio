@@ -1,0 +1,99 @@
+{% extends "main/admin.html" %}
+{% load static %}
+
+{% block title %} | 生徒用編集ページ{% endblock title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/editor.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/review.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+{% block review_status %}
+<section>
+    <h3>注意</h3>
+    <p>
+        このページを再読み込みしないで下さい。未保存の内容が失われます。<br>
+        また編集期間中はいつでも更新できるので、こまめに保存することをおすすめします。
+    </p>
+
+    <h3>審査履歴</h3>
+    <div class="review__history">
+        <div class="review__history__reviews">
+            {% for review in reviews %}
+            <div class="review__history__review">
+                <div class="review__history__review__reviewed_at">{{ review.reviewed_at|date:"Y年n月j日 H:i" }}</div>
+                <div class="review__history__review__status {% if review.status == 'accepted' %}accepted{% elif review.status == 'rejected' %}rejected{% else %}unknown{% endif %}">
+                    {% if review.status == 'accepted' %}
+                    <span class="material-symbols-rounded">check_circle</span> 承認
+                    {% elif review.status == 'rejected' %}
+                    <span class="material-symbols-rounded">cancel</span> 差し戻し
+                    {% elif review.status == 'pending' %}
+                    <span class="material-symbols-rounded">hourglass</span> 審査待ち
+                    {% else %}
+                    <span class="material-symbols-rounded">help</span> 不明
+                    {% endif %}
+                </div>
+                <div class="review__history__review__reason">
+                    {{ review.reason }}
+                </div>
+                <div class="review__history__review__comment">{{ review.comment }}</div>
+            </div>
+            {% empty %}
+            <p>まだ審査されていません。</p>
+            {% endfor %}
+        </div>
+    </div>
+    <a class="button_style2" href="{% url 'main:manuals_for_students_list' %}" target="_blank">
+        <span class="material-symbols-rounded">menu_book</span> マニュアルを見る
+    </a>
+</section>
+{% endblock review_status %}
+
+{% block form %}
+<form action="" method="post" enctype="multipart/form-data">
+    {{ form.media }}
+    {% csrf_token %}
+    <section>
+        <h3>全般</h3>
+        <div>
+            <table class="main">
+                {% for field in form %}
+                <tr>
+                    <th>
+                        <div class="th_wrapper">
+                            {{ field.label_tag }}{% if field.field.required %}<span class="required">必須</span>{% else %}<span class="option">オプション</span>{% endif %}
+                        </div>
+                    </th>
+                    <td>{{ field.errors }}{{ field.help_text }}{{ field }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </section>
+
+    {% block extra_forms %}{% endblock extra_forms %}
+
+    <div id="deleted_forms"></div>
+    
+    <section>
+        <label id="label_confirm">
+            <input type="checkbox" id="checkbox_confirm">
+            <p>私はコンテンツ・マニュアルを読み、問題がないことを確認しました。</p>
+        </label>
+    </section>
+
+    <section>
+        <button id="submit_button" type="button" class="button_style1">変更を適用</button>
+    </section>
+</form>
+{% endblock form %}
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js" defer></script>
+<script src="{% static 'main/js/editor.js' %}" defer></script>
+<script src="{% static 'main/js/confirm_input.js' %}" defer></script>
+<script src="{% static 'main/js/image_validate.js' %}" defer></script>
+{% endblock extra_js %}

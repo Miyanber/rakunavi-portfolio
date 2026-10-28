@@ -1,0 +1,28 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}リリースノート{% endblock title %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}らくなび リリースノート{% endblock header_title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/documents.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+<article>
+    <a class="button_style2" href="{% url 'main:mypage' %}">
+        <span class="material-symbols-rounded">arrow_back</span>
+        <span class="material-symbols-rounded">engineering</span> 管理ページへ戻る
+    </a>
+    <p>リリースノートを閲覧できます。</p>
+    {% for doc in documents %}
+        <a class="document_name button_style2" href="{% url 'main:release_notes_detail' doc.name %}">{{ doc }}</a>
+    {% endfor %}
+    
+</article>
+
+
+{% endblock content %}

@@ -1,0 +1,65 @@
+# このファイルに上位の依存関係をまとめる
+#  pip-compile requirements.inでrequirements.txtを生成して利用しよう
+
+# Django
+Django
+
+# ASGI / WebSocket
+daphne
+channels_redis
+
+# Authentication
+django-allauth
+
+# Database
+dj-database-url
+
+# Scheduler
+django-apscheduler
+
+# Admin
+django-baton
+
+# Rich text editor
+django-ckeditor-5
+
+# Files & Images
+django-cleanup
+django-imagekit
+Pillow
+whitenoise
+
+# PWA
+django-pwa
+
+# Security
+django-ratelimit
+django-http-compression
+
+# Storage
+django-storages
+boto3
+
+# Utilities
+colorama    #色つけ
+python-dotenv
+qrcode
+openpyxl
+psutil  # リソース監視
+pypdf
+beautifulsoup4
+Markdown
+mojimoji
+
+# PDF generation
+weasyprint
+
+# Development
+django-debug-toolbar
+django-extensions
+pip-tools
+pipdeptree
+pip-autoremove
+pydotplus
+gprof2dot
+

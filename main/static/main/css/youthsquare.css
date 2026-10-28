@@ -1,0 +1,210 @@
+body {
+    --accent-color: #df2c52;
+}
+
+header.introduction {
+    min-height: 40vw;
+}
+
+header.introduction h1 {
+    width: max-content;
+    margin: 2em auto;
+}
+
+section {
+    margin: 3em auto;
+    padding: 1em;
+}
+
+.to_live {
+    text-align: center;
+}
+
+.food_booth_div picture {
+    width: 30%;
+}
+
+.food_booth_div img {
+    width: 100%;
+    max-width: 180px;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    vertical-align: bottom;
+}
+
+p.allergens {
+    font-size: 1.1em;
+    color: red;
+    font-weight: bolder;
+}
+
+.food_booths,
+.food_trucks {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.food_booth_div,
+.food_truck_div {
+    font-family: var(--yusei-magic);
+}
+
+.food_booth_div {
+    border-top: .1em solid #a4a4a4;
+    border-bottom: .1em solid #a4a4a4;
+    padding: 0 2em;
+    margin: 2em 0;
+    display: flex;
+    align-items: center;
+    column-gap: 1em;
+    background-color: rgba(255, 192, 203, 0.2);
+    color: black;
+    border-left: .5em solid var(--accent-color);
+    box-shadow: rgba(99, 99, 99, 0.4) 0px 4px 7px 2px;
+    transition: 0.4s all;
+}
+
+.food_booth_div:hover {
+    box-shadow: rgba(99, 99, 99, 0.8) 0px 6px 15px 2px;
+    transform: scale(1.015);
+}
+
+.food_booth_div>div>* {
+    margin: .5em 0;
+}
+
+.food_booth_div .message {
+    color: var(--very-dark-gray);
+}
+
+.food_truck_div>div {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+}
+
+.food_truck_div>div h3 {
+    display: inline-block;
+    text-align: center;
+    border-bottom: .2em solid var(--accent-color);
+}
+
+.food_truck_div {
+    display: grid;
+    grid-template-columns: 11em auto;
+    border-bottom: .2em solid #a4a4a4;
+    padding: 2em 2vw;
+}
+
+.food_truck_div:first-child {
+    padding-top: 0;
+}
+
+.food_truck_div h3 {
+    margin: 1em 0 .5em;
+}
+
+.food_truck_div .info {
+    color: var(--very-dark-gray);
+}
+
+.food_truck_div table {
+    border-collapse: collapse;
+    max-width: 100%;
+    overflow-x: scroll;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-top: 1em;
+}
+
+.food_truck_div tr {
+    background-color: #fff4f4;
+    border-bottom: .1em dotted #a4a4a4;
+}
+
+.food_truck_div tr:nth-of-type(2n) {
+    background-color: #ffe1e1;
+}
+
+.food_truck_div td {
+    padding: .2em .5em;
+    width: 50%;
+}
+
+.food_truck_div:last-child {
+    border-bottom: none;
+}
+
+.food_truck_div h3 {
+    color: black;
+}
+
+span.yen {
+    font-size: .7em;
+    padding: 0 .1em;
+}
+
+@media only screen and (max-width: 1100px) {
+    header.introduction {
+        min-height: 40vh;
+    }
+
+    .food_booth_div img {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 770px) {
+    .food_booth_div {
+        padding: 0 4px;
+        font-size: 90%;
+    }
+}
+
+/* ダークモード */
+body.dark-mode {
+    --accent-color: #9f72ff;
+}
+
+body.dark-mode .body-text {
+    background-color: #00000000;
+}
+
+body.dark-mode section {
+    background-color: #291f29;
+}
+
+body.dark-mode h2 .body-text {
+    color: #ddd;
+}
+
+body.dark-mode .food_booth_div {
+    background-color: #333;
+    color: #ddd;
+}
+
+body.dark-mode .food_booth_div .message {
+    color: #ccc;
+}
+
+body.dark-mode .food_booth_div h3 {
+    color: #dd8edd;
+}
+
+body.dark-mode .food_truck_div tr {
+    background-color: #333;
+    border-bottom: .2em dotted #bbb;
+}
+
+body.dark-mode .food_truck_div .info {
+    color: #ccc;
+}
+
+body.dark-mode .food_truck_div tr:nth-of-type(2n) {
+    background-color: #505050;
+}
+
+body.dark-mode .food_truck_div h3 {
+    color: #dd8edd;
+}

@@ -1,0 +1,114 @@
+article {
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 80vw;
+}
+
+h2 {
+    font-size: 160%;
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+    font-size: 140%;
+    color: #9f72ff;
+}
+
+div p {
+    text-align: center;
+}
+
+table {
+    width: 90%;
+    margin: 2vh auto;
+    border-spacing: 3vw;
+}
+
+tr {
+    margin-bottom: 1vh;
+}
+
+tr.underbar td {
+    border-bottom: #000 1px solid;
+}
+
+th,
+td {
+    text-align: start;
+    width: 40%;
+    padding: 1em 0 0.2em 0;
+}
+
+.year {
+    width: 20%;
+}
+
+td.main_slogan {
+    font-size: 120%;
+    font-weight: bolder;
+}
+
+body.dark-mode h3 {
+    color: #c010be;
+}
+
+body.dark-mode tr.underbar td {
+    border-bottom: #ddd 1px solid;
+}
+
+body.dark-mode td:has(.images) {
+    background-color: #e7dde7;
+}
+
+
+.slogan_wrap {
+    display: flex;
+    height: 100%;
+}
+
+.slogan-image {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 200px;
+    flex-grow: 2;
+}
+
+.slogan-logo {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 200px;
+    flex-grow: 1;
+}
+
+.slogan-image img {
+    width: 100%;
+    height: auto;
+}
+
+.logo-square {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border: var(--accent-color1) solid 2px;
+}
+
+.slogan-logo img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.slogan-main,
+.slogan-sub {
+    font-family: var(--title-font);
+    font-size: 4rem;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.slogan-sub {
+    font-size: 2.5rem;
+}

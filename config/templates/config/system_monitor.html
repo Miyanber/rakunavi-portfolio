@@ -1,0 +1,53 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}システムモニター{% endblock title %}
+
+{% block extra_style %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'config/css/system_monitor.css' %}">
+{% endblock extra_style %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}システムモニター{% endblock header_title %}
+
+{% block content %}
+<article>
+    <h2>システムモニター</h2>
+    <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:mypage' %}">
+        <span class="material-symbols-rounded">arrow_left_alt</span>&nbsp;
+        <span class="material-symbols-rounded">security</span> 管理ページ
+    </a>
+    <p>
+        本番環境では、Amazon EC2管理ページを開くことなく、スケーリングの判断をすることができます。<br>
+        2025年度t3シリーズ（x64, Intel）の場合、平均CPU使用率は20%以内に抑え、メモリーに余裕をもってgunicornやEC2スケーリングを設計しました。
+    </p>
+
+    <section>
+        <div id="statsText" style="margin-bottom: 20px;">
+            <span>CPU: <span id="cpuValue">--</span> % /</span>
+            <span>Memory: <span id="memoryValue">--</span> % /</span>
+            <span>Swap: <span id="swapValue">--</span> %</span>
+        </div>
+        {% comment %} グラフ {% endcomment %}
+        <canvas id="cpuChart"></canvas>
+    </section>
+
+    <section>
+        <ul>
+            <li>OS：{{ os }}</li>
+            <li>アーキテクチャ：{{ arch }}</li>
+            <li>モデル：{% if cpu_model %}{{ cpu_model }}{% else %}不明{% endif %}</li>
+            <li>合計メモリ：{{ total_memory }}</li>
+            <li>物理コア数：{{ physical_cores }}</li>
+            <li>論理コア数：{{ logical_cores }}</li>
+        </ul>
+    </section>
+
+</article>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static "config/js/graph.js" %}"></script>
+{% endblock extra_js %}

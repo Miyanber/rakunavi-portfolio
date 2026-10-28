@@ -1,0 +1,67 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/dm.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}{{ partner.username }}とのトーク | Я{% endblock title_wrapper %}
+{% block header_title %}{{ partner.username }}{% endblock %}
+
+{% block content %}
+    <div class="top">
+        <a href="{% url 'ya:dm_listview' %}">
+            <span class="material-symbols-rounded">arrow_back_ios_new</span>
+        </a>
+    </div>
+
+    <div class="user-groups ">
+        <div class="icon_background">
+            <img class="icon" src="{% if partner.icon %}{{ partner.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+        </div>
+            <div class="name"><label>{{ partner.username }}{% if partner.role %}<span class="material-symbols-rounded roles">{{ partner.role.icon }}</span>{% endif %}</label>@{{ partner.user_id }}</div>
+    </div>
+
+    <div class="messages" id="messages">
+    {% for msg in messages %}
+        <div class="{% if msg.sender == request.user %}mine{% else %}yours{% endif %}" data-message-id="{{ msg.id }}">
+            <div class="icon_background">
+                <img class="sender icon" src="{% if msg.sender.icon %}{{ msg.sender.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+            </div>
+            <div class="bubble ">
+                <span class="content">{{ msg.content }}</span>
+            </div>
+            <span class="send_at">
+                {% if msg.send_at|timesince > three_days_ago|timesince %}
+                    {{ msg.send_at|timesince }}前
+                {% else %}
+                    {{ msg.send_at|date:"Y年m月d日 H:i:s" }}
+                {% endif %}
+                {% if msg.read_count == 1 %}
+                    <span class="material-symbols-rounded">check</span>
+                {% elif  msg.read_count >= 2%}
+                    <span class="material-symbols-rounded">done_all</span>
+                {% endif %}
+            </span>
+        </div>
+    {% endfor %}
+    <div class="spacer-bottom">
+        <div id="typing-indicator" style="visibility:hidden;">Typing...<span class="material-symbols-rounded"><span class="typing_status"></span></span></div>
+    </div>
+
+    <form method="post" id="dm-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.content }}
+        <button type="submit" class="submit basic "><span class="material-symbols-rounded">send</span></button>
+    </form>
+    <div class="bottom"></div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    window.partnerId = {{ partner.id }};
+    window.myUserId = {{ request.user.id }};
+</script>
+<script src="{% static 'ya/js/dm.js' %}"></script>
+{% endblock extra_js %}

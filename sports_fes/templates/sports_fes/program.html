@@ -1,0 +1,127 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+{% load sports_fes_extras %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/program.css' %}">
+{% endblock %}
+
+{% block title %}プログラム一覧{% endblock %}
+
+{% block content %}
+<header>
+    <div class="header-backlayer">
+        {% if general_images.program_header %}
+            <img class="common" src="{{ general_images.program_header.url }}" alt="プログラムヘッダー画像" />
+        {% else %}
+            <img class="black common" />
+        {% endif %}
+        <div class="title">プ ロ グ ラ ム</div>
+    </div>
+</header>
+
+<section>
+    <div class="search_control">
+        <button type="button" id="program-search-button" class="button_icon search-button" aria-label="検索を開く">
+            <div class="open-text">
+                <span class="material-symbols-rounded">search</span>
+                キーワード検索・学年別絞り込み    
+            </div>
+            <div class="close-text">
+                <span class="material-symbols-rounded">close</span>
+                検索メニューを閉じる
+            </div>
+        </button>
+    </div>
+
+    <div id="program-search-field" class="search_field{% if request.GET %} is-open{% endif %}">
+        <form method="get">
+            <p>{{ search_form.query }}</p>
+
+            <div class="tag-field">
+                <span class="tag-label">または　学年から検索</span>
+                <div class="tag-options">
+                    {% for checkbox in search_form.grade_nums %}
+                        <div class="tag-option">
+                            {{ checkbox.tag }}
+                            <label
+                                for="{{ checkbox.id_for_label }}"
+                                data-color="{{ grade_color_map|get_item:checkbox|default:'cccccc' }}"
+                            >
+                                {{ checkbox.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="button_jump1">検索</button>
+                <a class="reset_search" href="">検索をクリア</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('.tag-option').forEach(option => {
+        const input = option.querySelector('input[type="checkbox"]');
+        const label = option.querySelector('label');
+        const color = label.dataset.color;
+
+        const setColor = () => {
+            if (input.checked) {
+                label.style.backgroundColor = `#${color}`;
+                label.style.borderColor = `#${color}`;
+                label.style.color = '#fff';
+            } else {
+                label.style.backgroundColor = `#${color}20`;
+                label.style.borderColor = `#${color}50`;
+                label.style.color = 'var(--label-color)';
+            }
+        };
+
+        setColor();
+        input.addEventListener('change', setColor);
+    });
+
+    const searchField = document.getElementById('program-search-field');
+    const searchButton = document.getElementById('program-search-button');
+
+    if (searchField && searchButton) {
+        searchButton.addEventListener('click', () => {
+            if (searchField.classList.contains('is-open')) {
+                searchButton.classList.remove('is-open');
+                searchField.classList.remove('is-open');
+            } else {
+                searchField.classList.add('is-open');
+                searchButton.classList.add('is-open');
+            }
+        });
+    }
+</script>
+
+{% if request.GET %}<h2 class="search-result-label">検索結果</h2>{% endif %}
+
+{% if morning or afternoon %}
+    <h2>午前の部</h2>
+    <div class="program-cards">
+    {% for program in morning %}
+        {% include "sports_fes/partials/program_unit.html" %}
+    {% empty %}
+        <p style="text-align: center;">該当するプログラムはありません。</p>
+    {% endfor %}
+    </div>
+
+    <h2>午後の部</h2>
+    <div class="program-cards">
+    {% for program in afternoon %}
+        {% include "sports_fes/partials/program_unit.html" %}
+    {% empty %}
+        <p style="text-align: center;">該当するプログラムはありません。</p>
+    {% endfor %}
+    </div>
+{% else %}
+    <p style="text-align: center;">該当するプログラムはありません。</p>
+{% endif %}
+
+{% endblock %}

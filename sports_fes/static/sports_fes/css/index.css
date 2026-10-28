@@ -1,0 +1,433 @@
+.header-backlayer {
+    height: 90%;
+}
+
+header.index {
+    position: relative;
+    height: 100dvh;
+}
+
+img.index_title {
+    position: absolute;
+    right: 2lvw;
+    bottom: 6rem;
+    width: 40lvw;
+    height: auto;
+}
+
+img.backup_index_title {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 80vh;
+    border-radius: 0.5em;
+}
+
+div.backup_header_title {
+    position: absolute;
+    bottom: 30%;
+    right: 2em;
+    padding: 1em;
+    background-color: #192322b7;
+    border-radius: 1em;
+    z-index: 1;
+}
+
+div.backup_header_title h1 {
+    font-size: 2.5em;
+}
+
+div.backup_header_title h3 {
+    font-size: 2em;
+}
+
+div.backup_header_title .date_and_time {
+    text-align: right;
+    font-size: 1.5em;
+}
+
+@media (max-width: 1500px) {
+    div.overlay .header-title {
+        padding: 0;
+        width: 100%;
+        height: 50%;
+        box-sizing: border-box;
+        padding: 2rem;
+        transform: translateX(-0.2rem);
+    }
+
+    .header-title h1 {
+        font-size: 350%;
+    }
+
+    .header-title h3 {
+        font-size: 150%;
+    }
+
+    .header-title .date_and_time {
+        font-size: 120%;
+    }
+}
+
+@media (max-width: 768px) {
+    div.overlay .header-title {
+        padding: 0;
+        width: 100%;
+        height: 50%;
+        box-sizing: border-box;
+        padding: 1rem;
+        transform: translateX(-0.2rem);
+    }
+
+    img.index_title {
+        width: 80lvw;
+    }
+
+    .header-title h1 {
+        font-size: 300%;
+    }
+
+    .header-title h3 {
+        font-size: 150%;
+    }
+
+    .header-title .date_and_time {
+        font-size: 120%;
+    }
+}
+
+table.points {
+    display: block;
+    margin: 2em auto;
+    width: 60vw;
+    padding: 0.5em;
+    text-align: center;
+    /* 表回転 */
+    writing-mode: vertical-lr;
+    border-collapse: collapse;
+}
+
+table.points td {
+    /* 文字は横書き */
+    writing-mode: horizontal-tb;
+    width: 20vw;
+    font-size: 2em;
+    border: black 1px solid;
+    font-weight: 500;
+}
+
+table.points td.winner::after {
+    content: "｜優勝!!";
+}
+
+tr.red {
+    background-color: #f32f2f;
+}
+
+tr.blue {
+    background-color: #1676dd;
+}
+
+tr.yellow {
+    background-color: #e9b021;
+}
+
+div.header {
+    width: 100%;
+    height: 50rem;
+    overflow: hidden;
+    z-index: 0;
+}
+
+section {
+    box-sizing: border-box;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    width: 80vw;
+    z-index: 100;
+    padding-top: 2.5rem;
+    text-align: center;
+}
+
+@media (max-width: 540px) {
+    section {
+        width: 90vw;
+    }
+}
+
+section.news {
+    margin: 0 auto;
+    color: #fefefe;
+    padding-bottom: 4rem;
+
+    .att {
+        font-weight: bold;
+    }
+
+    p {
+        font-size: max(1rem, 1.4vw);
+
+        @media (max-width: 768px) {
+            font-size: 1rem;
+        }
+    }
+
+    .buttons {
+        width: 80%;
+        height: auto;
+        margin: 2rem auto;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: space-around;
+        justify-content: space-around;
+
+        @media (max-width: 768px) {
+            width: max-content;
+            flex-direction: column;
+            row-gap: 1rem;
+        }
+    }
+
+    .news_button {
+        width: 20vw;
+        background: transparent;
+        border-radius: 2.5rem;
+        --corner-radius: 4.5rem;
+        corner-shape: superellipse(1.5);
+        border: var(--theme-color1) solid 2px;
+        padding: 1rem;
+
+
+        @media (max-width: 768px) {
+            display: flex;
+            box-sizing: border-box;
+            width: max-content;
+            align-items: center;
+            column-gap: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            --corner-radius: 1rem;
+        }
+    }
+
+    .news_button .text {
+        transition: 0.5s all;
+        color: var(--theme-color1);
+        font-size: 1.5rem;
+        font-family: var(--text-font-B);
+        height: max-content;
+
+        @media (max-width: 768px) {
+            font-size: 1.5rem;
+        }
+    }
+
+    .news_button .icon {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        @media (max-width: 768px) {
+            width: 4rem;
+            height: 4rem;
+        }
+    }
+
+    .news_button .icon span {
+        width: 100%;
+        display: block;
+        color: var(--theme-color1);
+        font-size: 4rem;
+        transition: 0.5s all;
+
+        @media (max-width: 768px) {
+            font-size: 3rem;
+            line-height: 4rem;
+        }
+    }
+
+    .news_button .icon span.material-symbols-rounded {
+        font-variation-settings:
+            "FILL" 1 !important
+    }
+
+    a:hover .news_button label {
+        color: #108d59ee;
+    }
+
+    a:hover .news_button .icon span {
+        color: #0f8a57ee;
+    }
+}
+
+section.slogan {
+    width: 100%;
+    height: max-content;
+    margin: 8vh auto;
+
+    .slogan__title {
+        font-family: var(--title-font);
+        margin: 2rem 0;
+        font-size: 1.5rem;
+    }
+
+    .slogan-main,
+    .slogan-sub {
+        font-family: var(--title-font);
+        font-size: 4rem;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .slogan-sub {
+        font-size: 2.5rem;
+    }
+
+    a {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    section.slogan {
+        margin: 1.5rem auto;
+        padding: 1.5rem 0;
+
+        .slogan__title {
+            font-size: 1.1rem;
+
+            span {
+                display: inline-block;
+            }
+        }
+
+        .slogan-main,
+        .slogan-sub {
+            font-size: 3rem;
+        }
+
+        .slogan-sub {
+            font-size: 1.5rem;
+        }
+
+        a {
+            margin-bottom: 2rem;
+        }
+    }
+}
+
+section p {
+    padding-left: 1em;
+}
+
+.rakunavi_link {
+    margin: 1.5rem auto;
+    width: max-content;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    span {
+        display: inline-block;
+    }
+}
+
+a {
+    transition: 0.5s all;
+}
+
+a:hover {
+    transform: scale(1.03);
+}
+
+/* 横幅1200px以下で文字サイズを調整 */
+@media screen and (max-width: 1500px) {
+    section h2.main {
+        font-size: 2.5rem !important;
+    }
+
+    section h2.sub {
+        font-size: 1.8rem !important;
+    }
+
+    .news_button label {
+        color: #13ad6dee;
+        font-size: 1.5rem;
+    }
+
+    .news_button .icon span {
+        color: #13ad6dee;
+        font-size: 4rem;
+    }
+}
+
+.slogan_wrap {
+    display: flex;
+    height: 100%;
+}
+
+.slogan-image {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 200px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-grow: 2;
+}
+
+.slogan-logo {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 200px;
+    flex-grow: 1;
+}
+
+.slogan-image img {
+    width: 100%;
+    height: auto;
+    margin: 2rem 0;
+}
+
+.logo-square {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border: var(--accent-color1) solid 2px;
+}
+
+.slogan-logo img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 768px) {
+    .slogan_wrap {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 5lvh;
+        height: 100%;
+    }
+
+    .slogan-image {
+        margin: 2rem auto;
+        width: 80%;
+        gap: 2rem;
+    }
+
+    .slogan-logo {
+        width: 100%;
+        height: max-content;
+    }
+
+    .logo-square {
+        width: max(300px, 40lvw);
+        height: max(300px, 40lvw);
+    }
+}
+
+.toslogans {
+    display: flex;
+    justify-content: center;
+    height: max-content;
+}

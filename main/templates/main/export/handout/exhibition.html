@@ -1,0 +1,122 @@
+{% extends "main/export/handout/base.html" %}
+
+{% block head %}
+<style>
+    @page {
+        size: A4 portrait;
+        margin: 20mm;
+    }
+    .schedule {
+        margin: 0 auto;
+        border-collapse: collapse;
+
+        .header td, .header th {
+            text-align: center;
+        }
+
+        td, th {
+            border: 1px solid #000;
+            padding: 5px 10px;
+            vertical-align: top;
+        }
+
+        .qr_exhibition {
+            float: right;
+            width: 90px;
+            height: 90px;
+        }
+    }
+    .footer {
+        position: relative;
+        margin-top: 30px;
+        border-top: 2px dotted #000;
+        width: 100%;
+
+        h2 {
+            font-size: 1.2em;
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .line_text {
+            display: block;
+            padding: 5px;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+        }
+
+        .qr_wrapper {
+            float: left;
+            margin: 5px;
+            width: max-content;
+        }
+        
+        .footer_source {
+            float: right;
+            transform: translateY(100px);
+        }
+    }
+</style>
+{% endblock head %}
+
+{% block recipient %}展示 （{% if object.category == 'class' %}高校{{ object.grade_number }}年{{ object.class_number }}組 クラス展示{% else %}{{ object.title }}{% endif %}） 担当者{% endblock recipient %}
+
+{% block content %}
+<p>
+    　今年度も、文化祭公式Webアプリ「らくなび」が運用されます。学内文化祭を世間へ発信し、展示やライブの内容をより広く一般の人々に知ってもらうことを目的としています。
+    これに伴いまして、{% if object.category == 'class' %}クラス{% endif %}展示担当者の皆様に、幾つか協力を要請いたします。
+    これまで準備してきた皆さんの展示を、らくなびでアピールして下さい！
+</p>
+<table class="schedule">
+    <tr class="header">
+        <th>日時</th>
+        <th colspan="2">作業内容</th>
+    </tr>
+    <tr>
+        <td style="width: 10em;">{{ deadline }} まで</td>
+        <td style="border-right: none;">
+            右のQRコードから、紹介ページに掲載する内容を入力する。<br>
+            <strong>※このQRコードは各展示ごとに異なり、認証情報を含みます。管理にご注意ください。また、学習用iPadで写真を撮り保存しておくことをお勧めします。</strong>
+        </td>
+        <td style="border-left: none;">
+            <img class="qr_exhibition" src="data:image/png;base64,{{ object.qr_exhibition }}" alt="QR Code" />
+        </td>
+    </tr>
+    <tr>
+        <td>文化祭当日</td>
+        <td colspan="2">
+            別紙の「当日用入力フォーム」を、約 10 分おきに入力する。（推奨）
+            <br>混雑度又は待ち時間・当日のお知らせを更新できます。
+        </td>
+    </tr>
+</table>
+<div style="margin-top: 20px;">　注意点：</div>
+<ul style="margin-top: 5px;">
+    <li>「当日用入力フォーム」の入力は任意ですが、来場者が文化祭をスムーズに回れるようにするため、可能な限り入力するようにして下さい。当日のお知らせのみの入力も可能です。</li>
+    <li>コンテンツを作成する際は、紹介入力フォームからアクセスできる「コンテンツ作成ガイドライン」を遵守して下さい。</li>
+    <li><strong>紹介ページの編集期限は、{{ deadline }} です。</strong>原則この期限を過ぎると編集出来なくなり、アクセスが拒否されます。ご注意ください。</li>
+</ul>
+{% endblock content %}
+
+{% block footer %}
+<div class="footer">
+    <div class="line_text">切り取り線</div>
+    {% comment %} <p class="message">この紙は切り取って、文化祭当日、受付の机に貼っておいて下さい。</p> {% endcomment %}
+
+    <h2>展示 （{% if object.category == 'class' %}高校{{ object.grade_number }}年{{ object.class_number }}組 クラス展示{% else %}{{ object.title }}{% endif %}）の受付担当者の方へ</h2>
+    <p class="content">
+        　当日は学習用iPadで、以下とは別に配布されるQRコードを読み込み、約 10 分おきに混雑度又は待ち時間・当日のお知らせの更新をお願いします。特に当日のお知らせは、整理券の情報や受付時刻等の発信に便利です。是非ご活用ください。
+        <div class="qr_wrapper">
+            <img src="data:image/png;base64,{{ object.qr_attraction }}" alt="QR Code" />
+            <div class="title">当日用入力フォーム<strong>（テスト用）</strong></div>
+        </div>
+        <span class="footer_source">文化祭HP「らくなび」運営委員会</span>
+    </p>
+</div>
+{% endblock footer %}

@@ -1,0 +1,22 @@
+{% load static %}
+<div class="previewable_file_input">
+    {% if widget.include_preview %}
+    <img src="{{ widget.value.url }}" id="{{ widget.name }}-preview" class="preview_img">
+    {% endif %}
+    <div class="div">
+        <button class="file_input {% if widget.required %}no-preview{% endif %}" type="button">
+            <span class="material-symbols-rounded file_input">edit</span>画像を変更
+        </button>
+        {% if widget.is_initial and not widget.required %}
+        <button class="disable_checkbox_input" type="button">
+            <span class="material-symbols-rounded disable_checkbox_input">delete_forever</span>画像を削除
+        </button>
+        <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}" hidden>
+        {% elif not widget.required %}
+        <button class="clear_file_input" type="button">
+            <span class="material-symbols-rounded clear_file_input">delete_forever</span>削除
+        </button>
+        {% endif %}
+    </div>
+    <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} data-target="{{ widget.name }}-preview" data-initial="{{ widget.value.url }}" hidden>
+</div>

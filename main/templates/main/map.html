@@ -1,0 +1,97 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}{{ floor_name }} | マップ{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/map.css' %}">
+{% comment %} scroll-hint {% endcomment %}
+<link rel="stylesheet" href="https://unpkg.com/scroll-hint@latest/css/scroll-hint.css">
+{% endblock %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}マップ ― {{ floor_name }}{% endblock %}
+
+{% block content %}
+
+<section>
+    <p>
+        下のボタンを押して、各階を閲覧できます。
+        各場所をクリックすると、そこで行われる展示の詳細ページに飛びます。また地図は、実際と異なる場合があります。
+    </p>
+</section>
+
+<div class="spots">
+    <a href="{% url 'main:map' 0 %}?map_key={{ map_key }}" class="{% if floor == 0 %}active{% endif %}">本館B1F</a>
+    <a href="{% url 'main:map' 1 %}?map_key={{ map_key }}" class="{% if floor == 1 %}active{% endif %}">本館1F</a>
+    <a href="{% url 'main:map' 2 %}?map_key={{ map_key }}" class="{% if floor == 2 %}active{% endif %}">本館2F</a>
+    <a href="{% url 'main:map' 3 %}?map_key={{ map_key }}" class="{% if floor == 3 %}active{% endif %}">本館3F</a>
+    <a href="{% url 'main:map' 4 %}?map_key={{ map_key }}" class="{% if floor == 4 %}active{% endif %}">本館4F</a>
+    <a href="{% url 'main:map' 7 %}?map_key={{ map_key }}" class="{% if floor == 7 %}active{% endif %}">青春の広場</a>
+    <a href="{% url 'main:map' 6 %}?map_key={{ map_key }}" class="{% if floor == 6 %}active{% endif %}">北館2F</a>
+</div>
+
+
+{% if floor != 7 %}
+<div id="container" class="js-scrollable">
+
+    {% for spot in all_spots %}
+    {% if spot.prefetched_exhibitions %}
+        {% with ex=spot.prefetched_exhibitions.0 %}
+        <a href="{% url 'main:exhibition_detail' ex.id %}">
+            <div id="{{ spot.id }}"
+                class="spot"
+                data-start-x="{{ spot.start_x|default:'0' }}"
+                data-start-y="{{ spot.start_y|default:'0' }}"
+                data-item-width="{{ spot.width }}"
+                data-item-height="{{ spot.height }}">
+
+                {% if spot.pin %}
+                <span class="material-symbols-rounded" id="pin">pin_drop</span>
+                {% endif %}
+
+                {% if ex.category != 'class' %}
+                    <span class="title">{{ ex.title }}</span>
+                {% else %}
+                    <span class="title">{{ spot.name }}</span>
+                {% endif %}
+            </div>
+        </a>
+        {% endwith %}
+
+    {% elif spot.prefetched_performances %}
+        {% with perf=spot.prefetched_performances.0 %}
+        <a href="{% url 'main:performance_detail' perf.id %}">
+            <div class="spot"
+                data-start-x="{{ spot.start_x|default:'0' }}"
+                data-start-y="{{ spot.start_y|default:'0' }}"
+                data-item-width="{{ spot.width }}"
+                data-item-height="{{ spot.height }}">
+                <span>{{ spot.name }}</span>
+            </div>
+        </a>
+        {% endwith %}
+    {% endif %}
+{% endfor %}
+
+    <img src="{% static path %}" id="map" alt="{{ floor }}階の地図" loading="lazy">
+</div>
+{% else %}
+{% comment %} 青春の広場だけ別の処理 {% endcomment %}
+{% comment %} <img style="display: block;" id="container" src="{% static 'main/img/maps/7_pub.webp' %}" alt="" loading="lazy">
+<img class="floor_7" src="{% static 'main/img/maps/7_day1.webp' %}" alt="" loading="lazy">
+<img class="floor_7" src="{% static 'main/img/maps/7_day2.webp' %}" alt="" loading="lazy"> {% endcomment %}
+    {% if  youthsquare_map_obj %}
+        <img class="floor_7" src="{{ youthsquare_map_obj.day1.url }}" alt="1日目" loading="lazy">
+        <img class="floor_7" src="{{ youthsquare_map_obj.day2.url }}" alt="2日目" loading="lazy">
+    {% else %}
+        <h3>運営担当者へ：地図の更新が必要です。マニュアルを参照のこと。</h3>
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+{% comment %} scroll-hint {% endcomment %}
+<script src="https://unpkg.com/scroll-hint@latest/js/scroll-hint.min.js"></script>
+<script src="{% static 'main/js/map.js' %}" defer></script>
+{% endblock extra_js %}

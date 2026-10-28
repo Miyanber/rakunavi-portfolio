@@ -1,0 +1,11 @@
+{% extends "main/editor.html" %}
+{% load static %}
+
+{% block title %}{{ form.instance.name }} | 模擬店紹介{{ block.super }}{% endblock title %}
+
+{% block header_title %}模擬店紹介 編集ページ{% endblock header_title %}
+
+{% block extra_style %}
+{{ block.super }}
+<meta name="referrer" content="strict-origin-when-cross-origin">    {% comment %} URL流出防止 {% endcomment %}
+{% endblock extra_style %}

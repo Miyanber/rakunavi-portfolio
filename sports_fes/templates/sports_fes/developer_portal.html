@@ -1,0 +1,245 @@
+{% extends "sports_fes/base.html" %}
+
+{% block title %}らくなび | 体育祭Webアプリ{% endblock %}
+
+{% load static %} 
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'sports_fes/css/developer_portal.css' %}">
+{% endblock %}
+
+{% block content %}
+<article>
+    <div class="title_box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M714-162 537-339l84-84 177 177q17 17 17 42t-17 42q-17 17-42 17t-42-17Zm-569-42q0-25 17-42l234-234-68-68q-11 11-28 11t-28-11l-23-23v90q0 14-12 19t-22-5L106-576q-10-10-5-22t19-12h90l-22-22q-12-12-12-28t12-28l114-114q20-20 43-29t47-9q20 0 37.5 6t34.5 18q8 5 8.5 14t-6.5 16l-76 76 22 22q11 11 11 28t-11 28l68 68 90-90q-4-11-6.5-23t-2.5-24q0-59 40.5-99.5T701-841q8 0 15 .5t14 2.5q9 3 11.5 12.5T737-809l-65 65q-6 6-6 14t6 14l44 44q6 6 14 6t14-6l65-65q7-7 16.5-5t12.5 12q2 7 2.5 14t.5 15q0 59-40.5 99.5T701-561q-12 0-24-2t-23-7L246-162q-17 17-42 17t-42-17q-17-17-17-42Z"/></svg>
+        <h2>デベロッパーポータル</h2>
+    </div>
+    <div class="contents_box">
+        <div class="develop_item" data-target="login_status">
+            <h3>Infomation</h3>
+            <div class="icon">
+                <span class="material-symbols-rounded">folder_info</span>
+            </div>
+            <p>アカウント・アプリの情報を確認できます。</p>
+        </div>
+        <div class="develop_item" data-target="Edit">
+            <h3>Editer</h3>
+            <div class="icon">
+                <span class="material-symbols-rounded">edit_note</span>
+            </div>
+            <p>各項目を編集できます。</p>
+        </div>
+        <div class="develop_item" data-target="Errorpage">
+            <h3>Errorpage Preview</h3>
+            <div class="icon">
+                <span class="material-symbols-rounded">error</span>
+            </div>
+            <p>エラーページを意図的に表示します。<br>クリックして対象エラーを選択します。</p>
+        </div>
+    </div>
+</article>
+
+<div id="develop_modal">
+    <div class="modal_content">
+        <button id="close_modal">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M481-406 290-214q-16 16-38 15.5T214-215q-15-16-14.5-37t15.5-37l190-191-191-193q-15-16-15-37t15-37q16-16 38-16.5t38 15.5l191 192 189-192q16-16 38-15.5t38 16.5q15 16 14.5 37T745-673L555-480l190 191q15 15 15.5 36.5T746-215q-16 16-38 16.5T670-214L481-406Z"/></svg>
+        </button>
+        <div id="login_status" class="modal_page">
+            <h3>Infomation</h3>
+            <div class="status_group_wrap">
+            <section class="status_group">
+                <h3>Authentication</h3>
+
+                <div class="status_item">
+                    <span class="label">Status</span>
+                    <span class="value">
+                        {% if user.is_authenticated %}
+                            <span class="badge success">Authenticated</span>
+                        {% else %}
+                            <span class="badge danger">Anonymous</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Username</span>
+                    <span class="value">
+                        {% if user.is_authenticated %}
+                            {{ request.user.username}}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">User ID</span>
+                    <span class="value">
+                        {% if user.is_authenticated %}
+                            {{ request.user.user_id }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Staff</span>
+                    <span class="value">
+                        {{ user.is_staff|yesno:"Yes,No" }}
+                    </span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Superuser</span>
+                    <span class="value">
+                        {{ user.is_superuser|yesno:"Yes,No" }}
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="status_group">
+                <h3>Application</h3>
+
+                <div class="status_item">
+                    <span class="label">Environment</span>
+                    <span class="value">
+                        {% if debug %}
+                            Development
+                        {% else %}
+                            Production
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">DEBUG</span>
+                    <span class="value">
+                        {{ debug|yesno:"True,False" }}
+                    </span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Version</span>
+                    <span class="value">{{ rakunavi_version }}</span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Branch</span>
+                    <span class="value">{{ git_branch_name }}</span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Commit</span>
+                    <span class="value">{{ git_hash }}</span>
+                </div>
+
+            </section>
+
+            <section class="status_group">
+                <h3>Request</h3>
+
+                <div class="status_item">
+                    <span class="label">Current URL</span>
+                    <span class="value">{{ request.path }}</span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Language</span>
+                    <span class="value">{{ LANGUAGE_CODE }}</span>
+                </div>
+
+                <div class="status_item">
+                    <span class="label">Time Zone</span>
+                    <span class="value">{{ TIME_ZONE }}</span>
+                </div>
+
+            </section>
+            </div>
+        </div>
+        <div id="Errorpage" class="modal_page">
+            <h3>Errorpage Preview</h3>
+            <p>エラーの種類を選択してください。</p>
+            <div class="select_box">
+                <a class="trigger_select_item" href="{% url 'sports_fes:preview_400'%}">
+                    <h3>400 - Bad Request</h3>
+                    <div class="icon">
+                        <span class="material-symbols-rounded">sentiment_dissatisfied</span>
+                    </div>
+                </a>
+                <a class="trigger_select_item" href="{% url 'sports_fes:preview_403'%}">
+                    <h3>403 - Forbidden</h3>
+                    <div class="icon">
+                        <span class="material-symbols-rounded">gpp_bad</span>
+                    </div>
+                </a>
+                <a class="trigger_select_item" href="{% url 'sports_fes:preview_404'%}">
+                    <h3>404 - Not Found</h3>
+                    <div class="icon">
+                        <span class="material-symbols-rounded">search_off</span>
+                    </div>
+                </a>
+                <a class="trigger_select_item" href="{% url 'sports_fes:preview_500'%}">
+                    <h3>500 - Internal Server Error</h3>
+                    <div class="icon">
+                        <span class="material-symbols-rounded">assignment_late</span>
+                    </div>
+                </a>
+                <a class="trigger_select_item" href="{% url 'sports_fes:preview_csrf'%}">
+                    <h3>403 - Forbidden <br> ( CSRF token ) </h3>
+                    <div class="icon">
+                        <span class="material-symbols-rounded">gpp_bad</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div id="Edit" class="modal_page">
+            <h3>Editer</h3>
+            <p>指針策定後作成</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const el = document.querySelector(".title_box");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add("is-visible");
+      }, 800);
+      observer.unobserve(entry.target);
+    }
+  });
+});
+observer.observe(el);
+</script>
+
+<script>
+const modal = document.getElementById("develop_modal");
+const pages = document.querySelectorAll(".modal_page");
+
+document.querySelectorAll(".develop_item").forEach(item => {
+    item.addEventListener("click", () => {
+
+        pages.forEach(page => page.classList.remove("active"));
+
+        const target = document.getElementById(item.dataset.target);
+        target.classList.add("active");
+
+        modal.classList.add("show");
+    });
+});
+
+document.getElementById("close_modal").addEventListener("click", () => {
+    modal.classList.remove("show");
+});
+
+modal.addEventListener("click", e => {
+    if (e.target === modal) {
+        modal.classList.remove("show");
+    }
+});
+</script>
+
+{% endblock %}

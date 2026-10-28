@@ -1,0 +1,17 @@
+{% extends  "main/base.html" %}
+{% load static %}
+{% block title %}400 Bad Request{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'main/css/error_page.css' %}">   
+{% endblock %}
+
+{% block header_title %}400 Bad Request{% endblock %}
+
+{% block content %}
+<article>
+    <h2><span class="material-symbols-rounded">sentiment_dissatisfied</span> 不正なリクエストです。</h2>
+
+    <p>URLをご確認の上、もう一度お試しください。</p>
+</article>
+{% endblock %}

@@ -1,0 +1,4 @@
+.time_input input[type=number] {
+    width: 3em;
+    text-align: center;
+}

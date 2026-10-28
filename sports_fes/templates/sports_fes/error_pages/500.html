@@ -1,0 +1,37 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+{% block title %}500 Internal Server Error{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'sports_fes/css/error_page.css' %}">
+{% endblock %}
+
+{% block content %}
+<article>
+    <div class="title_box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M508.5-291.5Q520-303 520-320t-11.5-28.5Q497-360 480-360t-28.5 11.5Q440-337 440-320t11.5 28.5Q463-280 480-280t28.5-11.5Zm0-160Q520-463 520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440q17 0 28.5-11.5ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm301.5-598.5Q510-807 510-820t-8.5-21.5Q493-850 480-850t-21.5 8.5Q450-833 450-820t8.5 21.5Q467-790 480-790t21.5-8.5ZM200-200v-560 560Z"/></svg>
+        <h2>サーバー内部でエラーが発生しました。</h2>
+    </div>
+    <div class="error-code"><p>500</p>Internal Server Error</div>
+    <div class="contents_box">
+        <p>少し待ってからもう１度お試し下さい。</p>
+        <p>若しくは、開発者にご連絡ください。</p>
+    </div>
+</article>
+
+<script>
+const el = document.querySelector(".title_box");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add("is-visible");
+      }, 800);
+      observer.unobserve(entry.target);
+    }
+  });
+});
+observer.observe(el);
+</script>
+
+{% endblock %}

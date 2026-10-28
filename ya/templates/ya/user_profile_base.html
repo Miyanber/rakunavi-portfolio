@@ -1,0 +1,57 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/account.css' %}">
+<link rel="stylesheet" href="{% static 'ya/css/ckeditor_custom.css' %}">
+<link rel="stylesheet" href="{% static 'ya/css/search_user.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}Яアカウントの管理{% endblock title_wrapper %}
+{% block header_title %}Яアカウントの管理{% endblock %}
+
+{% block content %}
+<header>
+    <div class="header_image">
+        <img class="header" src="{% if profile_user.header_image %}{{ profile_user.header_image_avif.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+        <img class="icon" src="{% if profile_user.icon %}{{ profile_user.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+    </div>
+</header>
+<div class="contents">
+    <div class="left">
+        <div class="name"><label>{{ profile_user.username }}{% if profile_user.role %}<span class="material-symbols-rounded roles">{{ profile_user.role.icon }}</span>{% endif %}</label> @{{ profile_user.user_id }} </div>
+        <div class="bio ck-content">{{ profile_user.self_introduction|safe }}</div>
+        <div class="account_index">
+            {% url 'ya:user_profile' user_id=profile_user.user_id as profile_url %}
+            <a class="item {% if request.path == profile_url %}active{% endif %}" href="{% url 'ya:user_profile' profile_user.user_id %}">
+                <span class="material-symbols-rounded">list</span><span>投稿</span>
+            </a>
+            {% if request.user.id == profile_user.id %}
+            {% url 'ya:userinfo_change' user_id=profile_user.user_id as edit_url %}
+            <a class="item {% if request.path == edit_url %}active{% endif %}" href="{% url 'ya:userinfo_change' profile_user.user_id %}">
+                <span class="material-symbols-rounded">person_edit</span><span>プロフィール変更</span>
+            </a>
+            <a class="item" href="{% url 'ya:password_change' %}">
+                <span class="material-symbols-rounded">password</span><span>パスワード変更</span>
+            </a>
+            <a class="item" href="{% url 'admin:index' %}" target="_blank">
+                <span class="material-symbols-rounded">open_in_new</span><span>管理サイト</span>
+            </a>
+            <a class="item" href="{% url 'main:system_monitor' %}" target="_blank">
+                <span class="material-symbols-rounded">open_in_new</span><span>システムモニター</span>
+            </a>
+            <a class="item" href="{% url 'main:ec2_operations' %}" target="_blank">
+                <span class="material-symbols-rounded">open_in_new</span><span>EC2操作</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="right">
+        {% block profile_right %}{% endblock profile_right %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock extra_js %}

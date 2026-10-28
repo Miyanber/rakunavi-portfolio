@@ -1,0 +1,20 @@
+{% extends "main/performance_edit.html" %}
+{% load static %}
+
+{% block title %}新規作成 | ライブ紹介{{ block.super }}{% endblock title %}
+
+{% block header_title %}ライブ紹介 作成ページ</span>{% endblock header_title %}
+
+{% block judge %}{% endblock judge %}
+
+{% block content %}
+<section>
+    <h3>利用案内</h3>
+    <ul class="attention">
+        <li>説明不足だった点や質問があった点を踏まえ、9/27(金)に多くの箇所の表現を修正しています。申し訳ありませんでした。</li>
+        <li>紹介ページの内容は、フォーム送信後も期限内であれば編集可能です。</li>
+        <li>紹介ページ作成後初回は、必ずページをブックマークしてください。そうしないと後から編集ができなくなります。</li>
+    </ul>
+</section>
+{{ block.super }}
+{% endblock content %}

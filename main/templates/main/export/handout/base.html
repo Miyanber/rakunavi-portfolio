@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap" rel="stylesheet">
+
+    <style>
+        @page {
+            size: B5 portrait;
+            margin: 20mm;
+        }
+        body {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 10.5pt;
+            margin: 0;
+        }
+        .head {
+            margin-bottom: 30px;
+        }
+        .date {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .recipient {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .source {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .links {
+            display: flex;
+            flex-direction: row;;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .qr_wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid #000;
+            border-radius: 10px;
+
+            .title {
+                margin: 0 5px;
+            }
+
+            img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+    {% block head %}
+    {% endblock head %}
+</head>
+
+<body>
+    {% for object in objects %}
+    <div class="head">
+        <div class="date">{{ date.year }}年{{ date.month }}月{{ date.day }}日</div>
+        <div class="recipient">{% block recipient %}{% endblock recipient %}</div>
+        <h1><span style="font-size: .6em; vertical-align: top;">公式Webアプリ</span>「らくなび」用 紹介ページ作成のお願い</h1>
+        <div class="source">文化祭・体育祭Webアプリ「らくなび」運営委員会</div>
+    </div>    
+    
+    {% block content %}
+    {% endblock content %}
+    
+    <div class="links">
+        {% block links %}
+        {% endblock links %}
+    </div>
+
+    {% block footer %}
+    {% endblock footer %}
+
+    {% comment %} これで改ページを行う {% endcomment %}
+    <div style="page-break-after: always;"></div>
+    {% endfor %}
+</body>
+
+</html>

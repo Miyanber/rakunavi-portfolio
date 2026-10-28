@@ -1,0 +1,93 @@
+{% extends  override_base|default:"main/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+{% if override_base %}
+    <link rel="stylesheet" href="{% static 'sports_fes/css/credits.css' %}">
+{% else %}
+    <link rel="stylesheet" href="{% static 'main/css/credits.css' %}">
+{% endif %}
+{% endblock extra_style %}
+
+{% block title_wrapper %}クレジット{% endblock title_wrapper %}
+{% block header_title %}謝辞・クレジット{% endblock %}
+
+{% block content %}
+<article>
+    <h1>謝辞</h1>
+    <div>
+        <p>らくなびの運営は開発者だけでなく、先生方のご理解・本校生徒の支持によって実現しました。<br><br>
+            始まりは2024年度4月の発案に遡りますが、当時から初年度といえど、当時誰も想像していなかったようにスムーズに運営できたのは皆さんのおかげです。<br>
+            改めて、感謝申し上げます。<br>
+            今後、初期の開発メンバーは受験や卒業で離れ、また組織構成も変わることになります。しかしらくなびは、
+            多くの方へ学内文化祭を便利になるという経験を提供し続けていきます。
+        </p>
+    </div>
+    
+    <h1>クレジット</h1>
+    <div>
+        <h3>開発者</h3>
+        <table>
+            <tr>
+                <th class="name">名前</th>
+                <th class="words">一言</th>
+            </tr>
+            {% for dev in developers %}
+            <tr>
+                <td>{{ dev.name }}</td>
+                <td>{{ dev.words|linebreaks }}</td>
+            <tr>
+            {% empty %}
+            <tr>
+                <td>classified</td>
+                <td>？</td>
+            </tr>
+            {% endfor %}
+            {% comment %} 記入お願いします {% endcomment %}
+
+        </table>
+
+        <h3>貢献者</h3>
+        <table>
+            <tr>
+                <th class="name">名前：担当</th>
+                <th class="words">一言</th>
+            </tr>
+            {% for contributor in contributors %}
+            <tr>
+                <td>{{ contributor.name }}：{{ contributor.contribution }}</td>
+                <td>{{ contributor.words|linebreaks }}</td>
+            <tr>
+            {% empty %}
+            <tr>
+                <td>classified</td>
+                <td>？</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+    
+    <div>
+        <h3>余興コーナー</h3>
+        <label>どのプログラミング言語を、「らくなび」は最も使用しているでしょうか？
+            <input type="text" id="cow" placeholder="答えを入力<小文字英字のみ>" oninput="this.value = this.value.replace(/[^a-z]/g, '')">
+        </label>
+        <p id="displayText">ヒント：　2位がHTML、3位がCSS</p>
+        <div id="toggle_filter_container">
+            <p>
+                これらはちょっとした遊び心です。他のページに遷移すれば解除されます。<br>
+                華やかになって、気持ちだけでも、おだやかに。
+            </p>
+            <button class="button_style2" id="toggle_filter"><span class="material-symbols-rounded">tonality</span> 電源スイッチ</button>
+            <p class="haru_only">電気を消せば、静かにできます。</p>
+        </div>
+        <canvas id="scene"></canvas>
+        <canvas id="pm-overlay"></canvas>
+
+        {% comment %} はい、ChatGPTすごいねw。GPT-5。 {% endcomment %}
+        <script src="{% static 'main/js/flowers_webgl.js' %}" defer></script>
+        <script src="{% static 'main/js/pm_webgl.js' %}" defer></script>
+    </div>
+</article>
+{% endblock content %}

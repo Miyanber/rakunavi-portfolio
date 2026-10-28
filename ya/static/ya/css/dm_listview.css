@@ -1,0 +1,61 @@
+.dm {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    padding: 1.5rem .5rem;
+    padding-top: 0rem;
+    margin-top: 1.5rem;
+    border-bottom: #ffe9efaa solid .15rem;
+}
+
+body.dark-mode .dm {
+    border-bottom: #ca9bb240 solid .15rem;
+}
+
+.left img.icon {
+    width: 4rem !important;
+    height: auto;
+}
+
+.middle {
+    margin: .2rem .6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-grow: 1;
+}
+
+span.username {
+    font-size: 1.2rem;
+    display: inline-block;
+    padding-right: .5rem;
+    text-shadow: #7d445d40 1px 2px 4px;
+}
+
+body.dark-mode span.username {
+    text-shadow: #160f1450 2px 2px 6px;
+}
+
+span.username span {
+    font-size: 1.2rem;
+}
+
+span.message {
+    margin-left: .2rem;
+    font-size: .9rem;
+    color: var(--label-color);
+}
+
+span.send_at {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+button.group-add-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    padding-top: .8rem;
+}

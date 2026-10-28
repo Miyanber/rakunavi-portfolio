@@ -1,0 +1,67 @@
+#main_title {
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: #222222aa;
+    text-decoration-thickness: 2px;
+    font-size: 160%;
+}
+
+form {
+    width: max-content;
+    margin: 0px auto;
+    padding: 5vh 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+table {
+    width: max-content;
+    margin: 5vh 10px;
+    text-align: center;
+}
+
+.form_group {
+    margin: 20px;
+}
+
+.hint {
+    text-align: center;
+    width: 70vw;
+    font-style: italic;
+    font-size: 95%;
+    background-color: #e98fb5;
+    color: #222;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 1.5vh auto;
+    min-height: 2em;
+    /* 最小の高さを設定してフォームの位置を固定 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    /* エラーがない場合は非表示 */
+}
+
+.hint.show {
+    visibility: visible;
+    /* エラーがある場合に表示 */
+}
+
+#display {
+    display: inline;
+}
+
+body.dark-mode #main_title {
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: #222222aa;
+    text-decoration-thickness: 2px;
+    font-size: 160%;
+}
+
+body.dark-mode .hint {
+    background-color: #d879d8;
+    color: #333;
+}

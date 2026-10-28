@@ -1,0 +1,40 @@
+{% extends 'ya/user_profile_base.html' %}
+{% load static %}
+
+{% block profile_right %}
+    {% for post in profile_user.posts.all %}
+        <div class="unit">
+            <div class="post">
+                <div class="icon_background">
+                    <img class="icon" src="{% if post.author.icon %}{{ post.author.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                </div>
+                <div class="post-content">
+                    <div class="name"><label>{{ post.author.username }}{% if post.author.role %}<span class="material-symbols-rounded roles">{{ post.author.role.icon }}</span>{% endif %}
+                    </label>
+                </div>
+
+                    <div class="ck-content post-body">
+                        {{ post.content|safe }}
+                        {% if post.image %}
+                        <picture>
+                            <source srcset="{{ post.image_avif.url }}" type="image/avif">
+                            <div class="post-image">
+                                <img src="{{ post.image.url }}" alt="投稿画像" loading="lazy" decoding="async">
+                            </div>
+                        </picture>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>投稿はまだありません。</p>
+    {% endfor %}
+
+    <style>
+        .right{
+            display: flex;
+            flex-direction: column-reverse; 
+        }
+    </style>
+{% endblock profile_right%}

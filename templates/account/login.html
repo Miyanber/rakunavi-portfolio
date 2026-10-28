@@ -1,0 +1,68 @@
+{% extends "account/base_manage.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% load static %}
+
+{% block title %}ログイン{% endblock title %}
+{% block header_title %}ログイン{% endblock header_title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'account/css/login.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<article id="window">
+    {% if not SOCIALACCOUNT_ONLY %}
+    <div class="section">
+        <p>
+            <span class="material-symbols-rounded">identity_platform</span>
+            こちらはサンプル高等学校・附属中学校内部専用のページです。
+        </p>
+        <h2>ログイン</h2>
+        <p>
+            ユーザー名とパスワードを用いてログインします。 <strong>文化祭補助生徒（HP補助係）はこちらからログインして下さい。</strong>
+        </p>
+        {% setvar link %}
+            <a href="{{ signup_url }}">
+            {% endsetvar %}
+            {% setvar end_link %}
+            </a>
+        {% endsetvar %}
+        {% url 'account_login' as login_url %}
+        {% element form form=form method="post" action=login_url tags="entrance,login" %}
+            {% slot body %}
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="errors">
+                        {% for error in form.non_field_errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div>
+                    <label for="id_login">ユーザー名</label>
+                    <input type="text" value="{{ username }}" name="login" placeholder="ユーザー名" autocomplete="username" maxlength="150" required="" id="id_login">    
+                </div>
+                <div>
+                    <label for="id_password">パスワード</label>
+                    <input type="password" value="{{ password }}" name="password" placeholder="パスワード" autocomplete="current-password" required="" id="id_password">  
+                </div>
+                <div>
+                    {{ form.remember.as_field_group }}
+                </div>
+            {% endslot %}
+            {% slot actions %}
+                {% element button type="submit" tags="prominent,login" %}
+                    {% trans "Sign In" %}
+                {% endelement %}
+            {% endslot %}
+        {% endelement %}
+    </div>
+    {% endif %}
+
+    <canvas id="scene"></canvas>
+    <script src="{% static 'main/js/flowers_webgl.js' %}" defer></script>
+    <script src="{% static 'main/js/flowers_login.js' %}" defer></script>
+    
+</article>
+{% endblock content %}

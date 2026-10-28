@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}500 Internal Server Error{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{% static 'main/css/error_page.css' %}">   
+{% endblock %}
+
+{% block header_title %}500 Internal Server Error{% endblock %}
+
+{% block content %}
+<article>
+    <h2><span class="material-symbols-rounded">assignment_late</span> サーバー内部でエラーが発生しました。</h2>
+    <p>少し待ってからもう１度お試し下さい。</p>
+    <p>若しくは、開発者にご連絡ください。</p>
+</article>
+{% endblock %}

@@ -1,0 +1,210 @@
+:root {
+    --team-overlay-red: #5f2b2be6;
+    --team-overlay-blue: #33567de6;
+    --team-overlay-yellow: #7c6329e6;
+}
+
+.header-backlayer {
+    background-color: #e0be13bb;
+    box-shadow: #3c361970 0 0 15px;
+}
+
+body.dark-mode .header-backlayer {
+    box-shadow: #f5d53580 0 0 15px;
+}
+
+header .title {
+    background-color: #b29618bb;
+}
+
+.page-intro {
+    margin: 3rem 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+    }
+}
+
+.team {
+    display: flex;
+    width: 100%;
+    color: #eeeeee;
+    position: relative;
+    /* 追加 */
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        height: max-content;
+    }
+}
+
+.team-red {
+    background-color: #00000088;
+}
+
+.team-blue {
+    background-color: #00000088;
+}
+
+.team-yellow {
+    background-color: #00000088;
+}
+
+.team-title {
+    font-family: var(--title-font);
+    display: flex;
+    width: 13svw;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-direction: column;
+    z-index: 50;
+
+    @media (max-width: 768px) {
+        justify-content: space-evenly;
+        flex-direction: row;
+        width: 100%;
+        height: 6rem;
+    }
+}
+
+.title-char {
+    color: #fff;
+    box-sizing: border-box;
+    height: 9rem;
+    line-height: 8rem;
+    font-size: 8rem;
+    padding: 0.5rem;
+
+    @media (max-width: 768px) {
+        height: 6rem;
+        line-height: 5rem;
+        font-size: 5rem;
+    }
+}
+
+.team-content {
+    display: flex;
+    width: 75vw;
+    padding: 2rem;
+    align-items: center;
+    gap: 5%;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 2rem;
+        padding-top: 0;
+    }
+}
+
+.team-description {
+    height: max-content;
+
+    width: 50%;
+    position: relative;
+    z-index: 2;
+    /* 文字を前面に */
+    font-family: var(--text-font);
+    font-size: max(1rem, 1.3vw);
+    color: #ddd;
+
+
+    @media (max-width: 768px) {
+        width: 100%;
+        font-size: 1rem;
+    }
+}
+
+.teamphoto {
+    width: 40%;
+    height: auto;
+    position: relative;
+    z-index: 3;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: #232323cc 0 0 15px 2px;
+    border: #44444488 solid 0.1rem;
+    filter: brightness(100%);
+}
+
+.classes {
+    width: 48%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* 追加 */
+    z-index: 2;
+    /* 文字を前面に */
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.grade-block {
+    flex: 1;
+    /* 親の高さを均等に分割 */
+    display: flex;
+    align-items: center;
+    /* 中央寄せ */
+    border-bottom: 2px dashed #eee;
+    padding: 1rem 0;
+}
+
+.grade-block:last-child {
+    border-bottom: none;
+    /* 中学の下線は消す */
+}
+
+.grade-title {
+    font-size: max(1.5rem, 1.6vw);
+    color: #eee;
+    min-width: 5rem;
+    font-family: var(--title-font);
+}
+
+.grade-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.2rem;
+    flex: 1;
+}
+
+.grade {
+    width: 100%;
+    display: flex;
+    gap: 1rem 1.2rem;
+}
+
+.class-item {
+    font-family: var(--text-font);
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    font-size: 1.2rem;
+}
+
+strong {
+    font-weight: 900;
+    color: #ffffff;
+}
+
+@media screen and (max-width: 1200px) {
+    .class-item {
+        font-size: 0.9rem;
+    }
+
+    .grade {
+        gap: 1rem 0.3rem;
+    }
+}
+
+
+.edit_button{
+    z-index: 10;
+}

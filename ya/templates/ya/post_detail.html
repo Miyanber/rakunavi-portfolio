@@ -1,0 +1,157 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/ckeditor_custom.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+    <div class="unit">
+        <div class="post">
+            <div class="icon_background">
+                <img class="icon" src="{% if post.author.icon %}{{ post.author.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+            </div>
+            <div class="post-content">
+                <div class="name">
+                    <label>
+                        {{ post.author.username }}{% if post.author.role %}<span class="material-symbols-rounded roles">{{ post.author.role.icon }}</span>{% endif %}
+                    </label>
+                    @{{ post.author.user_id }}
+                    <span class="time-since-js" style="margin-left: auto;">                            
+                        {% if a_week_ago <= post.created_at %}
+                        {{ post.created_at|date:"Md日 H:i" }}
+                        {% else %}
+                            {{ post.created_at|date:"Y年Md日 H:i" }}
+                        {% endif %}
+                    </span>
+                {% if request.user == post.author or request.user.is_superuser %}
+                <button class="delete-btn" data-post-id="{{ post.id }}" onclick="event.stopPropagation();">
+                    <span class="material-symbols-rounded">delete</span></button>
+                {% endif %}
+                </div>
+
+                <div class="ck-content post-body">
+                    {{ post.content|safe }}
+                    {% if post.image %}
+                    <picture>
+                        <source srcset="{{ post.image_avif.url }}" type="image/avif">
+                        <div class="post-image">
+                            <img src="{{ post.image.url }}" alt="投稿画像" loading="lazy" decoding="async">
+                        </div>
+                    </picture>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="post-footer">
+            <div class="buttons">
+                <button class="comment-btn footer-btn" style="text-decoration: none;">
+                    <span class="material-symbols-rounded">chat_bubble</span><span class="like-count">{{ post.replies.all|dictsort:"id"|length }}</span>
+                </button>
+                <button type="button" class="like-btn footer-btn" data-post-id="{{ post.id }}" aria-pressed="{% if user in post.liked.all %}true{% else %}false{% endif %}">
+                    <span class="heart material-symbols-rounded">favorite</span>
+                    <span class="like-count">{{ post.liked.count }}</span>
+                </button>
+                <button class="quote-btn footer-btn" data-post-id="{{ post.post_id }}" onclick="event.stopPropagation();">
+                    <span class="material-symbols-rounded">repeat</span><span class="quote-count">{{ post.quote_count }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <h2 style="margin-left: 5%;">コメント</h2>
+    {% for reply in replies %}
+    <div class="unit reply">
+        <div class="post">
+            <div class="icon_background">
+                <img class="icon" src="{% if reply.author.icon %}{{ reply.author.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+            </div>
+            <div class="post-content">
+                <div class="name">
+                    <label>
+                        {{ reply.author.username }}{% if reply.author.role %}<span class="material-symbols-rounded roles">{{ reply.author.role.icon }}</span>{% endif %}
+                    </label>
+                    @{{ reply.author.user_id }}
+                    <span class="time-since-js" style="margin-left: auto;">                            
+                        {% if a_week_ago <= reply.created_at %}
+                        {{ reply.created_at|date:"Md日 H:i" }}
+                        {% else %}
+                            {{ reply.created_at|date:"Y年Md日 H:i" }}
+                        {% endif %}
+                    </span>
+                {% if request.user == reply.author or request.user.is_superuser %}
+                <button class="delete-btn" data-post-id="{{ reply.id }}" onclick="event.stopPropagation();">
+                    <span class="material-symbols-rounded">delete</span></button>
+                {% endif %}
+                </div>
+
+                <div class="ck-content post-body">
+                    {{ reply.content|safe }}
+                    {% if reply.image %}
+                    <picture>
+                        <source srcset="{{ reply.image_avif.url }}" type="image/avif">
+                        <div class="post-image">
+                            <img src="{{ reply.image.url }}" alt="投稿画像" loading="lazy" decoding="async" class="js-open-image" data-image-url="{{ reply.image.url }}">
+                        </div>
+                    </picture>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="post-footer">
+            <div class="buttons">
+                <button class="comment-btn footer-btn" style="text-decoration: none;">
+                    <span class="material-symbols-rounded">chat_bubble</span><span class="like-count">{{ reply.replies.all|dictsort:"id"|length }}</span>
+                </button>
+                <button type="button" class="like-btn footer-btn" data-post-id="{{ reply.id }}" aria-pressed="{% if user in reply.liked.all %}true{% else %}false{% endif %}">
+                    <span class="heart material-symbols-rounded">favorite</span>
+                    <span class="like-count">{{ reply.liked.count }}</span>
+                </button>
+                <button class="quote-btn footer-btn" data-post-id="{{ reply.post_id }}" onclick="event.stopPropagation();">
+                    <span class="material-symbols-rounded">repeat</span><span class="quote-count">{{ reply.quote_count }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>まだコメントはありません。</p>
+    {% endfor %}
+
+    {% comment %} 返信フォーム {% endcomment %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <span class="error">{{ form.content.errors }}</span>
+        {{ form.content }}
+        {{ form.media }}
+
+        <input type="file" name="image" id="image-input" accept="image/*" style="display: none;">
+        
+        <div id="post-image-wrapper">
+            <img id="preview-image" src="#" alt="Image Preview">
+            <button type="button" id="clear-image-btn">
+                <span class="material-symbols-rounded" style="font-size: 1.1rem;">
+                    close
+                </span>
+            </button>
+        </div>
+
+        <div style="display: flex;">
+            <div class="image-button-wrapper" style="display: flex; align-items: center; gap: 10px;">
+                <span class="material-symbols-rounded" id="image-upload-icon" style="cursor: pointer; font-size: 1.5rem;">
+                    add_photo_alternate
+                </span>
+            </div>
+            <div class="post_button"><button type="submit" class="basic">ポスト</button></div>
+        </div>
+    </form>
+
+{% endblock content%}
+
+{% block extra_js %}
+<script>
+    window.csrftoken = '{{ csrf_token }}';
+    window.toggle_like_url = "{% url 'ya:toggle_like' %}";
+</script>
+<script src="{% static "ya/js/post_input.js" %}"></script>
+{% endblock extra_js %}

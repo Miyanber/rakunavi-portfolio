@@ -1,0 +1,121 @@
+form input,
+form textarea {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #fff8fbee;
+    box-shadow: #d5b0be20 1px 1px 8px 5px;
+    corner-shape: superellipse(1.2);
+    /* corner-shape: superellipse(1.3); */
+    border-radius: 1.2rem;
+    /* border-radius: 1.8rem; */
+    backdrop-filter: blur(10px) contrast(1.1);
+    z-index: 20;
+    font-family: var(--text-font);
+    font-size: 1.2rem;
+    color: var(--coplor);
+    padding: .6rem 1rem;
+}
+
+body.dark-mode form input,
+body.dark-mode form textarea {
+    background-color: #86536aaa;
+    box-shadow: #49343e50 1px 1px 6px 5px;
+}
+
+.users .user {
+    margin: 0.5em auto;
+    padding: 0.5em 0 0.5em 2em;
+    border: black 1px solid;
+    border-radius: 0.5em;
+}
+
+.form {
+    display: flex;
+    box-sizing: border-box;
+    width: 75%;
+    /* height: 3.2rem; 指定しないこと*/
+    margin: 0 auto;
+    background-color: #f6dce088;
+    box-shadow: inset 0 0 15px 10px #ffebee88, #d5b0be20 1px 1px 8px 5px;
+    ;
+    corner-shape: superellipse(1.2);
+    /* corner-shape: superellipse(1.3); */
+    border-radius: 1.8rem;
+    /* border-radius: 1.8rem; */
+    padding: .50rem;
+    backdrop-filter: blur(10px) contrast(1.1);
+    z-index: 20;
+}
+
+body.dark-mode .form {
+    background-color: #5f4252aa;
+    box-shadow: inset 0 0 15px 10px #87617230, #29212570 1px 1px 15px 5px;
+}
+
+.form p {
+    background-color: #00000000;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    flex-grow: 1;
+}
+
+.search input {
+    font-family: var(--text-font);
+    font-size: 1rem !important;
+    width: 100%;
+    color: var(--color);
+    backdrop-filter: none !important;
+}
+
+.search input::placeholder {
+    color: var(--label-color);
+}
+
+button.submit {
+    margin-left: .4rem;
+    padding: .5rem .8rem !important;
+}
+
+.submit {
+    border-radius: 1.5rem !important;
+    background-color: #db165fa0 !important;
+}
+
+body.dark-mode .submit {
+    background-color: #f4b6e3dd !important;
+}
+
+.submit span {
+    transition: color .5s ease;
+    font-size: 1.5rem;
+    color: #ffffffdd;
+    text-shadow: #7d445d80 1px 2px 4px;
+    margin-right: 0 !important;
+    padding-left: .05rem;
+    padding-bottom: .2rem;
+    vertical-align: middle;
+}
+
+body.dark-mode .submit span {
+    text-shadow: #273f4c80 1px 2px 4px;
+}
+
+.submit:hover {
+    background-color: #fff6fadd !important;
+}
+
+body.dark-mode .submit:hover {
+    background-color: #f6fbffdd !important;
+}
+
+.submit:hover span {
+    color: #f150a1;
+    transition: color .5s ease;
+}
+
+body.dark-mode .submit:hover span {
+    color: #3287d1;
+    transition: color .5s ease;
+}

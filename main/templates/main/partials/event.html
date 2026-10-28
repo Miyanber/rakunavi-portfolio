@@ -1,0 +1,73 @@
+{% comment %} 必要なフィールド : event, index, spot {% endcomment %}
+{{ event_form.media }}
+{% with event=event_form.instance %}
+<div class="event_form" data-index="{{ index }}" id="event-{{ event.pk }}-form">
+    {% for error in event_form.errors %}
+        {{ error }}
+    {% endfor %}
+    {% for hidden in event_form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    <div class="event_form__header">
+        <div class="event_form__header__index">
+            {{ index }}
+        </div>
+        <div class="event_form__header__name">
+            {{ event_form.name }}
+        </div>
+        <div class="event_form__header__spot">
+            <select name="{{ event_form.spot.html_name }}" id="{{ event_form.spot.id_for_label }}">
+                {% for spot in spots %}
+                <option value="{{ spot.pk }}" {% if spot.pk == event.spot.pk %}selected{% endif %}>{{ spot }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="event_form__content">
+        <div class="event_form__content__explanation">
+            {{ event_form.explanation }}
+        </div>
+        <div class="event_form__content__timeslots">
+            <table id="{{ event.pk }}-timeslot_table" class="event_form__content__timeslots__table">
+                {% include "main/partials/timeslots.html" with timeslots=event.timeslots.all %}
+            </table>
+            <div class="event_form__content__timeslots__append">
+                <div class="event_form__content__timeslots__append__form hidden" id="event-{{ event.id }}-timeslot_form">
+                    <select name="{{ event.id }}-timeslot-date" required>
+                        <option value="1" selected>1日目</option>
+                        <option value="2">2日目</option>
+                    </select>
+                    <input name="{{ event.id }}-timeslot-begin_at" type="time" required>
+                    <div>～</div>
+                    <input name="{{ event.id }}-timeslot-end_at" type="time" required>
+                    <button 
+                        type="button" 
+                        class="timeslot_form__add_button event_form__content__timeslots__append__form__button" 
+                        data-pk="{{ event.pk }}">
+                        追加
+                    </button>
+                </div>
+                <div 
+                    class="timeslot_show_form_button event_form__content__timeslots__append__button" 
+                    data-timeslot-form-id="event-{{ event.id }}-timeslot_form">
+                    + 時間枠を追加
+                </div>
+            </div>
+        </div>
+    </div>
+    <div 
+        class="event_form__delete_button" 
+        data-pk="{{ event.pk }}">
+        <span class="material-symbols-rounded">
+            delete
+        </span>
+    </div>
+    <div class="event_form__drag_indicator">
+        <div class="wrapper">
+            <span class="material-symbols-rounded">
+                drag_indicator
+            </span>
+        </div>
+    </div>
+</div>
+{% endwith %}

@@ -1,0 +1,176 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}近日公開{% endblock title %}
+
+{% block header_title %}Coming Soon{% endblock header_title %}
+{% block header_type %}introduction{% endblock header_type %}
+{% block header_image %}
+        <picture>
+                <source srcset="{{ images.header_coming_soon_avif.url }}" type="image/avif">
+                <img id="header_bg" src="{{ images.header_coming_soon.url }}" alt="背景" decoding="async" fetchpriority="high">
+        </picture>
+{% endblock header_image %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/coming_soon.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<section>
+    <div id="container">
+        <h3>
+            {% comment %} はじめに表示されるメッセージ {% endcomment %}
+            <div id="message-container">学内文化祭へ、ようこそ</div>
+        </h3>
+
+        <div id="digital-effect-container"></div>
+
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+const digitalEffectContainer = document.getElementById('digital-effect-container');
+const messageContainer = document.getElementById('message-container');
+let containerWidth = digitalEffectContainer.clientWidth;
+let containerHeight = digitalEffectContainer.clientHeight;
+let effects = [];
+let movingChars = [];
+
+// ユーザー指定の追加文字、散らばる文字たち
+const userChars = "★☆●○◆◇■□▲△▼▽";
+const userCharsCount = 60; // 追加する文字の数
+
+// ランダムな色を生成する関数
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+// メッセージのリスト
+const messages = [
+    "こちらは、学内文化祭公式Webアプリ、",
+    "「らくなび」です。",
+    "文化祭の発信と利便性向上のために",
+    "開発・運用されています。",
+    "全機能の公開に向け、",
+    "準備中です。",
+    "もう少し、お待ち下さい。",
+    "",
+    "学内文化祭へ、ようこそ",  //ここは”はじめのメッセージ”と同じにする
+];
+let messageIndex = 0;
+
+// メッセージを更新する関数
+function updateMessage() {
+    const currentMessage = messages[messageIndex];
+    messageIndex = (messageIndex + 1) % messages.length;
+
+    // 現在のメッセージをバラバラに消すエフェクト
+    const messageChars = Array.from(messageContainer.textContent).map(char => {
+        const span = document.createElement('span');
+        span.classList.add('message-char');
+        span.textContent = char;
+        return span;
+    });
+
+    messageContainer.innerHTML = '';
+    messageChars.forEach(char => messageContainer.appendChild(char));
+
+    setTimeout(() => {
+        messageChars.forEach((char, i) => {
+            char.style.transform = `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px)`;
+            char.style.opacity = 0;
+        });
+
+        setTimeout(() => {
+            // 新しいメッセージを個々の文字に分解
+            const newMessageChars = Array.from(currentMessage).map(char => {
+                const span = document.createElement('span');
+                span.classList.add('message-char');
+                span.textContent = char;
+                span.style.opacity = 0; // 最初は透明
+                return span;
+            });
+
+            messageContainer.innerHTML = '';
+            newMessageChars.forEach(char => messageContainer.appendChild(char));
+
+            // 新しいメッセージを表示
+            setTimeout(() => {
+                newMessageChars.forEach(char => {
+                    char.style.transform = 'translate(0, 0)';
+                    char.style.opacity = 1;
+                });
+            }, 50); // 少し遅らせてアニメーションを適用
+        }, 500); // Transitionの分
+    }, 100);
+}
+
+// デジタルエフェクトの開始
+function startDigitalEffect() {
+    for (let i = 0; i < userCharsCount; i++) { // 追加文字の数
+        createMovingChar();
+    }
+    requestAnimationFrame(updateEffects); // アニメーションフレームの更新
+    setInterval(updateMessage, 3000); // メッセージを更新
+}
+
+// 追加の文字を作成する関数
+function createMovingChar() {
+    const char = document.createElement('div');
+    char.classList.add('moving-char');
+    char.textContent = userChars.charAt(Math.floor(Math.random() * userChars.length));
+    char.style.position = 'absolute';
+    char.style.left = `${Math.random() * containerWidth}px`;
+    char.style.top = `${Math.random() * containerHeight}px`;
+    char.style.color = getRandomColor(); // ランダムな色を設定
+    digitalEffectContainer.appendChild(char);
+
+    const velocityX = (Math.random() - 0.5) * 2; // ランダムなX方向の速度
+    const velocityY = (Math.random() - 0.5) * 2; // ランダムなY方向の速度
+
+    movingChars.push({ element: char, x: parseFloat(char.style.left), y: parseFloat(char.style.top), velocityX, velocityY });
+}
+
+// エフェクトの更新
+function updateEffects() {
+    movingChars.forEach(char => {
+        char.x += char.velocityX;
+        char.y += char.velocityY;
+
+        // 端に当たったら跳ね返る
+        if (char.x <= 0 || char.x >= containerWidth) {
+            char.velocityX *= -1;
+        }
+        if (char.y <= 0 || char.y >= containerHeight) {
+            char.velocityY *= -1;
+        }
+
+        char.element.style.left = `${char.x}px`;
+        char.element.style.top = `${char.y}px`;
+    });
+
+    requestAnimationFrame(updateEffects); // 次のフレームを要求
+}
+
+// 色を変える関数
+function changeColors() {
+    movingChars.forEach(char => {
+        char.element.style.color = getRandomColor();
+    });
+}
+
+// デジタルエフェクトの開始
+startDigitalEffect();
+
+// クリックで色を変える
+digitalEffectContainer.addEventListener('click', changeColors);
+</script>
+{% endblock extra_js %}

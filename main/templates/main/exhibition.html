@@ -1,0 +1,138 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+{% if 'exhibitions_search' in request.path %}検索
+{% elif category == 'class' %}クラス展示
+{% elif category == 'club' %}クラブ展示
+{% elif category == 'grade' %}学年展示
+{% elif category == 'facility' %}施設・その他{% endif %}
+ | 展示紹介{% endblock title %}
+
+{% block header_title %}展示紹介{% endblock header_title %}
+{% block header_type %}introduction{% endblock header_type %}
+{% block header_image %}
+<picture>
+    <source srcset="{{ images.header_exhibitions_avif.url }}" type="image/avif">
+    <img id="header_bg" src="{{ images.header_exhibitions.url }}" alt="背景" decoding="async" fetchpriority="high">
+</picture>
+{% endblock header_image %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/exhibition.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/exhibition_search.css' %}">
+{% endblock extra_style %}
+
+{% load custom_tags %}
+
+
+{% block content %}
+<div id="categories" class='spots no-print'>
+    <a href="{% url 'main:exhibitions_search' %}" class="{% if 'exhibitions_search' in request.path %}active{% endif %}">検索</a>
+    <a href="{% url 'main:exhibitions' 'class' %}" class="{% if category == 'class' %}active{% endif %}">クラス展示</a>
+    <a href="{% url 'main:exhibitions' 'club' %}" class="{% if category == 'club' %}active{% endif %}">クラブ展示</a>
+    <a href="{% url 'main:exhibitions' 'grade' %}" class="{% if category == 'grade' %}active{% endif %}">学年展示</a>
+    <a href="{% url 'main:exhibitions' 'facility' %}" class="{% if category == 'facility' %}active{% endif %}">施設・その他</a>
+</div>
+
+{% if category%}
+<div class="explanation">
+    {% if category == 'class' %}
+    <p>クラス展示では、高校1・2年生の各学級が自分たちでやりたい展示を決め、一生懸命準備した展示を行っています。</p>
+    {% elif category == 'club' %}
+    <p>クラブ展示では、中学・高校の任意の文化部が、自分たちの普段の活動や、文化祭のために特別に制作したものを展示します。</p>
+    {% elif category == 'grade' %}
+    <p>学年展示では、任意の学年が研修旅行などで得た機会や経験を活かした展示を行っています。</p>
+    {% endif%}
+    <p>所要時間は、展示の体験・観覧に必要とされる時間の目安、待ち時間は展示に入るまでに必要な時間の目安です。</p>
+</div>
+{% endif %}
+
+
+{% comment %} 以下exhibition_searchと共有 {% endcomment %}
+{% include "main/exhibition_unit.html" %}
+
+<div class="to_top">
+    <a href="#categories" class="button_style2">
+        <span class="material-symbols-rounded">arrow_upward</span>
+        展示一覧トップに戻る
+    </a>
+</div>
+
+{% comment %} 統合型検索フォーム {% endcomment %}
+<div class="integrated_search_form">
+    <form method="get" action="{% url 'main:jump_to_exhibitions_search' %}" class="search_form" target="_blank">
+        <div>
+            <input type="text" name="query" placeholder="タイトル、概要などから検索" required>
+            <button class="button_style1" type="submit"><span class="material-symbols-rounded">search_check_2</span> クイック検索</button>
+        </div>
+    </form>
+    <div class="click_to_exhibitions_search">
+        <a class="button_style2" href="{% url 'main:exhibitions_search' %}"><span class="material-symbols-rounded">search</span> タグを利用した詳細検索はこちらから</a>
+    </div>
+</div>
+
+<div id="pagination" class="no-print">
+    {% if page_obj.has_previous %}
+    <a href="{% url 'main:exhibitions' category %}?page=1" id="start" class="no-print">
+        <span class="material-symbols-rounded">keyboard_double_arrow_left</span>先頭へ
+    </a>
+    <a href="{% url 'main:exhibitions' category %}?page={{ page_obj.previous_page_number }}" id="previous" class="no-print">
+        <span class="material-symbols-rounded">arrow_back</span>前へ
+    </a>
+    {% endif %}
+    <span id="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages  }}</span>
+    {% if page_obj.has_next %}
+    <a href="{% url 'main:exhibitions' category %}?page={{ page_obj.next_page_number }}" id="next" class="no-print">
+        次へ<span class="material-symbols-rounded">arrow_forward</span>
+    </a>
+    <a href="{% url 'main:exhibitions' category %}?page={{ page_obj.paginator.num_pages }}" id="end" class="no-print">
+        最後へ<span class="material-symbols-rounded">double_arrow</span>
+    </a>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    function adjustFontSize(element) {
+        let fontSize = 1.5; // 初期フォントサイズ
+        element.style.fontSize = fontSize + "em";
+        element.style.whiteSpace = "normal"; // 複数行許可
+        element.style.wordBreak = "break-word"; // 長い単語も折り返し
+
+        // 高さと幅が要素内に収まるまで縮小
+        while (
+            (element.scrollHeight > element.clientHeight ||
+            element.scrollWidth > element.clientWidth) &&
+            fontSize > 0.5
+        ) {
+            fontSize -= 0.05;
+            element.style.fontSize = fontSize + "em";
+        }
+
+        // さらに微調整
+        while (
+            (element.scrollHeight > element.clientHeight ||
+            element.scrollWidth > element.clientWidth) &&
+            fontSize > 0.5
+        ) {
+            fontSize -= 0.01;
+            element.style.fontSize = fontSize + "em";
+        }
+    }
+
+    function adjustAllTitles() {
+        const titles = document.querySelectorAll("h2.title");
+        titles.forEach((title) => adjustFontSize(title));
+    }
+
+    window.addEventListener("load", adjustAllTitles);
+    window.addEventListener("resize", adjustAllTitles);
+
+    const titles = document.querySelectorAll("h2.title");
+    titles.forEach((title) => {
+        adjustFontSize(title);
+    });
+</script>
+{% endblock extra_js %}

@@ -1,0 +1,400 @@
+{% extends "main/admin.html" %}
+{% load static %}
+
+{% block title %}管理ページ{% endblock title %}
+
+{% block extra_style %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'main/css/mypage.css' %}">
+{% endblock extra_style %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}管理ページ{% endblock header_title %}
+
+{% block content %}
+{% if edit_done_message %}
+    <div class="alert">
+        {{ edit_done_message }}
+    </div>
+{% endif %}
+
+<div class="confirm_init" id="confirm_initialization" hidden>
+    <div class="confirm_init__content">
+        <div class="confirm_init__content__close_button" id="confirm_initialization_close_button">
+            <span class="material-symbols-rounded">
+                close
+            </span>
+        </div>
+        <p class="confirm_init__content__warning">
+            警告
+        </p>
+        <p>
+            該当モデルのオブジェクトが既に存在する場合は削除されます。本当に初期化してよろしいですか？<br>
+            ※初期化時は自動でバックアップが生成されます。
+        </p>
+        <div class="confirm_init__content__form">
+            <div>
+                操作を継続する場合は、以下の入力欄に "<strong>INITIALIZE</strong>" と入力してください。
+            </div>
+            <input type="text" id="confirm_initialization_input" autocomplete="off">
+            <button class="button_style2" type="button" id="confirm_initialization_button">初期化する</button>
+        </div>
+        <div class="confirm_init__content__error_message" id="confirm_initialization_error_message" hidden>
+            入力された文字列が一致しません。半角で入力されていることを確認して下さい。
+        </div>
+    </div>
+</div>
+
+<article>
+    <div>
+        <h2><span class="marker">ユーザー情報</span></h2>
+        <div class="info_wrapper">
+            <table class="info">
+                <tr>
+                    <th class="image" rowspan="2">
+                        <img src="{% if request.user.picture_path %}{{ request.user.picture_path }}{% else %}{% static 'main/img/default-icon_1x1.webp' %}{% endif %}" alt="">
+                    </th>
+                    <td class="username">{{ request.user.username }}</td>
+                </tr>
+                <tr>
+                    <td class="grade">{{ request.user.user_id }}</td>
+                </tr>
+            </table>
+        </div>
+        <div style="text-align: center;">
+            <a class="button_style2" href="{% url 'sports_fes:index' %}">
+                <span class="material-symbols-rounded">sprint</span> 体育祭Webアプリへ
+            </a>
+            <br>
+            <a class="button_style2" style="margin: 1em auto;" href="{% url 'admin:index' %}">
+                <span class="material-symbols-rounded">security</span> 管理サイトへ
+            </a>
+            <br>
+            {% if request.user.is_ya_user %}
+            <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:documents_list' %}">
+                <span class="material-symbols-rounded">article</span> ドキュメント
+            </a>
+            <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:release_notes_list' %}">
+                <span class="material-symbols-rounded">deployed_code</span> リリースノート
+            </a>
+            <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:manuals_for_students_list' %}">
+                <span class="material-symbols-rounded">quick_reference</span> 生徒用マニュアル
+            </a>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <br>
+            <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:system_monitor' %}">
+                <span class="material-symbols-rounded">vital_signs</span> システムモニター
+            </a>
+            <br>
+            <a class="button_style2" style="margin: 1em auto;" href="{% url 'main:ec2_operations' %}">
+                <span class="material-symbols-rounded">cloud</span> EC2操作
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% if request.user.is_superuser %}
+    <div>
+        <h2><span>説明会資料 PDF のダウンロード</span></h2>
+        <p>
+            　データベースのデータを削除する可能性があるため、<strong>運営責任者又は運営責任者が許可した者のみが、責任をもって操作すること。</strong>
+            以下に利用に関する諸注意を記載した。操作実行前に必ず目を通しておくこと。またmanagement_manual.mdを参照。
+        </p>
+        <ul>
+            <li>本番サーバー上で実行する際は、各モデル最初の1度だけ「初期化を行う」にチェックを入れること。</li>
+            <li>「初期化を行う」にチェックを入れると、該当モデルの既存のオブジェクトは全て削除され、新しく空オブジェクトが生成される。この際自動でバックアップが生成される。</li>
+            <li>展示・模擬店の初期化処理は、"docs/展示一覧表.xlsx" の内容を元に行われる。初期化を行う際は、前もってこのファイルを今年度用に書き換えておくこと。特にクラス展示の有無・模擬店出店の有無に注意すること。</li>
+            <li>現在、ライブのオブジェクト作成はconfig.modelsの「デフォルトオブジェクト数」に基づいて行われる。不足しないようにすること。</li>
+            <li>「初期化を行う」にチェックがない場合、該当モデルの既存のオブジェクトから資料が作成される。万が一資料が不足していた場合に有効である。</li>
+            <li>ダウンロードされる PDF は、展示のみ A4 、他は全て B5 サイズである。</li>
+            <li>先生に印刷してもらう場合は、用紙サイズを必ず伝えておくこと。</li>
+            <li>ダウンロードには約 10~20 秒程度かかる。ダウンロード中はページを閉じてはいけない。</li>
+            <li>各モデルについて、開発環境で一度動作確認を行っておくこと。</li>
+            <li>サーバー上にWeasyprintの依存関係ライブラリをインストールしておくこと。※詳細はサーバー運営マニュアルに記載</li>
+        </ul>
+        <form action="" method="post" id="HandoutPDFDownloadForm" class="pdf_download_form" data-action="handout_pdf_download">
+            <div class="pdf_download_form__fields">
+                <label for="init">初期化を行う</label>
+                <input type="checkbox" name="init" id="init">
+                <label for="date">プリント配布日</label>
+                <input type="date" name="date" id="date" required>
+                <label for="deadline">編集期限</label>
+                <input type="datetime-local" name="deadline" id="deadline" required>
+            </div>
+
+            <div class="pdf_download_form__buttons">
+                <button type="submit" class="button_style2 download_button" data-model="exhibition">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">展示 A4</span>
+                </button>
+                <button type="submit" class="button_style2 download_button" data-model="food_booth">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">模擬店 B5</span>
+                </button>
+                <button type="submit" class="button_style2 download_button" data-model="live_stage_performance">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">野外ライブ B5</span>
+                </button>
+                <button type="submit" class="button_style2 download_button" data-model="music_room_performance">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">音楽室ライブ B5</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if perms.main.can_download_exhibition_review or perms.main.can_download_food_booth_review or perms.main.can_download_performance_review %}
+    <div>
+        <h2><span>審査結果 PDF のダウンロード</span></h2>
+        <p>
+            　審査結果をマルチページの PDF で出力できます。
+            ダウンロードされる PDF は全て <strong>B5</strong> サイズとなっています。印刷する際はご注意下さい。
+            なお、ダウンロードには約 10 秒程度かかります。ご了承ください。<br>
+            この操作によってDBに変更は行われず、ここで指定した日時はPDF出力のみに利用されます。
+        </p>
+        <form action="" method="post" id="ReviewPDFDownloadForm" class="pdf_download_form" data-action="review_pdf_download">
+            <div class="pdf_download_form__fields">
+                <label for="date">プリント配布日</label>
+                <input type="date" name="date" id="date" required>
+                <label for="deadline">編集期限</label>
+                <input type="datetime-local" name="deadline" id="deadline" required>
+            </div>
+
+            <div class="pdf_download_form__buttons">
+                {% if perms.main.can_download_exhibition_review %}
+                <button type="submit" class="button_style2 download_button" data-model="exhibition">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">展示 B5</span>
+                </button>
+                {% endif %}
+                {% if perms.main.can_download_food_booth_review %}
+                <button type="submit" class="button_style2 download_button" data-model="food_booth">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">模擬店 B5</span>
+                </button>
+                {% endif %}
+                {% if perms.main.can_download_performance_review %}
+                <button type="submit" class="button_style2 download_button" data-model="live_stage_performance">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">野外ライブ B5</span>
+                </button>
+                <button type="submit" class="button_style2 download_button" data-model="music_room_performance">
+                    <div class="spinner_wrapper">
+                        <span class="material-symbols-rounded">download</span>
+                        <span class="spinner"></span>
+                    </div>
+                    <span class="content">音楽室ライブ B5</span>
+                </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div>
+        <h2><span>展示CMのURL一覧 のダウンロード</span></h2>
+        <div style="text-align: center;">
+            <a class="button_style2" href="{% url 'main:download_cm_urls' %}" target="_blank">
+                <span class="material-symbols-rounded">video_file</span> CM URL一覧のダウンロード
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if perms.main.can_review_exhibition or perms.main.can_review_food_booth or perms.main.can_review_performance %}
+    <div>
+        <h2><span>審査ページ一覧</span></h2>
+        <p>
+            審査用ページの一覧です。審査はこちらからお願いします。
+        </p>
+        <h4><span class="material-symbols-rounded">calendar_check</span> 現在の状態：{{ config_permission }}</h4>
+        <ul>
+            {% if config_permission.exhibitions_editing_deadline_scheduled %}
+            <li>展示編集期限：{{ config_permission.exhibitions_editing_deadline }}</li>
+            {% endif %}
+            {% if config_permission.food_booths_editing_deadline_scheduled %}
+            <li>模擬店編集期限：{{ config_permission.food_booths_editing_deadline }}</li>
+            {% endif %}
+            {% if  config_permission.performances_editing_deadline_scheduled %}
+            <li>ライブ編集期限：{{ config_permission.performances_editing_deadline }}</li>
+            {% endif %}
+        </ul>
+        <h5>流れ（2025年度）</h5>
+        <ul>
+            <li>１：編集日までに入力を求める。</li>
+            <li>２：設定された日時に、自動的に編集できなくなる。（QRコードを読み込んでも403エラーになる）</li>
+            <li>３：審査</li>
+            <li>４：審査後、審査PDFを印刷する。</li>
+            <li>５：らくなびを管理する生徒が手動で編集できるように設定する</li>
+            <li>６：展示側の再入力</li>
+            <li>以降は繰り返し</li>
+        </ul>
+        <div class="review_page_sections">
+            <div class="pending_section">
+                <h3>
+                    <span>
+                    <span class="material-symbols-rounded">sync</span>審査待ちのページ</span>
+                </h3>
+                {% if perms.main.can_review_exhibition %}
+                <h4>展示</h4>
+                <div class="review_page_links">
+                    {% for exhibition in exhibitions %}
+                    {% if not exhibition.review_status or exhibition.review_status == 'pending' %}
+                    <a href="{% url 'main:exhibition_review' exhibition.pk %}" class="review_page_link">
+                        {% if exhibition.category == "class" %}<b>[高校{{ exhibition.grade_number }}-{{ exhibition.class_number }}]</b> {% endif %}{{ exhibition.title }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if perms.main.can_review_food_booth %}
+                <h4>模擬店</h4>
+                <div class="review_page_links">
+                    {% for food_booth in food_booths %}
+                    {% if not food_booth.review_status or food_booth.review_status == 'pending' %}
+                    <a href="{% url 'main:food_booth_review' food_booth.pk %}" class="review_page_link">
+                        <b>[高校{{ food_booth.grade_number }}-{{ food_booth.class_number }}]</b> {{ food_booth.name }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if perms.main.can_review_performance %}
+                <h4>ライブ</h4>
+                <div class="review_page_links">
+                    {% for performance in performances %}
+                    {% if not performance.review_status or performance.review_status == 'pending' %}
+                    <a href="{% url 'main:performance_review' performance.pk %}" class="review_page_link">
+                        {{ performance.name }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="rejected_section">
+                <h3><span><span class="material-symbols-rounded" >gpp_bad</span>差し戻しされたページ</span></h3>
+                {% if perms.main.can_review_exhibition %}
+                <h4>展示</h4>
+                <div class="review_page_links">
+                    {% for exhibition in exhibitions %}
+                    {% if exhibition.review_status == 'rejected' %}
+                    <a href="{% url 'main:exhibition_review' exhibition.pk %}" class="review_page_link">
+                        {% if exhibition.category == "class" %}<b>[高校{{ exhibition.grade_number }}-{{ exhibition.class_number }}]</b> {% endif %}{{ exhibition.title }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if perms.main.can_review_food_booth %}
+                <h4>模擬店</h4>
+                <div class="review_page_links">
+                    {% for food_booth in food_booths %}
+                    {% if food_booth.review_status == 'rejected' %}
+                    <a href="{% url 'main:food_booth_review' food_booth.pk %}" class="review_page_link">
+                        <b>[高校{{ food_booth.grade_number }}-{{ food_booth.class_number }}]</b> {{ food_booth.name }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if perms.main.can_review_performance %}
+                <h4>ライブ</h4>
+                <div class="review_page_links">
+                    {% for performance in performances %}
+                    {% if performance.review_status == 'rejected' %}
+                    <a href="{% url 'main:performance_review' performance.pk %}" class="review_page_link">
+                        {{ performance.name }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="accepted_section">
+                <h3><span><span class="material-symbols-rounded" >verified</span>承認済みのページ</span></h3>
+                {% if perms.main.can_review_exhibition %}
+                <h4>展示</h4>
+                <div class="review_page_links">
+                    {% for exhibition in exhibitions %}
+                    {% if exhibition.review_status == 'accepted' %}
+                    <a href="{% url 'main:exhibition_review' exhibition.pk %}" class="review_page_link">
+                        {% if exhibition.category == "class" %}<b>[高校{{ exhibition.grade_number }}-{{ exhibition.class_number }}]</b> {% endif %}{{ exhibition.title }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if perms.main.can_review_food_booth %}
+                <h4>模擬店</h4>
+                <div class="review_page_links">
+                    {% for food_booth in food_booths %}
+                    {% if food_booth.review_status == 'accepted' %}
+                    <a href="{% url 'main:food_booth_review' food_booth.pk %}" class="review_page_link">
+                        <b>[高校{{ food_booth.grade_number }}-{{ food_booth.class_number }}]</b> {{ food_booth.name }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if perms.main.can_review_performance %}
+                <h4>ライブ</h4>
+                <div class="review_page_links">
+                    {% for performance in performances %}
+                    {% if performance.review_status == 'accepted' %}
+                    <a href="{% url 'main:performance_review' performance.pk %}" class="review_page_link">
+                        {{ performance.name }}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div>
+        <form action="{% url 'account_logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button_style1" id="logout_button">
+                <div class="material-symbols-rounded">logout</div> ログアウト
+            </button>
+        </form>
+    </div>
+</article>
+{% endblock content %}
+
+{% block extra_js %}
+<script type="module" src="{% static 'main/js/mypage.js' %}" crossorigin="anonymous" defer></script>
+{% endblock extra_js %}

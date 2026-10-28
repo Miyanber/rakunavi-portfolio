@@ -1,0 +1,60 @@
+{% extends "main/editor.html" %}
+{% load static %}
+
+{% block title %}{{ exhibition.title }} | 展示紹介{{ block.super }}{% endblock title %}
+
+{% block header_title %}展示紹介 <span style="display: inline-block;">編集ページ</span>{% endblock header_title %}
+
+{% block extra_style %}
+{{ block.super }}
+<meta name="referrer" content="strict-origin-when-cross-origin">    {% comment %} URL流出防止 {% endcomment %}
+<link rel="stylesheet" href="{% static 'main/css/exhibition_edit.css' %}">
+{% endblock extra_style %}
+
+{% block extra_forms %}
+<section>
+    <h3>イベント</h3>
+    <p>
+        <span class="body-text">展示の中でも、特定の期間中実施しているイベントを、タイムテーブルに表示できます。</span>
+    </p>
+
+    <div id="events" class="event_formset">
+        {{ event_formset.management_form }}
+        {% for event_form in event_formset %}
+        {% include "main/partials/event.html" with event_form=event_form index=forloop.counter spots=spots %}
+        {% endfor %}
+    </div>
+
+    <div class="event_settings">
+        {% with event_form=event_formset.empty_form %}
+        <div class="event_settings__title">
+            イベント新規追加用フォーム
+        </div>
+        <div class="event_create_form">
+            <div class="event_create_form__name">
+                <input name="event-new-name" type="text" placeholder="{{ event_form.name.label }}" required>
+            </div>
+            <div class="event_create_form__spot">
+                <select name="event-new-spot" required>
+                    {% for spot in spots %}
+                    <option value="{{ spot.pk }}">{{ spot }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="event_create_form__explanation">
+                <textarea name="event-new-explanation" placeholder="{{ event_form.explanation.label }}" rows="3">{{ event.explanation }}</textarea>
+            </div>
+            <div class="event_create_form__button">
+                <button type="button" class="button_style2">イベントを新規追加</button>
+            </div>
+        </div>
+        {% endwith %}
+    </div>
+</section>
+{% endblock extra_forms %}
+
+{% block extra_js %}
+{{ block.super }}
+<script type="module" src="{% static 'main/js/exhibition_edit.js' %}" crossorigin="anonymous" defer></script>
+{% comment %} type="module"のときは crossorigin="anonymous"をしないと本番だけCORSエラーになる {% endcomment %}
+{% endblock extra_js %}

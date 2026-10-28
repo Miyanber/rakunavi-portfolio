@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}マップ：認証{% endblock title %}
+
+{% block header_title %}マップ：認証{% endblock header_title %}
+{% block header_type %}function{% endblock header_type %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/map_auth.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+<article>
+    <h2><span class="material-symbols-rounded">security</span> マップの合言葉を入力してください</h2>
+    <p>マップの閲覧には、合言葉が必要です。<br>
+        合言葉は、パンフレットや会場内のQRコードに記載されています。<br>
+        合言葉の有効期限は、{{ end_date.end_at|date:"Y年m月d日" }}までです。</p>
+    <form method="post" action="{% url 'main:map_auth' %}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            {{ form.key.label_tag }}
+            {{ form.key }}
+            {{ form.key.errors }}
+        </div>
+        <button class="button_style1" type="submit" class="style2-2">
+            <span class="material-symbols-rounded">key</span>送信
+        </button>
+    </form>
+</article>
+{% endblock content %}

@@ -1,0 +1,95 @@
+/* 演出 */
+body.haru footer,
+body.haru header {
+    filter: blur(10px);
+}
+
+article h1 {
+    font-size: 150%;
+}
+
+article.div {
+    margin-left: 1.5em;
+}
+
+p {
+    font-size: 105%;
+}
+
+table {
+    width: 80%;
+    margin-left: 10%;
+    text-align: center;
+}
+
+th.name {
+    width: 30%;
+    font-weight: 500;
+}
+
+th.words {
+    width: 70%;
+    font-weight: 500;
+}
+
+#cow {
+    width: 26em;
+}
+
+#toggle_filter_container {
+    padding: 0.5em 0 0 0.5em;
+    display: none;
+}
+
+#toggle_filter {
+    display: block;
+    margin: 0 auto;
+    font-size: 1em;
+}
+
+body.haru #toggle_filter {
+    box-shadow: 0 0 1em rgba(255, 233, 255, 0.8);
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    filter: none;
+}
+
+#pm-overlay {
+    z-index: 9999;
+}
+
+p.haru_only {
+    display: none;
+}
+
+body.haru p.haru_only {
+    display: block;
+}
+
+body.haru #backToTop {
+    display: none !important;
+}
+
+@media only screen and (max-width: 770px) {
+    h1 {
+        font-size: 110%;
+    }
+
+    p {
+        font-size: 90%;
+    }
+
+    #cow {
+        font-size: 0.9em;
+        width: 90%;
+    }
+
+}

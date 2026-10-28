@@ -1,0 +1,52 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+{% load sports_fes_extras %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/program.css' %}" />
+{% endblock %}
+
+{% block title %}{{ program.name }}{% endblock %}
+
+{% block content %}
+<div class="header_mini"></div>
+<section>
+    <h2>{{ program.name }}</h2>
+	<div class="grade grade-in-detail">
+		{% if not program.grades %}
+			<div class="grade_inner" data-color="111111">
+				<span>全学年</span>
+			</div>
+		{% else %}
+			{% for g in program.grades %}
+				<div 
+					class="grade_inner"
+					data-color="{{ grade_color_map|get_item:g|default:'cccccc' }}"
+					style="
+						background-color: #{{ grade_color_map|get_item:g|default:'cccccc' }}60; 
+						border-color: #{{ grade_color_map|get_item:g|default:'cccccc' }}60;
+					"
+				>
+					<span>{{ g|grade_label }}</span>
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+    <a href="{% url 'sports_fes:program_list' %}"><button class="button_jump1">一覧に戻る</button></a>
+
+    <div class="program-content">
+        {% if program.track_image %}
+        <div class="program-image">
+            <img src="{{ program.track_image.url }}" alt="{{ program.name }}のトラック図" id="trackImage" />
+            <a href="{{ program.track_image.url }}">
+                <button class="button_jump1" style="margin: 1rem auto" id="zoomBtn">画像を拡大する</button>
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="program-description">
+            <p>{{ program.description | safe }}</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

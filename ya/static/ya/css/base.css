@@ -1,0 +1,1767 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho&display=swap');
+
+/* Regular (通常) */
+@font-face {
+    font-family: 'FOT-TsukuARdGothicStd';
+    src: url('../fonts/FOT-TsukuARdGothicStd-R.otf') format('truetype');
+    font-weight: 400;
+    /* normal */
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Medium (中太) */
+@font-face {
+    font-family: 'FOT-TsukuARdGothicStd';
+    src: url('../fonts/FOT-TsukuARdGothicStd-M.otf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* DemiBold (太字) */
+@font-face {
+    font-family: 'FOT-TsukuARdGothicStd';
+    src: url('../fonts/FOT-TsukuARdGothicStd-D.otf') format('truetype');
+    font-weight: 600;
+    /* bold */
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Bold (太字) */
+@font-face {
+    font-family: 'FOT-TsukuARdGothicStd';
+    src: url('../fonts/FOT-TsukuARdGothicStd-B.otf') format('truetype');
+    font-weight: 700;
+    /* bold */
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Light (細字) */
+@font-face {
+    font-family: 'FOT-TsukuARdGothicStd';
+    src: url('../fonts/FOT-TsukuARdGothicStd-L.otf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ExtraBold (極太) */
+@font-face {
+    font-family: 'FOT-TsukuARdGothicStd';
+    src: url('../fonts/FOT-TsukuARdGothicStd-E.otf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100vh;
+    font-size: 16px;
+}
+
+/* View Transition API */
+@view-transition {
+    navigation: auto;
+}
+
+/* 遷移時に背景用のオーバーレイを生成 */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+}
+
+/* ページコンテンツのフェードイン */
+::view-transition-new(root) {
+    animation: content-fade-in 0.3s ease forwards;
+}
+
+@keyframes content-fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.99);
+        filter: blur(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+/*パラメータ設定*/
+:root {
+    --background-color: linear-gradient(60deg, #f2aec0, #f4c2cf, #eccdd5);
+    --color: #5e052a;
+    --label-color: #76304cbb;
+    --re-color: #fff;
+    --theme-color1: #af8490;
+    --theme-color2: #ffe3eb;
+    --accent-color1: #e03c83;
+    --accent-color2: #ea3d71;
+    --accent-bg-color: ;
+    --title-font: "Shippori Mincho", sans-serif;
+    --text-font: "Kiwi Maru", sans-serif;
+    --button-font: "Kiwi Maru", sans-serif;
+    --menu-width: 40dvw;
+}
+
+body.dark-mode {
+    --background-color: linear-gradient(80deg, #282025, #291f25, #31232c);
+    --color: #fae3f4;
+    --label-color: #e4cfdedd;
+    --re-color: #272022;
+    --theme-color1: ;
+    --theme-color2: #6c4a58;
+    --accent-color1: #F4B6E3;
+    --accent-color2: #fae3f4;
+    --accent-bg-color: ;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    background: var(--background-color);
+    color: var(--color);
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    transition: 2s all;
+    -ms-overflow-style: none;
+    font-family: var(--text-font);
+    font-weight: 600;
+    transition-property: background;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.django_message {
+    position: fixed;
+    text-align: center;
+    width: 50vw;
+    top: 10vh;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 1.3em;
+    z-index: 100;
+    background-color: #edc8d1;
+    color: black;
+    border-radius: 2em;
+    padding: 1em;
+    animation: 1.5s ease-in forwards popup-out;
+}
+
+body.dark-mode .django_message {
+    background-color: #962572;
+    color: #ebe8ea;
+}
+
+.devinfo {
+    position: fixed;
+    bottom: 0;
+    left: 1rem;
+    text-align: start;
+    opacity: 0.8;
+}
+
+.devinfo span {
+    font-size: 1.3rem;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    filter: none;
+}
+
+#toggle_filter {
+    opacity: 0.8;
+}
+
+#pm-overlay {
+    z-index: 9999;
+}
+
+@keyframes popup-out {
+    0% {
+        top: 10vh;
+        opacity: 1;
+    }
+
+    70% {
+        top: calc(10vh + 10px);
+        opacity: 0.8;
+    }
+
+    100% {
+        top: calc(10vh - 150px);
+        opacity: 0;
+    }
+}
+
+main {
+    width: 100%;
+    /* 残りのすべての垂直スペースを占有させる */
+    flex-grow: 1;
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-rounded {
+    display: inline-flex;
+    vertical-align: text-bottom;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    -webkit-user-select: none;
+    user-select: none;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 24;
+    color: var(--color);
+    font-size: 1.2rem;
+}
+
+h1 {
+    font-family: var(--title-font);
+}
+
+h2 {
+    font-family: var(--title-font);
+}
+
+button {
+    z-index: 50;
+    position: relative;
+    font-weight: 500;
+}
+
+button.basic,
+a.basic {
+    box-sizing: border-box;
+    padding: .5rem 1rem;
+    font-family: var(--text-font);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    background-color: var(--accent-color1);
+    border: none;
+    transition: 0.4s ease;
+    corner-shape: superellipse(1.2);
+    /* corner-shape: superellipse(1.8); */
+    border-radius: 1rem;
+    /* border-radius: 2rem; */
+    box-shadow: #7d445d30 1px 1px 5px 2px;
+}
+
+button.basic,
+a.basic,
+button.basic span,
+a.basic span {
+    color: #fff;
+    font-weight: 700;
+}
+
+button.basic span,
+a.basic span {
+    font-size: 1.1rem;
+    transition: 0.4s;
+    margin-right: .2rem;
+}
+
+body.dark-mode button.basic,
+body.dark-mode a.basic {
+    background-color: var(--accent-color1);
+    box-shadow: #02141f18 1px 1px 6px 5px;
+}
+
+body.dark-mode button.basic,
+body.dark-mode a.basic,
+body.dark-mode button.basic span,
+body.dark-mode a.basic span {
+    color: var(--re-color);
+}
+
+button.basic:hover,
+a.basic:hover {
+    background: var(--theme-color2);
+}
+
+button.basic:hover,
+a.basic:hover,
+button.basic:hover span,
+a.basic:hover span {
+    color: var(--accent-color2);
+    text-shadow: #480a1355 2px 2px 4px;
+}
+
+body.dark-mode button.basic:hover,
+body.dark-mode a.basic:hover {
+    background: #ffe3f3;
+}
+
+body.dark-mode button.basic:hover,
+body.dark-mode a.basic:hover,
+body.dark-mode button.basic:hover span,
+body.dark-mode a.basic:hover span {
+    color: #b51d73;
+    text-shadow: #480a3055 2px 2px 4px;
+}
+
+p {
+    margin-block-start: .5rem;
+    margin-block-end: 0rem;
+}
+
+button.basic_2 {
+    box-sizing: border-box;
+    padding: .3rem 1rem;
+    font-family: var(--text-font);
+    font-size: .9rem;
+    color: #fff;
+    background-color: #1c7aff;
+    border: none;
+    transition: 0.4s ease;
+    border-radius: 2rem;
+}
+
+button.basic_2:hover {
+    background: #e3efff;
+    color: #0b6bf2;
+}
+
+textarea {
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 1.2rem;
+    /* height: 1.5rem; */
+    font-family: var(--text-font);
+    background-color: #00000000;
+    border: none;
+    outline: none;
+    color: var(--color);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    resize: none;
+}
+
+.textarea::-webkit-scrollbar {
+    display: none;
+}
+
+textarea::placeholder {
+    color: var(--label-color);
+}
+
+.left_content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28%;
+    height: 100%;
+    max-width: 420px;
+}
+
+.title {
+    position: absolute;
+    display: flex;
+    align-items: baseline;
+    transform: translate(-50%, 0);
+    top: 3.5vh;
+    left: 50%;
+    font-size: 4vh;
+}
+
+.title .ya {
+    margin: 0;
+    font-family: var(--text-font);
+    font-size: 8vh;
+    line-height: 1;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: auto;
+    margin-top: 30vh;
+    width: 80%;
+    max-width: 500px;
+    height: max-content;
+    background-color: #57585844;
+    padding: 2rem;
+    --corner-radius: 5rem;
+    clip-path: polygon(calc(100% + var(--corner-radius) * -0.9476) calc(var(--corner-radius) * 0.0000), calc(100% + var(--corner-radius) * -0.8949) calc(var(--corner-radius) * 0.0004), calc(100% + var(--corner-radius) * -0.8418) calc(var(--corner-radius) * 0.0013), calc(100% + var(--corner-radius) * -0.7881) calc(var(--corner-radius) * 0.0032), calc(100% + var(--corner-radius) * -0.7337) calc(var(--corner-radius) * 0.0063), calc(100% + var(--corner-radius) * -0.6787) calc(var(--corner-radius) * 0.0112), calc(100% + var(--corner-radius) * -0.6231) calc(var(--corner-radius) * 0.0182), calc(100% + var(--corner-radius) * -0.5671) calc(var(--corner-radius) * 0.0278), calc(100% + var(--corner-radius) * -0.5111) calc(var(--corner-radius) * 0.0406), calc(100% + var(--corner-radius) * -0.4555) calc(var(--corner-radius) * 0.0570), calc(100% + var(--corner-radius) * -0.4009) calc(var(--corner-radius) * 0.0775), calc(100% + var(--corner-radius) * -0.3480) calc(var(--corner-radius) * 0.1026), calc(100% + var(--corner-radius) * -0.2974) calc(var(--corner-radius) * 0.1324), calc(100% + var(--corner-radius) * -0.2499) calc(var(--corner-radius) * 0.1670), calc(100% + var(--corner-radius) * -0.2063) calc(var(--corner-radius) * 0.2063), calc(100% + var(--corner-radius) * -0.1670) calc(var(--corner-radius) * 0.2499), calc(100% + var(--corner-radius) * -0.1324) calc(var(--corner-radius) * 0.2974), calc(100% + var(--corner-radius) * -0.1026) calc(var(--corner-radius) * 0.3480), calc(100% + var(--corner-radius) * -0.0775) calc(var(--corner-radius) * 0.4009), calc(100% + var(--corner-radius) * -0.0570) calc(var(--corner-radius) * 0.4555), calc(100% + var(--corner-radius) * -0.0406) calc(var(--corner-radius) * 0.5111), calc(100% + var(--corner-radius) * -0.0278) calc(var(--corner-radius) * 0.5671), calc(100% + var(--corner-radius) * -0.0182) calc(var(--corner-radius) * 0.6231), calc(100% + var(--corner-radius) * -0.0112) calc(var(--corner-radius) * 0.6787), calc(100% + var(--corner-radius) * -0.0063) calc(var(--corner-radius) * 0.7337), calc(100% + var(--corner-radius) * -0.0032) calc(var(--corner-radius) * 0.7881), calc(100% + var(--corner-radius) * -0.0013) calc(var(--corner-radius) * 0.8418), calc(100% + var(--corner-radius) * -0.0004) calc(var(--corner-radius) * 0.8949), calc(100% + var(--corner-radius) * -0.0000) calc(var(--corner-radius) * 0.9476), calc(100% + var(--corner-radius) * -0.0000) calc(100% + var(--corner-radius) * -0.9476), calc(100% + var(--corner-radius) * -0.0004) calc(100% + var(--corner-radius) * -0.8949), calc(100% + var(--corner-radius) * -0.0013) calc(100% + var(--corner-radius) * -0.8418), calc(100% + var(--corner-radius) * -0.0032) calc(100% + var(--corner-radius) * -0.7881), calc(100% + var(--corner-radius) * -0.0063) calc(100% + var(--corner-radius) * -0.7337), calc(100% + var(--corner-radius) * -0.0112) calc(100% + var(--corner-radius) * -0.6787), calc(100% + var(--corner-radius) * -0.0182) calc(100% + var(--corner-radius) * -0.6231), calc(100% + var(--corner-radius) * -0.0278) calc(100% + var(--corner-radius) * -0.5671), calc(100% + var(--corner-radius) * -0.0406) calc(100% + var(--corner-radius) * -0.5111), calc(100% + var(--corner-radius) * -0.0570) calc(100% + var(--corner-radius) * -0.4555), calc(100% + var(--corner-radius) * -0.0775) calc(100% + var(--corner-radius) * -0.4009), calc(100% + var(--corner-radius) * -0.1026) calc(100% + var(--corner-radius) * -0.3480), calc(100% + var(--corner-radius) * -0.1324) calc(100% + var(--corner-radius) * -0.2974), calc(100% + var(--corner-radius) * -0.1670) calc(100% + var(--corner-radius) * -0.2499), calc(100% + var(--corner-radius) * -0.2063) calc(100% + var(--corner-radius) * -0.2063), calc(100% + var(--corner-radius) * -0.2499) calc(100% + var(--corner-radius) * -0.1670), calc(100% + var(--corner-radius) * -0.2974) calc(100% + var(--corner-radius) * -0.1324), calc(100% + var(--corner-radius) * -0.3480) calc(100% + var(--corner-radius) * -0.1026), calc(100% + var(--corner-radius) * -0.4009) calc(100% + var(--corner-radius) * -0.0775), calc(100% + var(--corner-radius) * -0.4555) calc(100% + var(--corner-radius) * -0.0570), calc(100% + var(--corner-radius) * -0.5111) calc(100% + var(--corner-radius) * -0.0406), calc(100% + var(--corner-radius) * -0.5671) calc(100% + var(--corner-radius) * -0.0278), calc(100% + var(--corner-radius) * -0.6231) calc(100% + var(--corner-radius) * -0.0182), calc(100% + var(--corner-radius) * -0.6787) calc(100% + var(--corner-radius) * -0.0112), calc(100% + var(--corner-radius) * -0.7337) calc(100% + var(--corner-radius) * -0.0063), calc(100% + var(--corner-radius) * -0.7881) calc(100% + var(--corner-radius) * -0.0032), calc(100% + var(--corner-radius) * -0.8418) calc(100% + var(--corner-radius) * -0.0013), calc(100% + var(--corner-radius) * -0.8949) calc(100% + var(--corner-radius) * -0.0004), calc(100% + var(--corner-radius) * -0.9476) calc(100% + var(--corner-radius) * -0.0000), calc(var(--corner-radius) * 0.9476) calc(100% + var(--corner-radius) * -0.0000), calc(var(--corner-radius) * 0.8949) calc(100% + var(--corner-radius) * -0.0004), calc(var(--corner-radius) * 0.8418) calc(100% + var(--corner-radius) * -0.0013), calc(var(--corner-radius) * 0.7881) calc(100% + var(--corner-radius) * -0.0032), calc(var(--corner-radius) * 0.7337) calc(100% + var(--corner-radius) * -0.0063), calc(var(--corner-radius) * 0.6787) calc(100% + var(--corner-radius) * -0.0112), calc(var(--corner-radius) * 0.6231) calc(100% + var(--corner-radius) * -0.0182), calc(var(--corner-radius) * 0.5671) calc(100% + var(--corner-radius) * -0.0278), calc(var(--corner-radius) * 0.5111) calc(100% + var(--corner-radius) * -0.0406), calc(var(--corner-radius) * 0.4555) calc(100% + var(--corner-radius) * -0.0570), calc(var(--corner-radius) * 0.4009) calc(100% + var(--corner-radius) * -0.0775), calc(var(--corner-radius) * 0.3480) calc(100% + var(--corner-radius) * -0.1026), calc(var(--corner-radius) * 0.2974) calc(100% + var(--corner-radius) * -0.1324), calc(var(--corner-radius) * 0.2499) calc(100% + var(--corner-radius) * -0.1670), calc(var(--corner-radius) * 0.2063) calc(100% + var(--corner-radius) * -0.2063), calc(var(--corner-radius) * 0.1670) calc(100% + var(--corner-radius) * -0.2499), calc(var(--corner-radius) * 0.1324) calc(100% + var(--corner-radius) * -0.2974), calc(var(--corner-radius) * 0.1026) calc(100% + var(--corner-radius) * -0.3480), calc(var(--corner-radius) * 0.0775) calc(100% + var(--corner-radius) * -0.4009), calc(var(--corner-radius) * 0.0570) calc(100% + var(--corner-radius) * -0.4555), calc(var(--corner-radius) * 0.0406) calc(100% + var(--corner-radius) * -0.5111), calc(var(--corner-radius) * 0.0278) calc(100% + var(--corner-radius) * -0.5671), calc(var(--corner-radius) * 0.0182) calc(100% + var(--corner-radius) * -0.6231), calc(var(--corner-radius) * 0.0112) calc(100% + var(--corner-radius) * -0.6787), calc(var(--corner-radius) * 0.0063) calc(100% + var(--corner-radius) * -0.7337), calc(var(--corner-radius) * 0.0032) calc(100% + var(--corner-radius) * -0.7881), calc(var(--corner-radius) * 0.0013) calc(100% + var(--corner-radius) * -0.8418), calc(var(--corner-radius) * 0.0004) calc(100% + var(--corner-radius) * -0.8949), calc(var(--corner-radius) * 0.0000) calc(100% + var(--corner-radius) * -0.9476), calc(var(--corner-radius) * 0.0000) calc(var(--corner-radius) * 0.9476), calc(var(--corner-radius) * 0.0004) calc(var(--corner-radius) * 0.8949), calc(var(--corner-radius) * 0.0013) calc(var(--corner-radius) * 0.8418), calc(var(--corner-radius) * 0.0032) calc(var(--corner-radius) * 0.7881), calc(var(--corner-radius) * 0.0063) calc(var(--corner-radius) * 0.7337), calc(var(--corner-radius) * 0.0112) calc(var(--corner-radius) * 0.6787), calc(var(--corner-radius) * 0.0182) calc(var(--corner-radius) * 0.6231), calc(var(--corner-radius) * 0.0278) calc(var(--corner-radius) * 0.5671), calc(var(--corner-radius) * 0.0406) calc(var(--corner-radius) * 0.5111), calc(var(--corner-radius) * 0.0570) calc(var(--corner-radius) * 0.4555), calc(var(--corner-radius) * 0.0775) calc(var(--corner-radius) * 0.4009), calc(var(--corner-radius) * 0.1026) calc(var(--corner-radius) * 0.3480), calc(var(--corner-radius) * 0.1324) calc(var(--corner-radius) * 0.2974), calc(var(--corner-radius) * 0.1670) calc(var(--corner-radius) * 0.2499), calc(var(--corner-radius) * 0.2063) calc(var(--corner-radius) * 0.2063), calc(var(--corner-radius) * 0.2499) calc(var(--corner-radius) * 0.1670), calc(var(--corner-radius) * 0.2974) calc(var(--corner-radius) * 0.1324), calc(var(--corner-radius) * 0.3480) calc(var(--corner-radius) * 0.1026), calc(var(--corner-radius) * 0.4009) calc(var(--corner-radius) * 0.0775), calc(var(--corner-radius) * 0.4555) calc(var(--corner-radius) * 0.0570), calc(var(--corner-radius) * 0.5111) calc(var(--corner-radius) * 0.0406), calc(var(--corner-radius) * 0.5671) calc(var(--corner-radius) * 0.0278), calc(var(--corner-radius) * 0.6231) calc(var(--corner-radius) * 0.0182), calc(var(--corner-radius) * 0.6787) calc(var(--corner-radius) * 0.0112), calc(var(--corner-radius) * 0.7337) calc(var(--corner-radius) * 0.0063), calc(var(--corner-radius) * 0.7881) calc(var(--corner-radius) * 0.0032), calc(var(--corner-radius) * 0.8418) calc(var(--corner-radius) * 0.0013), calc(var(--corner-radius) * 0.8949) calc(var(--corner-radius) * 0.0004), calc(var(--corner-radius) * 0.9476) calc(var(--corner-radius) * 0.0000));
+}
+
+.login-button {
+    margin-top: 2rem;
+    background: #ff492d;
+    width: 100%;
+    height: 3rem;
+    color: #ffffff;
+    border: none;
+    font-family: var(--text-font);
+    font-size: 1rem;
+    transition: 0.4s;
+    --corner-radius: 1.5rem;
+}
+
+.login-button:hover {
+    background: #ddd;
+    color: #ff492d;
+}
+
+.left_content_small {
+    position: relative;
+    display: none;
+    width: 10rem;
+    height: 100%;
+    margin-left: 3rem;
+    margin-right: 2rem;
+}
+
+.left_content_small img.icon {
+    width: 4rem;
+}
+
+.left_content_small a {
+    font-size: 1.5rem;
+}
+
+.left_content_small a span {
+    font-size: 2rem;
+    margin-right: .5rem;
+}
+
+.left_content_small button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-size: 1.5rem;
+    font-family: var(--text-font);
+    color: var(--color);
+    text-align: left;
+}
+
+header {
+    display: none;
+}
+
+#menu-btn {
+    display: none;
+}
+
+#close-btn {
+    display: none;
+    width: 2.5rem;
+}
+
+.left_content_small button span {
+    font-size: 2rem;
+    margin-right: .5rem;
+}
+
+.left_content_small .title {
+    position: absolute;
+    display: flex;
+    align-items: baseline;
+    transform: translate(-50%, 0);
+    top: 7vh;
+    left: 50%;
+    font-size: 3vh;
+}
+
+.left_content_small .title .ya {
+    margin: 0;
+    font-family: var(--text-font);
+    font-size: 8vh;
+    line-height: 1;
+}
+
+input {
+    border: none;
+    outline: none;
+    font-weight: 500;
+}
+
+.form-input {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #8d8d8d44;
+    padding: 1rem;
+    --corner-radius: 2rem;
+    /* overflow-y: hidden; */
+    display: flex;
+    gap: 1rem;
+    color: #fff;
+    font-family: var(--text-font);
+    font-size: 1.2rem;
+    padding-left: 1.5rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-footer .buttons span.comment-count,
+.post-footer .buttons span.like-count,
+.post-footer .buttons span.quote-count {
+    font-family: var(--text-font);
+    font-weight: 700;
+}
+
+/* ★ 引用モーダル */
+#quoteModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background: #222c3866;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+    display: none;
+    visibility: hidden;
+
+    /* 初期透明度と縮小状態 */
+    opacity: 0;
+    transform: scale(0.95);
+
+    /* モーダルが閉じている状態のポインターイベントを無効化 */
+    pointer-events: none;
+}
+
+#quoteModal.is-visible {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+    /* 表示状態 */
+    pointer-events: auto;
+    /* クリック有効 */
+    display: flex;
+    /* Flexboxで表示する（CSS側で制御） */
+}
+
+#quoteModal .modal-content {
+    box-sizing: border-box;
+    width: 90%;
+    max-width: 600px;
+    padding: 1.2rem;
+    --corner-radius: 3.5rem;
+    /* overflow-y: hidden; */
+    background: #233447aa;
+    backdrop-filter: blur(10px);
+}
+
+#quoteModal textarea {
+    width: 100%;
+    height: 110px;
+    background: #00000000;
+    border: none;
+    outline: none;
+    padding: .6rem;
+    border-radius: .5rem;
+    color: #fff;
+    margin-top: .6rem;
+}
+
+.quoted-box {
+    display: flex;
+    gap: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.2rem;
+    --corner-radius: 3.5rem;
+    /* overflow-y: hidden; */
+    display: flex;
+    gap: 1rem;
+    background: #34475d88;
+}
+
+.quoted-user {
+    display: flex;
+    align-items: center;
+    font-size: .9rem;
+    color: #bbb;
+    margin-bottom: .3rem;
+}
+
+.quoted-user img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    margin-right: .4rem;
+}
+
+button#closeModal {
+    background-color: #ff492d;
+    color: #fff;
+}
+
+button#closeModal:hover {
+    background: #fbebea;
+    color: #ef2e10;
+}
+
+#modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #2c2025aa;
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    /* モーダル本体より1つ下 */
+}
+
+body.dark-mode #modal-overlay {
+    background: #1f181caa;
+    backdrop-filter: blur(10px);
+}
+
+#modal {
+    display: none;
+    position: fixed;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 50vw;
+    max-width: 700px;
+    padding: 2rem;
+    bottom: 2.5vh;
+    left: 50vw;
+    transform: translateX(-50%);
+    background: linear-gradient(60deg, #fbbac3aa, #fdb1ceaa, #ffafd8aa);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px var(--theme-shadow-color);
+    border: var(--theme-color2) solid .2rem;
+    z-index: 1000;
+    /* 上の部分 */
+    corner-shape: superellipse(1.3);
+    border-radius: 3rem;
+    text-align: center;
+}
+
+body.dark-mode #modal {
+    background: linear-gradient(60deg, #70404bbb, #502731bb, #7e3d4dbb);
+}
+
+.open_modal {
+    animation: open_modal .5s ease;
+    /* ここの秒数はbase.jsの時間と同期すること */
+}
+
+@keyframes open_modal {
+    from {
+        opacity: 0;
+        filter: blur(3px);
+        transform: translateX(-50%) translateY(40%);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateX(-50%) translateY(0%);
+        /* translateX(-50%)がないと中央に表示されない */
+        scale: 1;
+    }
+}
+
+.close_modal {
+    animation: close_modal 0.4s ease;
+    /* ここも秒数はbase.jsの時間と同期すること */
+    animation-fill-mode: forwards;
+}
+
+.close_modal {
+    animation: close_modal 0.8s ease;
+    /* ここも秒数はbase.jsの時間と同期すること */
+    animation-fill-mode: forwards;
+}
+
+@keyframes close_modal {
+    from {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateX(-50%) translateY(0%);
+    }
+
+    to {
+        filter: blur(3px);
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+    }
+}
+
+.qr_contents {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2rem;
+    padding-top: 1rem;
+}
+
+img#qrcode-img {
+    border: #693954 solid .3rem;
+    padding: .4rem;
+    width: 45%;
+    aspect-ratio: 1 / 1;
+    corner-shape: superellipse(1.2);
+    border-radius: 1.6rem;
+    margin: 1rem;
+}
+
+body.dark-mode img#qrcode-img {
+    border: #cdaac3 solid .3rem;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+}
+
+.left_nav {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80vh;
+    margin-top: 15vh;
+}
+
+.login_status {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    height: max-content;
+    background-color: #ebc2ce88;
+    padding: 2rem;
+    corner-shape: superellipse(1.2);
+    /* corner-shape: superellipse(1.5); */
+    border-radius: 4rem;
+    /* border-radius: 5rem; */
+    filter: brightness(1.05);
+    box-shadow: inset 0 0 15px 10px #fadee488, #d5b0be20 1px 1px 8px 5px;
+}
+
+body.dark-mode .login_status {
+    background-color: #53444f44;
+    box-shadow: inset 0 0 15px 10px #84737f25, #41353e30 1px 1px 15px 5px;
+}
+
+.status {
+    display: flex;
+    gap: 1rem;
+}
+
+.status img.icon {
+    box-sizing: border-box;
+    width: 5.3rem;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 2.65rem;
+}
+
+.user {
+    width: calc(100% - 7rem);
+    overflow-x: hidden;
+}
+
+.user .name {
+    box-sizing: border-box;
+    display: flex;
+    height: 5rem;
+    overflow-x: hidden;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    font-size: 1.2rem;
+    font-family: var(--text-font);
+}
+
+.name {
+    text-shadow: #7d445d40 1px 2px 4px;
+}
+
+body.dark-mode .name {
+    text-shadow: #160f1450 2px 2px 6px;
+}
+
+label {
+    text-shadow: #7d445d40 1px 2px 4px;
+}
+
+body.dark-mode label {
+    text-shadow: #160f1480 2px 2px 6px;
+}
+
+.user .name label {
+    width: 100%;
+    font-size: 1.5rem;
+    font-family: var(--text-font);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user .name label span {
+    font-size: 1.5rem;
+}
+
+.logout-form {
+    margin-top: 6px;
+}
+
+.logout-button {
+    background: #f52d5f;
+    width: 100%;
+    height: 3rem;
+    border: none;
+    font-family: var(--text-font);
+    font-size: 1rem;
+    transition: 0.4s;
+    corner-shape: superellipse(1.2);
+    /* corner-shape: superellipse(1.6); */
+    border-radius: 1rem;
+    /* border-radius: 1.5rem; */
+    filter: brightness(1.05);
+    box-shadow: #7d445d30 1px 1px 5px 2px;
+}
+
+.logout-button,
+.logout-button span {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.logout-button span {
+    font-size: 1.1rem;
+    transition: 0.4s;
+    margin-right: .2rem;
+}
+
+body.dark-mode .logout-button {
+    background-color: #fc7dbd;
+    box-shadow: #02141f18 1px 1px 6px 5px;
+}
+
+body.dark-mode .logout-button,
+body.dark-mode .logout-button span {
+    color: var(--re-color);
+}
+
+.logout-button:hover {
+    background-color: #fbebea;
+}
+
+.logout-button:hover,
+.logout-button:hover span {
+    color: #ef104f;
+    text-shadow: #3f041a88 1px 1px 5px;
+}
+
+body.dark-mode .logout-button:hover {
+    background-color: #eaf4fb;
+}
+
+body.dark-mode .logout-button:hover,
+body.dark-mode .logout-button:hover span {
+    color: #b51d73;
+    text-shadow: #480a3055 2px 2px 4px;
+}
+
+.select a {
+    text-shadow: #7d445d40 1px 2px 4px;
+}
+
+body.dark-mode .select a {
+    text-shadow: #160f1480 2px 2px 6px;
+}
+
+.posts-wrapper {
+    position: relative;
+    box-sizing: border-box;
+    width: 60%;
+    max-width: 1200px;
+    height: 100vh;
+    margin-top: 0vh;
+}
+
+.posts-wrapper .pw_background {
+    position: absolute;
+    border-radius: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px 10px #f7ceda50;
+    z-index: 0;
+    pointer-events: none;
+}
+
+body.dark-mode .posts-wrapper .pw_background {
+    box-shadow: 0 0 10px 10px #5b405218;
+}
+
+.posts-wrapper .pw_content {
+    box-sizing: border-box;
+    background: #ffe6ed50;
+    padding: 2rem;
+    --corner-radius: 0;
+    overflow-y: scroll;
+    border-radius: 0;
+    box-shadow: inset 0 0 20px 10px #ffdce850;
+    width: 100%;
+    height: 100vh;
+    border-left: #fef2f6aa solid .15rem;
+    border-right: #fef2f6aa solid .15rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+body.dark-mode .posts-wrapper .pw_content {
+    box-sizing: border-box;
+    background: linear-gradient(80deg, #483542aa, #4a3945aa, #4e3b48aa);
+    box-shadow: inset 0 0 20px 10px #4e384738;
+    border-left: #795866aa solid .15rem;
+    border-right: #795866aa solid .15rem;
+}
+
+.posts-wrapper .pw_content::-webkit-scrollbar {
+    display: none;
+}
+
+.new-post {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.new-post .content {
+    background-color: #f4d9dd88;
+    box-shadow: inset 0 0 15px 10px #fae2e588;
+    padding: 1.2rem;
+    corner-shape: superellipse(1.2);
+    /* corner-shape: superellipse(1.5); */
+    border-radius: 2.7rem;
+    /* border-radius: 3.5rem; */
+    filter: brightness(1.05);
+    display: flex;
+    gap: 1rem;
+}
+
+body.dark-mode .new-post .content {
+    background-color: #5f4252aa;
+    box-shadow: inset 0 0 15px 10px #b38c9d30, #392e3470 1px 1px 15px 5px;
+}
+
+.post-content {
+    box-sizing: border-box;
+    width: calc(100% - 4.3rem);
+    box-sizing: border-box;
+}
+
+.new-post form p {
+    margin: 0;
+}
+
+.new-post form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    padding-right: 2rem;
+    font-family: var(--text-font);
+    font-weight: 500;
+    background-color: #00000000;
+    border: none;
+    outline: none;
+    color: var(--color);
+    field-sizing: content;
+}
+
+form label {
+    display: none;
+}
+
+/* アイコンを押せるボタンとして見せる */
+.image-button {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.image-button span {
+    font-size: 28px;
+    color: var(--theme-color1);
+}
+
+.image-button:hover span {
+    color: #ffffff;
+}
+
+.post_button {
+    margin-left: auto;
+    width: max-content;
+}
+
+.unit {
+    padding: 1rem 0;
+    border-bottom: #ffe3ee88 solid .15rem;
+    position: relative;
+}
+
+body.dark-mode .unit {
+    border-bottom: #ca9bb240 solid .15rem;
+}
+
+.unit.reply {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.post {
+    display: flex;
+    gap: 1rem;
+}
+
+.post,
+.post-footer {
+    transform: scale(1);
+}
+
+.unit:has(a.large:hover) .post,
+.unit:has(a.large:hover) .post-footer {
+    transform: scale(1.04);
+    transition: transform 0.5s linear(0, 0.395 7.9%, 0.702 16.3%, 0.921 25.2%, 1 29.9%, 1.06 34.8%, 1.095 39%, 1.118 43.4%, 1.13 48.1%, 1.131 53.1%, 1.11 62.2%, 1.019 86%, 1.004 93%, 1);
+}
+
+.unit:not(:has(a.large:hover)) .post,
+.unit:not(:has(a.large:hover)) .post-footer {
+    transform: scale(1);
+    transition: transform 0.3s ease-out;
+}
+
+img.icon {
+    box-sizing: border-box;
+    width: 3.3rem;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    corner-shape: superellipse(1.2);
+    border-radius: 50%;
+    filter: brightness(1.05);
+    border: .18rem var(--accent-color1) solid;
+    box-shadow: #7d445d18 0 1px 6px 5px;
+    object-fit: cover;
+}
+
+body.dark-mode img.icon {
+    filter: brightness(1);
+    box-shadow: #30202b40 0 1px 8px 8px;
+}
+
+.comment .icon_background {
+    width: 2.8rem;
+    height: 2.8rem;
+    --corner-radius: 1.4rem;
+}
+
+.comment img.icon {
+    top: .15rem;
+    left: .15rem;
+    width: 2.5rem;
+    --corner-radius: 1.25rem;
+}
+
+.name span {
+    color: var(--label-color);
+}
+
+.post-content .name {
+    display: flex;
+    height: 2rem;
+    align-items: flex-end;
+    font-size: 1rem;
+    font-family: var(--text-font);
+    flex-wrap: wrap;
+}
+
+.comment .post-content .name {
+    display: flex;
+    height: 1.8rem;
+    align-items: flex-end;
+    font-size: 1rem;
+    font-family: var(--text-font);
+    flex-wrap: wrap;
+}
+
+.post-content .name label {
+    font-size: 1.1rem;
+    font-family: var(--text-font);
+    margin-right: .8rem;
+}
+
+.post-content .name label span {
+    font-size: 1.1rem;
+    margin-right: 0;
+}
+
+.comment .post-content .name label {
+    font-size: 1rem;
+    font-family: var(--text-font);
+    margin-right: .8rem;
+}
+
+.post-content .post-body {
+    position: relative;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    font-family: var(--text-font);
+    margin: .5rem 0;
+    margin-bottom: 0;
+    text-shadow: #7d445d40 1px 2px 4px;
+}
+
+body.dark-mode .post-content .post-body {
+    text-shadow: #160f1480 2px 2px 6px;
+}
+
+.post-content .post-body a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.post-footer {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 1rem;
+}
+
+.post-footer .buttons {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-around;
+}
+
+.post-footer .buttons span {
+    display: inline;
+    color: var(--accent-color2);
+}
+
+.post-footer span {
+    display: block;
+    width: 10rem;
+    text-align: right
+}
+
+button.footer-btn[aria-pressed="false"] span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 0, 'wght' 800;
+}
+
+button.comment-btn {
+    background-color: #00000000;
+    border: none;
+    color: #ffffff;
+}
+
+button.comment-btn span {
+    display: inline-block;
+    transition: color 0.5s ease;
+    font-size: 1.2rem;
+    margin-left: .5rem;
+    color: #fff;
+    transition: color 0.5s ease;
+}
+
+button.comment-btn span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 0, 'wght' 800;
+    font-size: 1.2rem;
+}
+
+button.comment-btn:hover span {
+    color: #1788f3;
+}
+
+button.like-btn[aria-pressed="false"] {
+    background-color: #00000000;
+    border: none;
+    color: var(--accent-color2);
+}
+
+button.like-btn span {
+    width: max-content;
+}
+
+button.like-btn[aria-pressed="false"] span {
+    color: var(--accent-color2);
+    font-size: 1.2rem;
+    margin-left: .5rem;
+}
+
+button.like-btn[aria-pressed="true"] {
+    background-color: #00000000;
+    border: none;
+}
+
+button.like-btn[aria-pressed="false"]:hover span {
+    color: #ff1b5c;
+}
+
+body.dark-mode button.like-btn[aria-pressed="false"]:hover span {
+    color: #fd53a8;
+}
+
+button.like-btn[aria-pressed="true"] span {
+    color: #ff1b5c !important;
+    font-size: 1.2rem;
+    margin-left: .5rem;
+}
+
+body.dark-mode button.like-btn[aria-pressed="true"] span {
+    color: #fd53a8 !important;
+}
+
+button.like-btn[aria-pressed="true"] span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 800;
+}
+
+button.like-btn[aria-pressed="false"] span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 0, 'wght' 800;
+}
+
+button.like-btn[aria-pressed="true"] span,
+button.like-btn[aria-pressed="false"] span {
+    display: inline-block;
+    /* transformを効かせる場合と同様 */
+    transition: color 0.5s ease;
+    /* 色の変化をスムーズに */
+    font-size: 1.2rem;
+    margin-left: .5rem;
+}
+
+button.quote-btn {
+    background-color: #00000000;
+    border: none;
+}
+
+button.quote-btn span {
+    display: inline-block;
+    transition: color 0.5s ease;
+    font-size: 1.2rem;
+    margin-left: .5rem;
+    color: #fff;
+}
+
+button.quote-btn span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 0, 'wght' 800;
+}
+
+button.quote-btn:hover span {
+    color: #2fda08;
+}
+
+.comment-form {
+    box-sizing: border-box;
+    width: auto;
+    display: flex;
+    background-color: #8d8d8d44;
+    padding: .5rem;
+    --corner-radius: 1.5rem;
+    clip-path: polygon(calc(100% + var(--corner-radius) * -0.9476) calc(var(--corner-radius) * 0.0007), calc(100% + var(--corner-radius) * -0.8952) calc(var(--corner-radius) * 0.0032), calc(100% + var(--corner-radius) * -0.8428) calc(var(--corner-radius) * 0.0078), calc(100% + var(--corner-radius) * -0.7906) calc(var(--corner-radius) * 0.0147), calc(100% + var(--corner-radius) * -0.7385) calc(var(--corner-radius) * 0.0241), calc(100% + var(--corner-radius) * -0.6868) calc(var(--corner-radius) * 0.0361), calc(100% + var(--corner-radius) * -0.6357) calc(var(--corner-radius) * 0.0509), calc(100% + var(--corner-radius) * -0.5852) calc(var(--corner-radius) * 0.0684), calc(100% + var(--corner-radius) * -0.5357) calc(var(--corner-radius) * 0.0887), calc(100% + var(--corner-radius) * -0.4873) calc(var(--corner-radius) * 0.1120), calc(100% + var(--corner-radius) * -0.4403) calc(var(--corner-radius) * 0.1381), calc(100% + var(--corner-radius) * -0.3949) calc(var(--corner-radius) * 0.1671), calc(100% + var(--corner-radius) * -0.3512) calc(var(--corner-radius) * 0.1988), calc(100% + var(--corner-radius) * -0.3096) calc(var(--corner-radius) * 0.2333), calc(100% + var(--corner-radius) * -0.2703) calc(var(--corner-radius) * 0.2703), calc(100% + var(--corner-radius) * -0.2333) calc(var(--corner-radius) * 0.3096), calc(100% + var(--corner-radius) * -0.1988) calc(var(--corner-radius) * 0.3512), calc(100% + var(--corner-radius) * -0.1671) calc(var(--corner-radius) * 0.3949), calc(100% + var(--corner-radius) * -0.1381) calc(var(--corner-radius) * 0.4403), calc(100% + var(--corner-radius) * -0.1120) calc(var(--corner-radius) * 0.4873), calc(100% + var(--corner-radius) * -0.0887) calc(var(--corner-radius) * 0.5357), calc(100% + var(--corner-radius) * -0.0684) calc(var(--corner-radius) * 0.5852), calc(100% + var(--corner-radius) * -0.0509) calc(var(--corner-radius) * 0.6357), calc(100% + var(--corner-radius) * -0.0361) calc(var(--corner-radius) * 0.6868), calc(100% + var(--corner-radius) * -0.0241) calc(var(--corner-radius) * 0.7385), calc(100% + var(--corner-radius) * -0.0147) calc(var(--corner-radius) * 0.7906), calc(100% + var(--corner-radius) * -0.0078) calc(var(--corner-radius) * 0.8428), calc(100% + var(--corner-radius) * -0.0032) calc(var(--corner-radius) * 0.8952), calc(100% + var(--corner-radius) * -0.0007) calc(var(--corner-radius) * 0.9476), calc(100% + var(--corner-radius) * -0.0007) calc(100% + var(--corner-radius) * -0.9476), calc(100% + var(--corner-radius) * -0.0032) calc(100% + var(--corner-radius) * -0.8952), calc(100% + var(--corner-radius) * -0.0078) calc(100% + var(--corner-radius) * -0.8428), calc(100% + var(--corner-radius) * -0.0147) calc(100% + var(--corner-radius) * -0.7906), calc(100% + var(--corner-radius) * -0.0241) calc(100% + var(--corner-radius) * -0.7385), calc(100% + var(--corner-radius) * -0.0361) calc(100% + var(--corner-radius) * -0.6868), calc(100% + var(--corner-radius) * -0.0509) calc(100% + var(--corner-radius) * -0.6357), calc(100% + var(--corner-radius) * -0.0684) calc(100% + var(--corner-radius) * -0.5852), calc(100% + var(--corner-radius) * -0.0887) calc(100% + var(--corner-radius) * -0.5357), calc(100% + var(--corner-radius) * -0.1120) calc(100% + var(--corner-radius) * -0.4873), calc(100% + var(--corner-radius) * -0.1381) calc(100% + var(--corner-radius) * -0.4403), calc(100% + var(--corner-radius) * -0.1671) calc(100% + var(--corner-radius) * -0.3949), calc(100% + var(--corner-radius) * -0.1988) calc(100% + var(--corner-radius) * -0.3512), calc(100% + var(--corner-radius) * -0.2333) calc(100% + var(--corner-radius) * -0.3096), calc(100% + var(--corner-radius) * -0.2703) calc(100% + var(--corner-radius) * -0.2703), calc(100% + var(--corner-radius) * -0.3096) calc(100% + var(--corner-radius) * -0.2333), calc(100% + var(--corner-radius) * -0.3512) calc(100% + var(--corner-radius) * -0.1988), calc(100% + var(--corner-radius) * -0.3949) calc(100% + var(--corner-radius) * -0.1671), calc(100% + var(--corner-radius) * -0.4403) calc(100% + var(--corner-radius) * -0.1381), calc(100% + var(--corner-radius) * -0.4873) calc(100% + var(--corner-radius) * -0.1120), calc(100% + var(--corner-radius) * -0.5357) calc(100% + var(--corner-radius) * -0.0887), calc(100% + var(--corner-radius) * -0.5852) calc(100% + var(--corner-radius) * -0.0684), calc(100% + var(--corner-radius) * -0.6357) calc(100% + var(--corner-radius) * -0.0509), calc(100% + var(--corner-radius) * -0.6868) calc(100% + var(--corner-radius) * -0.0361), calc(100% + var(--corner-radius) * -0.7385) calc(100% + var(--corner-radius) * -0.0241), calc(100% + var(--corner-radius) * -0.7906) calc(100% + var(--corner-radius) * -0.0147), calc(100% + var(--corner-radius) * -0.8428) calc(100% + var(--corner-radius) * -0.0078), calc(100% + var(--corner-radius) * -0.8952) calc(100% + var(--corner-radius) * -0.0032), calc(100% + var(--corner-radius) * -0.9476) calc(100% + var(--corner-radius) * -0.0007), calc(var(--corner-radius) * 0.9476) calc(100% + var(--corner-radius) * -0.0007), calc(var(--corner-radius) * 0.8952) calc(100% + var(--corner-radius) * -0.0032), calc(var(--corner-radius) * 0.8428) calc(100% + var(--corner-radius) * -0.0078), calc(var(--corner-radius) * 0.7906) calc(100% + var(--corner-radius) * -0.0147), calc(var(--corner-radius) * 0.7385) calc(100% + var(--corner-radius) * -0.0241), calc(var(--corner-radius) * 0.6868) calc(100% + var(--corner-radius) * -0.0361), calc(var(--corner-radius) * 0.6357) calc(100% + var(--corner-radius) * -0.0509), calc(var(--corner-radius) * 0.5852) calc(100% + var(--corner-radius) * -0.0684), calc(var(--corner-radius) * 0.5357) calc(100% + var(--corner-radius) * -0.0887), calc(var(--corner-radius) * 0.4873) calc(100% + var(--corner-radius) * -0.1120), calc(var(--corner-radius) * 0.4403) calc(100% + var(--corner-radius) * -0.1381), calc(var(--corner-radius) * 0.3949) calc(100% + var(--corner-radius) * -0.1671), calc(var(--corner-radius) * 0.3512) calc(100% + var(--corner-radius) * -0.1988), calc(var(--corner-radius) * 0.3096) calc(100% + var(--corner-radius) * -0.2333), calc(var(--corner-radius) * 0.2703) calc(100% + var(--corner-radius) * -0.2703), calc(var(--corner-radius) * 0.2333) calc(100% + var(--corner-radius) * -0.3096), calc(var(--corner-radius) * 0.1988) calc(100% + var(--corner-radius) * -0.3512), calc(var(--corner-radius) * 0.1671) calc(100% + var(--corner-radius) * -0.3949), calc(var(--corner-radius) * 0.1381) calc(100% + var(--corner-radius) * -0.4403), calc(var(--corner-radius) * 0.1120) calc(100% + var(--corner-radius) * -0.4873), calc(var(--corner-radius) * 0.0887) calc(100% + var(--corner-radius) * -0.5357), calc(var(--corner-radius) * 0.0684) calc(100% + var(--corner-radius) * -0.5852), calc(var(--corner-radius) * 0.0509) calc(100% + var(--corner-radius) * -0.6357), calc(var(--corner-radius) * 0.0361) calc(100% + var(--corner-radius) * -0.6868), calc(var(--corner-radius) * 0.0241) calc(100% + var(--corner-radius) * -0.7385), calc(var(--corner-radius) * 0.0147) calc(100% + var(--corner-radius) * -0.7906), calc(var(--corner-radius) * 0.0078) calc(100% + var(--corner-radius) * -0.8428), calc(var(--corner-radius) * 0.0032) calc(100% + var(--corner-radius) * -0.8952), calc(var(--corner-radius) * 0.0007) calc(100% + var(--corner-radius) * -0.9476), calc(var(--corner-radius) * 0.0007) calc(var(--corner-radius) * 0.9476), calc(var(--corner-radius) * 0.0032) calc(var(--corner-radius) * 0.8952), calc(var(--corner-radius) * 0.0078) calc(var(--corner-radius) * 0.8428), calc(var(--corner-radius) * 0.0147) calc(var(--corner-radius) * 0.7906), calc(var(--corner-radius) * 0.0241) calc(var(--corner-radius) * 0.7385), calc(var(--corner-radius) * 0.0361) calc(var(--corner-radius) * 0.6868), calc(var(--corner-radius) * 0.0509) calc(var(--corner-radius) * 0.6357), calc(var(--corner-radius) * 0.0684) calc(var(--corner-radius) * 0.5852), calc(var(--corner-radius) * 0.0887) calc(var(--corner-radius) * 0.5357), calc(var(--corner-radius) * 0.1120) calc(var(--corner-radius) * 0.4873), calc(var(--corner-radius) * 0.1381) calc(var(--corner-radius) * 0.4403), calc(var(--corner-radius) * 0.1671) calc(var(--corner-radius) * 0.3949), calc(var(--corner-radius) * 0.1988) calc(var(--corner-radius) * 0.3512), calc(var(--corner-radius) * 0.2333) calc(var(--corner-radius) * 0.3096), calc(var(--corner-radius) * 0.2703) calc(var(--corner-radius) * 0.2703), calc(var(--corner-radius) * 0.3096) calc(var(--corner-radius) * 0.2333), calc(var(--corner-radius) * 0.3512) calc(var(--corner-radius) * 0.1988), calc(var(--corner-radius) * 0.3949) calc(var(--corner-radius) * 0.1671), calc(var(--corner-radius) * 0.4403) calc(var(--corner-radius) * 0.1381), calc(var(--corner-radius) * 0.4873) calc(var(--corner-radius) * 0.1120), calc(var(--corner-radius) * 0.5357) calc(var(--corner-radius) * 0.0887), calc(var(--corner-radius) * 0.5852) calc(var(--corner-radius) * 0.0684), calc(var(--corner-radius) * 0.6357) calc(var(--corner-radius) * 0.0509), calc(var(--corner-radius) * 0.6868) calc(var(--corner-radius) * 0.0361), calc(var(--corner-radius) * 0.7385) calc(var(--corner-radius) * 0.0241), calc(var(--corner-radius) * 0.7906) calc(var(--corner-radius) * 0.0147), calc(var(--corner-radius) * 0.8428) calc(var(--corner-radius) * 0.0078), calc(var(--corner-radius) * 0.8952) calc(var(--corner-radius) * 0.0032), calc(var(--corner-radius) * 0.9476) calc(var(--corner-radius) * 0.0007));
+    height: 3rem;
+}
+
+.comment-form textarea {
+    /* overflow: hidden; */
+    /* スクロールバー非表示 */
+    resize: none;
+    /* ユーザーによるリサイズ禁止 */
+    width: 15rem;
+    height: auto;
+    padding-left: .5rem;
+    line-height: 1.2em;
+}
+
+.comment-form button {
+    box-sizing: border-box;
+    width: 4rem;
+    padding: .3rem 1rem;
+    font-family: var(--text-font);
+    font-size: .9rem;
+    color: #fff;
+    background-color: #1c7aff;
+    border: none;
+    --corner-radius: 1rem;
+    clip-path: polygon(calc(100% + var(--corner-radius) * -0.9476) calc(var(--corner-radius) * 0.0007), calc(100% + var(--corner-radius) * -0.8952) calc(var(--corner-radius) * 0.0032), calc(100% + var(--corner-radius) * -0.8428) calc(var(--corner-radius) * 0.0078), calc(100% + var(--corner-radius) * -0.7906) calc(var(--corner-radius) * 0.0147), calc(100% + var(--corner-radius) * -0.7385) calc(var(--corner-radius) * 0.0241), calc(100% + var(--corner-radius) * -0.6868) calc(var(--corner-radius) * 0.0361), calc(100% + var(--corner-radius) * -0.6357) calc(var(--corner-radius) * 0.0509), calc(100% + var(--corner-radius) * -0.5852) calc(var(--corner-radius) * 0.0684), calc(100% + var(--corner-radius) * -0.5357) calc(var(--corner-radius) * 0.0887), calc(100% + var(--corner-radius) * -0.4873) calc(var(--corner-radius) * 0.1120), calc(100% + var(--corner-radius) * -0.4403) calc(var(--corner-radius) * 0.1381), calc(100% + var(--corner-radius) * -0.3949) calc(var(--corner-radius) * 0.1671), calc(100% + var(--corner-radius) * -0.3512) calc(var(--corner-radius) * 0.1988), calc(100% + var(--corner-radius) * -0.3096) calc(var(--corner-radius) * 0.2333), calc(100% + var(--corner-radius) * -0.2703) calc(var(--corner-radius) * 0.2703), calc(100% + var(--corner-radius) * -0.2333) calc(var(--corner-radius) * 0.3096), calc(100% + var(--corner-radius) * -0.1988) calc(var(--corner-radius) * 0.3512), calc(100% + var(--corner-radius) * -0.1671) calc(var(--corner-radius) * 0.3949), calc(100% + var(--corner-radius) * -0.1381) calc(var(--corner-radius) * 0.4403), calc(100% + var(--corner-radius) * -0.1120) calc(var(--corner-radius) * 0.4873), calc(100% + var(--corner-radius) * -0.0887) calc(var(--corner-radius) * 0.5357), calc(100% + var(--corner-radius) * -0.0684) calc(var(--corner-radius) * 0.5852), calc(100% + var(--corner-radius) * -0.0509) calc(var(--corner-radius) * 0.6357), calc(100% + var(--corner-radius) * -0.0361) calc(var(--corner-radius) * 0.6868), calc(100% + var(--corner-radius) * -0.0241) calc(var(--corner-radius) * 0.7385), calc(100% + var(--corner-radius) * -0.0147) calc(var(--corner-radius) * 0.7906), calc(100% + var(--corner-radius) * -0.0078) calc(var(--corner-radius) * 0.8428), calc(100% + var(--corner-radius) * -0.0032) calc(var(--corner-radius) * 0.8952), calc(100% + var(--corner-radius) * -0.0007) calc(var(--corner-radius) * 0.9476), calc(100% + var(--corner-radius) * -0.0007) calc(100% + var(--corner-radius) * -0.9476), calc(100% + var(--corner-radius) * -0.0032) calc(100% + var(--corner-radius) * -0.8952), calc(100% + var(--corner-radius) * -0.0078) calc(100% + var(--corner-radius) * -0.8428), calc(100% + var(--corner-radius) * -0.0147) calc(100% + var(--corner-radius) * -0.7906), calc(100% + var(--corner-radius) * -0.0241) calc(100% + var(--corner-radius) * -0.7385), calc(100% + var(--corner-radius) * -0.0361) calc(100% + var(--corner-radius) * -0.6868), calc(100% + var(--corner-radius) * -0.0509) calc(100% + var(--corner-radius) * -0.6357), calc(100% + var(--corner-radius) * -0.0684) calc(100% + var(--corner-radius) * -0.5852), calc(100% + var(--corner-radius) * -0.0887) calc(100% + var(--corner-radius) * -0.5357), calc(100% + var(--corner-radius) * -0.1120) calc(100% + var(--corner-radius) * -0.4873), calc(100% + var(--corner-radius) * -0.1381) calc(100% + var(--corner-radius) * -0.4403), calc(100% + var(--corner-radius) * -0.1671) calc(100% + var(--corner-radius) * -0.3949), calc(100% + var(--corner-radius) * -0.1988) calc(100% + var(--corner-radius) * -0.3512), calc(100% + var(--corner-radius) * -0.2333) calc(100% + var(--corner-radius) * -0.3096), calc(100% + var(--corner-radius) * -0.2703) calc(100% + var(--corner-radius) * -0.2703), calc(100% + var(--corner-radius) * -0.3096) calc(100% + var(--corner-radius) * -0.2333), calc(100% + var(--corner-radius) * -0.3512) calc(100% + var(--corner-radius) * -0.1988), calc(100% + var(--corner-radius) * -0.3949) calc(100% + var(--corner-radius) * -0.1671), calc(100% + var(--corner-radius) * -0.4403) calc(100% + var(--corner-radius) * -0.1381), calc(100% + var(--corner-radius) * -0.4873) calc(100% + var(--corner-radius) * -0.1120), calc(100% + var(--corner-radius) * -0.5357) calc(100% + var(--corner-radius) * -0.0887), calc(100% + var(--corner-radius) * -0.5852) calc(100% + var(--corner-radius) * -0.0684), calc(100% + var(--corner-radius) * -0.6357) calc(100% + var(--corner-radius) * -0.0509), calc(100% + var(--corner-radius) * -0.6868) calc(100% + var(--corner-radius) * -0.0361), calc(100% + var(--corner-radius) * -0.7385) calc(100% + var(--corner-radius) * -0.0241), calc(100% + var(--corner-radius) * -0.7906) calc(100% + var(--corner-radius) * -0.0147), calc(100% + var(--corner-radius) * -0.8428) calc(100% + var(--corner-radius) * -0.0078), calc(100% + var(--corner-radius) * -0.8952) calc(100% + var(--corner-radius) * -0.0032), calc(100% + var(--corner-radius) * -0.9476) calc(100% + var(--corner-radius) * -0.0007), calc(var(--corner-radius) * 0.9476) calc(100% + var(--corner-radius) * -0.0007), calc(var(--corner-radius) * 0.8952) calc(100% + var(--corner-radius) * -0.0032), calc(var(--corner-radius) * 0.8428) calc(100% + var(--corner-radius) * -0.0078), calc(var(--corner-radius) * 0.7906) calc(100% + var(--corner-radius) * -0.0147), calc(var(--corner-radius) * 0.7385) calc(100% + var(--corner-radius) * -0.0241), calc(var(--corner-radius) * 0.6868) calc(100% + var(--corner-radius) * -0.0361), calc(var(--corner-radius) * 0.6357) calc(100% + var(--corner-radius) * -0.0509), calc(var(--corner-radius) * 0.5852) calc(100% + var(--corner-radius) * -0.0684), calc(var(--corner-radius) * 0.5357) calc(100% + var(--corner-radius) * -0.0887), calc(var(--corner-radius) * 0.4873) calc(100% + var(--corner-radius) * -0.1120), calc(var(--corner-radius) * 0.4403) calc(100% + var(--corner-radius) * -0.1381), calc(var(--corner-radius) * 0.3949) calc(100% + var(--corner-radius) * -0.1671), calc(var(--corner-radius) * 0.3512) calc(100% + var(--corner-radius) * -0.1988), calc(var(--corner-radius) * 0.3096) calc(100% + var(--corner-radius) * -0.2333), calc(var(--corner-radius) * 0.2703) calc(100% + var(--corner-radius) * -0.2703), calc(var(--corner-radius) * 0.2333) calc(100% + var(--corner-radius) * -0.3096), calc(var(--corner-radius) * 0.1988) calc(100% + var(--corner-radius) * -0.3512), calc(var(--corner-radius) * 0.1671) calc(100% + var(--corner-radius) * -0.3949), calc(var(--corner-radius) * 0.1381) calc(100% + var(--corner-radius) * -0.4403), calc(var(--corner-radius) * 0.1120) calc(100% + var(--corner-radius) * -0.4873), calc(var(--corner-radius) * 0.0887) calc(100% + var(--corner-radius) * -0.5357), calc(var(--corner-radius) * 0.0684) calc(100% + var(--corner-radius) * -0.5852), calc(var(--corner-radius) * 0.0509) calc(100% + var(--corner-radius) * -0.6357), calc(var(--corner-radius) * 0.0361) calc(100% + var(--corner-radius) * -0.6868), calc(var(--corner-radius) * 0.0241) calc(100% + var(--corner-radius) * -0.7385), calc(var(--corner-radius) * 0.0147) calc(100% + var(--corner-radius) * -0.7906), calc(var(--corner-radius) * 0.0078) calc(100% + var(--corner-radius) * -0.8428), calc(var(--corner-radius) * 0.0032) calc(100% + var(--corner-radius) * -0.8952), calc(var(--corner-radius) * 0.0007) calc(100% + var(--corner-radius) * -0.9476), calc(var(--corner-radius) * 0.0007) calc(var(--corner-radius) * 0.9476), calc(var(--corner-radius) * 0.0032) calc(var(--corner-radius) * 0.8952), calc(var(--corner-radius) * 0.0078) calc(var(--corner-radius) * 0.8428), calc(var(--corner-radius) * 0.0147) calc(var(--corner-radius) * 0.7906), calc(var(--corner-radius) * 0.0241) calc(var(--corner-radius) * 0.7385), calc(var(--corner-radius) * 0.0361) calc(var(--corner-radius) * 0.6868), calc(var(--corner-radius) * 0.0509) calc(var(--corner-radius) * 0.6357), calc(var(--corner-radius) * 0.0684) calc(var(--corner-radius) * 0.5852), calc(var(--corner-radius) * 0.0887) calc(var(--corner-radius) * 0.5357), calc(var(--corner-radius) * 0.1120) calc(var(--corner-radius) * 0.4873), calc(var(--corner-radius) * 0.1381) calc(var(--corner-radius) * 0.4403), calc(var(--corner-radius) * 0.1671) calc(var(--corner-radius) * 0.3949), calc(var(--corner-radius) * 0.1988) calc(var(--corner-radius) * 0.3512), calc(var(--corner-radius) * 0.2333) calc(var(--corner-radius) * 0.3096), calc(var(--corner-radius) * 0.2703) calc(var(--corner-radius) * 0.2703), calc(var(--corner-radius) * 0.3096) calc(var(--corner-radius) * 0.2333), calc(var(--corner-radius) * 0.3512) calc(var(--corner-radius) * 0.1988), calc(var(--corner-radius) * 0.3949) calc(var(--corner-radius) * 0.1671), calc(var(--corner-radius) * 0.4403) calc(var(--corner-radius) * 0.1381), calc(var(--corner-radius) * 0.4873) calc(var(--corner-radius) * 0.1120), calc(var(--corner-radius) * 0.5357) calc(var(--corner-radius) * 0.0887), calc(var(--corner-radius) * 0.5852) calc(var(--corner-radius) * 0.0684), calc(var(--corner-radius) * 0.6357) calc(var(--corner-radius) * 0.0509), calc(var(--corner-radius) * 0.6868) calc(var(--corner-radius) * 0.0361), calc(var(--corner-radius) * 0.7385) calc(var(--corner-radius) * 0.0241), calc(var(--corner-radius) * 0.7906) calc(var(--corner-radius) * 0.0147), calc(var(--corner-radius) * 0.8428) calc(var(--corner-radius) * 0.0078), calc(var(--corner-radius) * 0.8952) calc(var(--corner-radius) * 0.0032), calc(var(--corner-radius) * 0.9476) calc(var(--corner-radius) * 0.0007));
+}
+
+.comment {
+    margin: 1rem 2rem;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0;
+}
+
+p.comment-text {
+    font-size: 1.1rem;
+    margin: .5rem 0;
+}
+
+.quoted-post {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.2rem;
+    --corner-radius: 3.5rem;
+    /* overflow-y: hidden; */
+    display: flex;
+    gap: 1rem;
+    background-color: #f8d0d6;
+    box-shadow: inset 0 0 15px 10px #f5dee288;
+    border-radius: 2rem;
+}
+
+body.dark-mode .quoted-post {
+    background-color: #323d4f;
+    box-shadow: inset 0 0 20px 10px #54607530;
+}
+
+.quoted-unit .background {
+    position: absolute;
+    border-radius: 3rem;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px 10px #e7c0c488;
+    transition: transform 0.3s ease-in-out;
+    transform: scale(1);
+}
+
+body.dark-mode .quoted-unit .background {
+    box-shadow: 0 0 12px 10px #3e435844;
+}
+
+.quoted-unit .background,
+.quoted-post.content {
+    transform: scale(1);
+}
+
+.unit.quoted-unit:has(a:hover) .background,
+.unit.quoted-unit:has(a:hover) .quoted-post.content {
+    transform: scale(1.04);
+    transition: transform 0.5s linear(0, 0.242 4.1%, 0.453 8.2%, 0.637 12.4%, 0.722 14.6%, 0.799 16.8%, 0.869 19%, 0.934 21.3%, 0.993 23.6%, 1.044 25.9%, 1.088 28.2%, 1.128 30.6%, 1.163 33.1%, 1.191 35.6%, 1.21 37.7%, 1.225 39.8%, 1.236 41.9%, 1.244 44.1%, 1.249 46.4%, 1.25 48.7%, 1.248 51.1%, 1.241 53.7%, 1.225 58%, 1.198 62.8%, 1.167 67.5%, 1.079 79.7%, 1.055 83.3%, 1.037 86.5%, 1.02 90.1%, 1.009 93.5%, 1.002 96.8%, 1)
+}
+
+.unit.quoted-unit:not(:has(a:hover)) .background,
+.unit.quoted-unit:not(:has(a:hover)) .quoted-post.content {
+    transform: scale(1);
+    transition: transform 0.3s ease-out;
+}
+
+.quoted-unit {
+    border: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+body.dark-mode .quoted-unit {
+    border: none;
+}
+
+button.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-bottom: .2rem;
+}
+
+button.delete-btn span {
+    color: #ff5b42;
+    font-size: 1.5rem;
+    transition: color 0.5s ease;
+}
+
+body.dark-mode button.delete-btn span {
+    color: #f4558a;
+}
+
+
+button.delete-btn:hover span {
+    color: #ff2200;
+}
+
+body.dark-mode button.delete-btn:hover span {
+    color: #f3447f;
+}
+
+button.delete-btn span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 0, 'wght' 400;
+    transition: color 0.5s ease, font-variation-settings 0.2s ease-out;
+    cursor: pointer;
+}
+
+button.delete-btn:hover span.material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 900;
+}
+
+.quoted-post .post-body {
+    color: var(--label-color);
+}
+
+.quoted-post .none {
+    width: 100%;
+}
+
+.quoted-post .none p {
+    text-align: center;
+    font-size: 1rem;
+}
+
+a.post-link {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 1;
+}
+
+.quoted-unit a {
+    z-index: 20;
+}
+
+#post-image-wrapper {
+    display: none;
+    margin-top: 10px;
+    position: relative;
+    width: max-content;
+}
+
+.post-image {
+    box-sizing: border-box;
+    width: 100%;
+    height: max-content;
+    margin-top: 1rem;
+    padding-right: 3rem;
+}
+
+.post-image img {
+    width: 100%;
+    corner-shape: superellipse(1.3);
+    border-radius: 2rem;
+    padding: .2rem;
+    height: 100%;
+    max-height: 50vh;
+    object-fit: cover;
+    overflow: hidden;
+    border: var(--accent-color1) solid .2rem;
+}
+
+#preview-image {
+    box-sizing: border-box;
+    max-width: 10rem;
+    max-height: 10rem;
+    height: auto;
+    corner-shape: superellipse(1.3);
+    border-radius: 1.2rem;
+}
+
+#clear-image-btn {
+    box-sizing: border-box;
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: #ffffff solid .15rem;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+#clear-image-btn span {
+    text-align: center;
+    color: #ffffff;
+}
+
+.select {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 1.2rem;
+    border-bottom: #ffdbe4aa solid .15rem;
+}
+
+body.dark-mode .select {
+    border-bottom: #8a747f40 solid .15rem;
+}
+
+.select span {
+    font-size: 1.3rem;
+    line-height: 1.5rem;
+}
+
+.select a.active span {
+    color: var(--accent-color1);
+}
+
+.select span.material-symbols-rounded {
+    font-size: 1.2rem;
+}
+
+.select a span.small {
+    font-size: 90%;
+}
+
+@media screen and (max-width: 1300px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    html {
+        font-size: 12px;
+    }
+
+    main {
+        gap: 3%;
+    }
+
+    .posts-wrapper .pw_content {
+        box-sizing: border-box;
+        padding: 1.2rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 14px;
+    }
+
+    header {
+        display: block;
+    }
+
+    .left_content {
+        display: none;
+    }
+
+    .left_content_small {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 100px;
+        height: 100%;
+        width: var(--menu-width);
+        transform: translateX(-150%);
+        transition: transform 0.3s ease-out;
+        z-index: 50;
+    }
+
+    .left_content_small_btn {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        height: max-content;
+        background-color: #ebc2ce88;
+        padding: 2rem;
+        corner-shape: superellipse(1.2);
+        /* corner-shape: superellipse(1.5); */
+        border-radius: 4rem;
+        /* border-radius: 5rem; */
+        filter: brightness(1.05);
+        box-shadow: inset 0 0 15px 10px #fadee488, #d5b0be20 1px 1px 8px 5px;
+    }
+
+    #menu-btn,
+    #close-btn {
+        position: absolute;
+        display: flex;
+        z-index: 20;
+    }
+
+    #menu-btn {
+        left: 0;
+        border: none;
+        background-color: transparent;
+        color: var(--color);
+    }
+
+    #close-btn {
+        right: 0;
+    }
+
+    .left_content_small.open {
+        display: flex;
+        transform: translateX(-30%);
+    }
+
+    main {
+        justify-content: space-between;
+    }
+
+    .posts-wrapper {
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100vh;
+        margin-top: 0;
+        border-radius: 0;
+        --corner-radius: 0;
+    }
+
+    #overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-out;
+        z-index: 40;
+    }
+
+    #overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .swipe-hint {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        z-index: 30;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .left_content_small {
+        transform: translateX(-200%);
+        width: 70%;
+    }
+
+    button.basic {
+        padding: .4rem .7rem;
+        font-size: .75rem;
+        --corner-radius: 1rem;
+    }
+
+    .left_content {
+        display: none;
+    }
+
+    .posts-wrapper {
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100vh;
+        margin-top: 0;
+        border-radius: 0;
+        --corner-radius: 0;
+    }
+
+    .posts-wrapper .pw_background {
+        display: none;
+    }
+
+    .posts-wrapper .pw_content {
+        box-sizing: border-box;
+        padding: 1rem;
+        /* overflow-y: scroll; */
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        --corner-radius: 0;
+    }
+
+
+}
+
+span.roles {
+    color: #bd245c;
+    margin-left: .5rem;
+}
+
+body.dark-mode span.roles {
+    color: #f486d6;
+    margin-left: .5rem;
+}
+
+#websocket-indicator {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border-radius: 0.5rem;
+    padding: 0 0.5rem;
+    z-index: 100;
+    font-size: 90%;
+}
+
+.unavailable {
+    background-color: red;
+}

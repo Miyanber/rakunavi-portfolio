@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+h2.design_title {
+    width: max-content;
+    margin: 2rem auto;
+    margin-top: 5rem;
+    font-size: 2rem;
+}
+
+p.design_content {
+    font-size: 1.2rem;
+    line-height: 2rem;
+}
+
+section.design_basic {
+    width: 100vw;
+    max-width: none;
+    padding: 1rem;
+    border-radius: 0;
+    background-color: #f0b0a388;
+}
+
+body.dark-mode section.design_basic {
+    background-color: #90275688;
+}
+
+
+img.light {
+    display: block;
+}
+
+img.dark {
+    display: none;
+}
+
+body.dark-mode img.light {
+    display: none;
+}
+
+body.dark-mode img.dark {
+    display: block;
+}

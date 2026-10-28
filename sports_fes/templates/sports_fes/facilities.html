@@ -1,0 +1,32 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/facilities.css' %}">
+{% endblock %}
+
+{% block title %}会場案内{% endblock %}
+
+{% block content %}
+<header>
+    <div class="header-backlayer">
+        {% if general_images.facility_header %}
+            <img class="common" src="{{ general_images.facility_header.url }}" alt="会場案内ヘッダー画像" />
+        {% else %}
+            <img class="black common" />
+        {% endif %}
+        <div class="title">会 場 案 内</div>
+    </div>
+</header>
+
+
+<section>
+  <h2>会場案内図</h2>
+  <img class="field_image light" src="{% if field_image_url %}{{ field_image_url }}{% else %}{% static 'sports_fes/img/wip.webp' %}{% endif %}" alt="">
+  <img class="field_image dark" src="{% if field_image_url %}{{ field_image_url }}{% else %}{% static 'sports_fes/img/wip_darkmode.webp' %}{% endif %}" alt="">
+  <div class="facility_alt ck-content">
+    {{ alt.alt|safe }}
+  </div>
+</section>
+
+{% endblock %}

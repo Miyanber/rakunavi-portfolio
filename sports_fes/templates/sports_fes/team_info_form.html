@@ -1,0 +1,72 @@
+{% extends "sports_fes/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'sports_fes/css/team_info_form.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/editor.css' %}">
+{% endblock %}
+
+{% block title %}応援団情報入力フォーム{% endblock %}
+
+{% block content %}
+<header>
+    <div class="header-backlayer">
+        {% if general_images.team_header %}
+            <img src="{{ general_images.team_header.url }}" alt="チームヘッダー画像" />
+        {% else %}
+            <img class="black" />
+        {% endif %}
+    </div>
+    <div class="title">応援団情報入力</div>
+</header>
+
+<section>
+    <a class="button_basic1" href="{% url 'main:manuals_for_students_list' %}" target="_blank">
+        <span class="material-symbols-rounded">menu_book</span> マニュアルを見る
+    </a>
+    <h1>{{ token }}</h1>
+</section>
+
+{% block form %}
+<form action="" method="post" enctype="multipart/form-data">
+    {{ form.media }}
+    {% csrf_token %}
+    <section>
+        <h3>全般</h3>
+        <div>
+            <table class="main">
+                {% for field in form %}
+                <tr>
+                    <th>
+                        <div class="th_wrapper">
+                            {{ field.label_tag }}{% if field.field.required %}<span class="required">必須</span>{% else %}<span class="option">オプション</span>{% endif %}
+                        </div>
+                    </th>
+                    <td>{{ field.errors }}{{ field.help_text }}{{ field }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </section>
+    
+    <section>
+        <label id="label_confirm">
+            <input type="checkbox" id="checkbox_confirm">
+            <p>私はコンテンツ・マニュアルを読み、問題がないことを確認しました。</p>
+        </label>
+    </section>
+
+    <section>
+        <button id="submit_button" type="button" class="button_basic1">変更を適用</button>
+    </section>
+</form>
+{% endblock form %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js" defer></script>
+<script src="{% static 'main/js/editor.js' %}" defer></script>
+<script src="{% static 'main/js/confirm_input.js' %}" defer></script>
+<script src="{% static 'main/js/image_validate.js' %}" defer></script>
+{% endblock extra_js %}
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends  "ya/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'ya/css/dm_listview.css' %}">
+{% endblock extra_style %}
+
+{% block title_wrapper %}DM一覧{% endblock title_wrapper %}
+{% block header_title %}DM一覧{% endblock %}
+
+{% block content %}
+    <div style="display:flex;">
+        <h1>メッセージ</h1>
+        <a style="margin: auto 0; margin-left: auto; padding-top: .8rem;" href="{% url 'ya:search_user' %}">
+            <span class="material-symbols-rounded">person_add</span>
+        </a>
+    </div>
+
+    {% for dm in dm_list %}
+        {% comment %} TODO：ここのロジックをきれいにしたい {% endcomment %}
+        {% if dm.sender == request.user %}
+            <a href="{% url 'ya:dm' dm.receiver.id %}">
+        {% else %}
+            <a href="{% url 'ya:dm' dm.sender.id %}">
+        {% endif %}   {% comment  %}リンク先を場合分け{% endcomment %}
+            <div class="dm">
+                <div class="left">
+                    {% if dm.sender == request.user %}
+                    <img class="icon" src="{% if dm.receiver.icon %}{{ dm.receiver.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                    {% else %}
+                    <img class="icon" src="{% if dm.sender.icon %}{{ dm.sender.icon.url }}{% else %}{% static "main/img/default-icon_1x1.webp" %}{% endif %}">
+                    {% endif %}
+                </div>
+                <div class="middle">
+                    <span class="username">
+                    {% if dm.sender == request.user %}
+                        {{ dm.receiver.username }}{% if dm.receiver.role %}<span class="material-symbols-rounded roles">{{ dm.receiver.role.icon }}</span>{% endif %}
+                    {% else %}
+                        {{ dm.sender.username }}{% if dm.sender.role %}<span class="material-symbols-rounded roles">{{ dm.sender.role.icon }}</span>{% endif %}
+                    {% endif %}
+                    </span>
+                    <span class="message">{{ dm.content }}</span>
+                </div>
+                <div class="right">
+                    <span class="send_at">{{ dm.send_at }}</span>
+                    {% if dm in dm_unreads  %}
+                        <span class="unread" style="color: var(--accent-color1)">未読メッセージがあります</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+{% endblock content %}

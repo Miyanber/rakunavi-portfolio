@@ -1,0 +1,98 @@
+{% extends  override_base|default:"main/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+{% if override_base %}
+    <link rel="stylesheet" href="{% static 'sports_fes/css/credits.css' %}">
+{% else %}
+    <link rel="stylesheet" href="{% static 'main/css/about_development.css' %}">
+{% endif %}
+{% endblock extra_style %}
+
+{% block title_wrapper %}開発について{% endblock title_wrapper %}
+{% block header_title %}開発について{% endblock %}
+
+{% block content %}
+<article>
+    <div class="about">
+        <h2>開発について</h2>
+
+        <p>らくなびの開発にあたって、技術的な情報を公開しています。</p>
+    </div>
+
+    <div>
+        <h3>フレームワーク</h3>
+        <p>
+            らくなびは、Pythonのフレームワーク Django
+            <a href="https://www.djangoproject.com/start/overview/" target="_blank">（公式サイト<span class="material-symbols-rounded">open_in_new</span>）</a>
+            を利用しています。<br>
+            Djangoはセキュリティが高く、柔軟で拡張性があるため、多くの企業や団体で採用されています。
+        </p>
+        <img src="{% static 'main/img/logos/django-logo-negative.svg' %}" alt="Djangoロゴ" class="logo">
+        <a href="https://www.djangoproject.com/community/logos/" target="_blank">出典<span class="material-symbols-rounded">open_in_new</span></a>
+    </div>
+
+    <div>
+        <h3>準拠・対応している技術</h3>
+        <p>
+            以下に準拠・対応しています。
+        </p>
+        <ul>
+            <li>PWA（プログレッシブWebアプリ）</li>
+                Webサイトとは思えない、ネイティブアプリのような体験を可能にします。普通のアプリのようにインストールすることも可能です。<br>
+                <img src="{% static 'main/img/logos/PWA-dark-en.svg' %}" alt="PWAロゴ" class="logo">
+                <a href="https://github.com/webmaxru/progressive-web-apps-logo" target="_blank">出典<span class="material-symbols-rounded">open_in_new</span></a>
+            {% comment %} <li>CSP（コンテンツセキュリティポリシー）</li>
+                サイバー攻撃の１つ、クロスサイトスクリプティング （XSS） からの低減のために、追加の強力なセキュリティレイヤを提供します。 {% endcomment %}
+            <li>Webp・AVIF画像配信</li>
+                画像の配信で従来広く使用されてきたJPEGやPNGなどのフォーマットに代わり、より軽量で先進的なAVIFで画像を配信しています。
+                AVIFが利用できない場合でも、十分軽量な形式Webpを利用（フォールバック）できます。<br>
+                <img src="{% static 'main/img/logos/WebPLogo.svg' %}" alt="Webpロゴ" class="logo">
+                <small>&copy; Google LLC,</small>
+                <a href="https://commons.wikimedia.org/wiki/File:WebPLogo.svg" target="_blank">出典<span class="material-symbols-rounded">open_in_new</span></a>
+                <img src="{% static 'main/img/logos/Avif-logo-rgb.svg' %}" alt="AVIFロゴ" class="logo">
+                <small>&copy; 2019 The Alliance for Open Media,</small>
+                <a href="https://commons.wikipedia.org/wiki/File:Avif-logo-rgb.svg" target="_blank">出典<span class="material-symbols-rounded">open_in_new</span></a>
+            <li>zstdエンコーディング</li>
+                リソースをZstandard（zstd）という圧縮率の高い形式で圧縮することにより、より高速な配信を実現します。<br>
+                <img src="{% static 'main/img/logos/Zstandard_logo.png' %}" alt="zstdロゴ" class="logo">
+                <small>&copy; Facebook, Inc.,</small>
+                <a href="https://commons.wikimedia.org/wiki/File:Zstandard_logo.png" target="_blank">出典<span class="material-symbols-rounded">open_in_new</span></a>
+            <li>View Transition API</li>
+                ページ遷移の際に、滑らかなアニメーションでユーザー体験を向上させます。一部のブラウザではご利用いただけません。
+                <a href="https://caniuse.com/view-transitions" target="_blank">ブラウザの対応状況<span class="material-symbols-rounded">open_in_new</span></a>
+            
+        </ul>
+    </div>
+
+    <div>
+        <h3>開発における創意工夫</h3>
+        <p></p>
+        <ul>
+            <li>ライト・ダークテーマ</li>
+                初回読み込み時にユーザーの設定を検出し、最適なテーマを自動で適用しています。フッターのボタンで手動変更もできます。
+            <li>ナビゲーションバー</li>
+                多くのサイトではナビゲーションバーが上に配置されることが多いですが、下に配置することによって、スマートフォンアプリのような体験を可能にしています。
+            <li>クエリ最適化</li>
+                データベースから最低限のクエリでデータを取得し、いわゆるN+1問題を解消。レスポンスの改善に繋げました。
+            <li>クラスベースビュー（CBV）</li>
+                Djangoにおけるクラスベースビューによってコードの再利用性と保守性を高めつつ、拡張性を持たせることができています。
+            <li>QRコードでの共有</li>
+                フッターにあるQRコード生成ボタンで、ご覧のページのQRコードを生成できます。共有時に便利です。（「QRコード」は株式会社デンソーウェーブの登録商標です。）
+        </ul>
+    </div>
+    
+    <div>
+        <h3>運用インフラ</h3>
+        <p>
+            Webアプリケーションの公開にあたっては、Amazon Web Services (AWS) の EC2 および S3
+            <a href="https://aws.amazon.com/jp/" target="_blank">（公式サイト<span class="material-symbols-rounded">open_in_new</span>）</a>、
+            Cloudflare CDN
+            <a href="https://www.cloudflare.com/ja-jp/learning/cdn/what-is-a-cdn/" target="_blank">（公式サイト<span class="material-symbols-rounded">open_in_new</span>）</a>
+            を利用しています。
+        </p>
+        <a href="https://aws.amazon.com/what-is-cloud-computing" target="blank"><img src="https://d0.awsstatic.com/logos/powered-by-aws-white.png" alt="Powered by AWS Cloud Computing" class="logo aws_logo" ></a>
+        <img src="{% static 'main/img/logos/ProtectedByCloudflareBadge_web_badges_5.png' %}" alt="clouflareロゴ" class="logo">
+    </div>
+</article>
+{% endblock content %}

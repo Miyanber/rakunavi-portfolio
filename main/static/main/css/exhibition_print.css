@@ -1,0 +1,39 @@
+#exhibitions * {
+    outline: 1px solid gray;
+}
+
+#exhibitions {
+    background-color: white;
+    color: black;
+}
+
+.images,
+.category,
+.waiting-info,
+.overview h3,
+.comment-wrapper,
+.detail,
+.link_style3  {
+    display: none !important;
+}
+
+.exhibition {
+    margin: 10vw;
+}
+
+.title-wrapper {
+    position: relative;
+}
+
+.icon {
+    width: 10vw;
+    height: 10vw;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.title {
+    margin-left: 10vw;
+}

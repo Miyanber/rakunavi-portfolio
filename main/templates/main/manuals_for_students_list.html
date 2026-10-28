@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}生徒用マニュアル{% endblock title %}
+
+{% block header_type %}function{% endblock header_type %}
+{% block header_title %}らくなび 生徒用マニュアル{% endblock header_title %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/documents.css' %}">
+{% endblock extra_style %}
+
+{% block content %}
+
+<article>
+    {% if not session_edit_token %}
+    <a class="button_style2" href="{% url 'main:mypage' %}">
+        <span class="material-symbols-rounded">arrow_back</span>
+        <span class="material-symbols-rounded">engineering</span> 管理ページへ戻る
+    </a>
+    {% endif %}
+    <p>
+        生徒用マニュアルを閲覧できます。必ずこれらのマニュアルを熟読の上、コンテンツ作成を行ってください。<br>
+        なおQRコード認証が前提のため、このページをブックマークしても、そのブックマークからはアクセスできません。
+    </p>
+    {% for doc in documents %}
+        <a class="document_name button_style2" href="{% url 'main:manuals_for_students_detail' doc.name %}">{{ doc }}</a>
+    {% endfor %}
+    
+</article>
+
+
+{% endblock content %}

@@ -1,0 +1,28 @@
+.post_head {
+    border-bottom: black 1px solid;
+}
+
+.image {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 0.5em;
+}
+
+.content {
+    font-size: 1.1em;
+}
+
+.like-btn {
+    background-color: #00000000;
+    border: none;
+}
+
+.created_at {
+    text-align: end;
+    opacity: 0.9;
+    font-size: 90%;
+}
+
+.error li{
+    color: red;
+}
