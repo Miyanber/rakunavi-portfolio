@@ -58,89 +58,24 @@
 
 ## 🏗 サーバーインフラ構成
 
-本番運用時は **Cloudflare**（ドメイン管理・WAF・CDN）と **AWS 東京リージョン (`ap-northeast-1`)**（EC2・S3・IAM）を組み合わせ、数千人規模の同時アクセスと WebSocket によるリアルタイム通信を低コストかつ安全にさばく構成を採用しています（詳細は [`docs/server_manual_1.md`](docs/server_manual_1.md) および [`docs/server_manual_2.md`](docs/server_manual_2.md) を参照）。
+本番運用時は **Cloudflare**（CDN・セキュリティ）と **AWS 東京リージョン (`ap-northeast-1`)** を組み合わせ、数千人規模の同時アクセスとリアルタイム混雑配信を低コストかつ安定して稼働させる構成を採用しています（詳細は [`docs/server_manual_1.md`](docs/server_manual_1.md) を参照）。
 
-```mermaid
-flowchart TB
-    subgraph Client["クライアント・運用環境"]
-        Visitor["📱 来場者・生徒ブラウザ (PWA / HTTPS / WSS)"]
-        Admin["💻 サーバー運営担当者 (WSL / Terminal)"]
-    end
+<div align="center">
+  <img src="docs/images/architecture.png" alt="RakuNavi サーバーインフラアーキテクチャ図" width="100%">
+</div>
 
-    subgraph External["外部サービス"]
-        GitHub["GitHub リポジトリ (Rakunan-RakuNavi/RakuNavi)"]
-        LetsEncrypt["Let's Encrypt (SSL証明書認証局)"]
-    end
+### インフラ構成の要点
 
-    subgraph Cloudflare["Cloudflare (DNS / セキュリティ / CDN)"]
-        CF_DNS["Cloudflare Registrar & DNS (Aレコード / CNAME)"]
-        CF_WAF["Cloudflare WAF / セキュリティルール (海外IP・Tor・不審アクセス遮断)"]
-        CF_CDN["Cloudflare CDN (cdn.ドメイン名 エッジキャッシュ)"]
-    end
-
-    subgraph AWS["AWS 東京リージョン (ap-northeast-1)"]
-        subgraph VPC["Default VPC"]
-            EIP["Elastic IP (固定パブリックIPv4)"]
-            SG["Security Group (Inbound: 80, 443 / 22は管理者IP限定)"]
-
-            subgraph EC2["Amazon EC2 (Ubuntu Server 24.04 LTS / t3.micro・t3.small)"]
-                Nginx["Nginx (リバースプロキシ / SSL終端 :443 / 不正WSパス遮断)"]
-                Certbot["Certbot (SSL証明書管理・cron自動更新)"]
-                Daphne["Daphne (ASGIサーバー 127.0.0.1:8001 / systemd)"]
-                Django["Django 6.1 アプリケーション (Channels / WeasyPrint)"]
-                Redis["Redis (Channel Layer 127.0.0.1:6379)"]
-                SQLite["SQLite (db.sqlite3)"]
-                Logs["ログ管理 (/var/log/rakunavi/django.log, journalctl)"]
-            end
-        end
-
-        subgraph S3Storage["Amazon S3 & IAM"]
-            IAM["IAM ユーザー (S3ReadWriteRakuNaviBucketOnly)"]
-            S3Policy["バケットポリシー & CORS (Cloudflare IP・Elastic IPのみGet許可)"]
-            S3["Amazon S3 バケット (cdn.ドメイン名: static / media / docs-images)"]
-        end
-    end
-
-    %% 来場者・生徒のリクエストフロー（動的ページ & WebSocket）
-    Visitor -->|"① HTTPS / WebSocket (wss://)"| CF_DNS
-    CF_DNS --> CF_WAF
-    CF_WAF -->|"② 動的リクエスト・WS中継"| EIP
-    EIP --> SG
-    SG -->|"Port 80 / 443"| Nginx
-    Nginx -->|"③ HTTP (/)・WebSocket (/ws/ Upgrade)"| Daphne
-    Daphne <-->|"ASGI"| Django
-    Django <-->|"データ読み書き"| SQLite
-    Django <-->|"WebSocket Pub/Sub"| Redis
-    Django -->|"エラー・アクセス記録"| Logs
-
-    %% 静的ファイル・メディア配信フロー（CDN + S3）
-    Visitor -->|"④ 静的・メディア取得 (https://cdn.ドメイン名)"| CF_CDN
-    CF_CDN -->|"⑤ キャッシュミス時オリジン取得 (CNAME)"| S3Policy
-    S3Policy --> S3
-
-    %% 運用・デプロイ・証明書更新フロー
-    Admin -->|"SSH (:22) / SCP (.env, db.sqlite3) / apply_changes.sh"| SG
-    GitHub -->|"SSH鍵認証で git clone / pull"| Django
-    Django -->|"collectstatic / sync_docs_images / 画像保存 (PutObject)"| IAM
-    IAM --> S3
-    Certbot <-->|"証明書発行・定期更新"| LetsEncrypt
-    Certbot -->|"証明書適用"| Nginx
-```
-
-### インフラ構成のポイント
-
-1. **Webサーバー & ASGIアプリケーション構成（Nginx + Daphne + Django Channels）**
-   - リバースプロキシの **Nginx** が HTTPS（Port 443）を終端し、通常の HTTP リクエスト（`/`）と WebSocket 接続（`/ws/` の `Upgrade` ヘッダ付きリクエスト）を分け、systemd で常駐管理される **Daphne**（`127.0.0.1:8001`）へ転送します。
-   - 不正な WebSocket スキャン（`/ws-*`, `/wsfapi` 等）は Nginx 層でステータス `444` により即時遮断し、アプリケーション層の負荷を防止しています。
-2. **静的ファイル・メディアのオフロード配信（Cloudflare CDN + Amazon S3）**
-   - CSS・JS（`static/`）、展示・CKEditor アップロード画像（`media/`）、管理画面ドキュメント用画像（`docs-images/`）はすべて **Amazon S3**（`cdn.ドメイン名` バケット）に集約し、CNAME で接続した **Cloudflare CDN** からエッジ配信することで EC2 インスタンスの負荷を大幅に軽減しています。
-   - S3 バケットポリシーにより、読み取り（`GetObject` / `ListBucket`）は **Cloudflare の IP レンジおよび EC2 の Elastic IP からのみ許可**し、書き込み（`PutObject`）は専用 IAM ユーザー（`S3ReadWriteRakuNaviBucketOnly`）に限定しています。
-3. **多層セキュリティ対策（Cloudflare WAF + Security Group + Certbot + Django CSP）**
-   - **Cloudflare WAF:** 海外 IP（`ip.src.country ne "JP"`）やログイン画面へのマネージドチャレンジ、Tor ノード遮断により、辞書攻撃やボットアクセスをエッジで防御。
-   - **AWS Security Group:** SSH（Port 22）は運営担当者のグローバル IP のみに制限。
-   - **SSL/TLS & セキュリティヘッダ:** Let's Encrypt（Certbot + crontab 自動更新）による HTTPS 化に加え、本番デプロイ完了フラグ（`DEPLOY_DONE=True`）連動で HSTS・Secure Cookie・Content Security Policy（`SECURE_CSP`）を一括適用。
-4. **デプロイ・運用ワークフロー**
-   - 運営担当者はローカル（WSL 等）から `.pem` 鍵認証で EC2 へ SSH / SCP 接続し、GitHub からの SSH クローン・プル、`.env` や `db.sqlite3` の配置、`collectstatic` / `sync_docs_images` による S3 同期、および [`scripts/apply_changes.sh`](scripts/apply_changes.sh) による `daphne`・`nginx` サービスの一括再起動を行います。
+- **Amazon EC2 (仮想サーバー: t3.micro / Ubuntu 24.04 LTS):**
+  - **Nginx (Webサーバー):** 外部からのWebアクセスを受け付け、Django アプリケーションへスムーズに引き渡します。
+  - **Django (Webアプリ本体):** 校内マップやタイムテーブルの表示、展示ブースの混雑度更新を処理します。
+  - **Redis & SQLite:** 混雑度のリアルタイム配信に Redis、基本データの保存に SQLite（`db.sqlite3`）を使用しています。
+- **Cloudflare (CDN / セキュリティ):**
+  - **高速配信 (CDN):** 画像やスタイルファイルをキャッシュして高速に配信し、EC2サーバーの負荷を大幅に軽減します。
+  - **セキュリティ防御:** 海外からの不審なアクセスや機械的なスキャンをサーバー到達前にブロックします。
+- **Amazon S3 & IAM (ストレージ・権限管理):**
+  - **Amazon S3:** 展示紹介画像や静的ファイルをまとめて安全に保管するクラウドストレージです。
+  - **IAM:** 安全なファイル保存を行うため、必要な最小限の権限のみを付与して運用しています。
 
 ---
 
