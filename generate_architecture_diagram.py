@@ -54,7 +54,7 @@ with Diagram(
                 ec2_inst = EC2("EC2 (Ubuntu)")
                 nginx = Nginx("Nginx\n(Web Server)")
                 django = Django("Django\n(Web App)")
-                redis = Redis("Redis\n(Realtime Sync)")
+                redis = Redis("Redis\n(Cache & Tasks)")
                 db = SQL("SQLite\n(Database)")
 
                 nginx >> Edge(label="Forward") >> django

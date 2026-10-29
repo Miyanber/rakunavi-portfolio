@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.12%20%7C%203.14-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-6.1-green.svg)](https://www.djangoproject.com/)
-[![Channels](https://img.shields.io/badge/Channels-WebSocket-orange.svg)](https://channels.readthedocs.io/)
 [![PWA](https://img.shields.io/badge/PWA-Supported-purple.svg)](https://web.dev/progressive-web-apps/)
 [![License](https://img.shields.io/badge/License-Proprietary%20%2F%20All%20Rights%20Reserved-red.svg)](LICENSE.md)
 
@@ -28,9 +27,9 @@
 1. **インタラクティブ学内マップ**
    - フロア（地下1階〜地上4階、北館、野外ステージ等）ごとの教室配置・展示ブースを視覚的に表示
    - スポット（教室・ステージ）のタップによる展示詳細・タイムテーブルへのシームレスな遷移
-2. **リアルタイム混雑度・待ち時間配信**
+2. **混雑度・待ち時間の即時更新・共有**
    - 各展示団体の生徒が専用トークン認証から最新混雑度（空き／普通／混雑／整理券状況）を即時更新
-   - 来場者画面へ最新情報を瞬時に反映
+   - 来場者側もアクセス時に最新の混雑状況・待ち時間をスムーズに確認可能
 3. **展示・パフォーマンス・模擬店タイムテーブル**
    - 時間枠ごとのステージ発表や模擬店アレルゲン情報の詳細表示
    - お気に入り・タグ絞り込み機能
@@ -46,19 +45,19 @@
 
 | 分野 | 技術 / ツール |
 | :--- | :--- |
-| **バックエンド** | Python 3.12+, Django 6.1, Django Channels (WebSocket), Daphne (ASGI) |
+| **バックエンド** | Python 3.12+, Django 6.1, Daphne (ASGI) |
 | **データベース** | SQLite (`db.sqlite3`) |
 | **フロントエンド** | Vanilla JavaScript (ES Modules), Vanilla CSS (Flexbox / CSS Grid), HTML5 |
 | **メディア・アセット** | Pillow (画像最適化・WebP変換), Google Material Symbols (サブセット化最適化), WeasyPrint (PDF出力) |
 | **認証・管理** | Django Allauth, Django Baton (管理画面カスタマイズ), CKEditor 5 |
-| **非同期・タスク** | Redis (Channel Layer), Django APScheduler |
+| **非同期・タスク** | Redis (キャッシュ・非同期処理基盤), Django APScheduler |
 | **インフラ（本番運用時）** | AWS EC2 (Ubuntu 24.04 LTS), Nginx, Let's Encrypt (Certbot), Cloudflare (DNS / WAF / CDN), AWS S3 |
 
 ---
 
 ## 🏗 サーバーインフラ構成
 
-本番運用時は **Cloudflare**（CDN・セキュリティ）と **AWS 東京リージョン (`ap-northeast-1`)** を組み合わせ、数千人規模の同時アクセスとリアルタイム混雑配信を低コストかつ安定して稼働させる構成を採用しています（詳細は [`docs/server_manual_1.md`](docs/server_manual_1.md) を参照）。
+本番運用時は **Cloudflare**（CDN・セキュリティ）と **AWS 東京リージョン (`ap-northeast-1`)** を組み合わせ、数千人規模のアクセス下でも混雑度・展示情報の閲覧を低コストかつ安定して稼働させる構成を採用しています（詳細は [`docs/server_manual_1.md`](docs/server_manual_1.md) を参照）。
 
 <div align="center">
   <img src="docs/images/architecture.png" alt="RakuNavi サーバーインフラアーキテクチャ図" width="100%">
@@ -69,7 +68,7 @@
 - **Amazon EC2 (仮想サーバー: t3.micro / Ubuntu 24.04 LTS):**
   - **Nginx (Webサーバー):** 外部からのWebアクセスを受け付け、Django アプリケーションへスムーズに引き渡します。
   - **Django (Webアプリ本体):** 校内マップやタイムテーブルの表示、展示ブースの混雑度更新を処理します。
-  - **Redis & SQLite:** 混雑度のリアルタイム配信に Redis、基本データの保存に SQLite（`db.sqlite3`）を使用しています。
+  - **Redis & SQLite:** アプリケーションデータの保存に SQLite（`db.sqlite3`）を使用し、キャッシュやバックグラウンド処理基盤として Redis を組み合わせています。
 - **Cloudflare (CDN / セキュリティ):**
   - **高速配信 (CDN):** 画像やスタイルファイルをキャッシュして高速に配信し、EC2サーバーの負荷を大幅に軽減します。
   - **セキュリティ防御:** 海外からの不審なアクセスや機械的なスキャンをサーバー到達前にブロックします。
